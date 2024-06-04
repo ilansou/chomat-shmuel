@@ -1,0 +1,32 @@
+import "./App.css";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Home } from "./pages/home";
+import { Events } from "./pages/events";
+import { Classes } from "./pages/classes";
+import { NewsAndUpdates } from "./pages/newsAndUpdates";
+import { Contact } from "./pages/contact";
+import { Login } from "./pages/login";
+import { Navbar } from "./components/navbar";
+import { Footer } from "./components/footer";
+
+function App() {
+    return (
+        <div className="App">
+            <Router>
+                <Navbar />
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/events" element={<Events />} />
+                    <Route path="/classes" element={<Classes />} />
+                    <Route path="/newsAndUpdates" element={<NewsAndUpdates />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/login" element={<Login />} />
+                </Routes>
+                <Footer />
+            </Router>
+        </div>
+    );
+}
+
+export default App;
