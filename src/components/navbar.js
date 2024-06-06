@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import logo from "../images/logo.png";
 import { auth } from "../config/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import "../styles/navbar.css";
 
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -29,15 +30,12 @@ export const Navbar = () => {
     };
 
     return (
-        <nav className="bg-white shadow-sm flex flex-wrap items-center justify-evenly px-4 py-2">
-            <Link to="/" className="mr-4">
-                <img src={logo} alt="logo" className="h-13 w-auto" />
+        <nav className="navbar">
+            <Link to="/" className="logo">
+                <img src={logo} alt="logo" />
             </Link>
-            <button className="block md:hidden focus:outline-none justify-end" onClick={toggleMenu}>
-                <svg
-                    className="h-6 w-6 fill-current"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
+            <button className="toggle-button" onClick={toggleMenu}>
+                <svg className="toggle-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     {isOpen ? (
                         <path
                             fillRule="evenodd"
@@ -53,47 +51,34 @@ export const Navbar = () => {
                     )}
                 </svg>
             </button>
-            <div
-                className={`${
-                    isOpen ? "block" : "hidden"
-                } w-full md:flex md:items-center md:w-auto md:flex-grow md:mr-8`}>
-                <div className="text-sm md:flex-grow md:flex md:justify-evenly">
-                    <Link
-                        to="/"
-                        className="block mt-4 md:inline-block md:mt-0 md:mr-8 hover:scale-150">
+            <div className={`menu ${isOpen ? "open" : ""}`}>
+                <div className="menu-items">
+                    <Link to="/" className="menu-item">
                         דף בית
                     </Link>
-                    <Link
-                        to="/events"
-                        className="block mt-4 md:inline-block md:mt-0 md:mr-8 hover:scale-150">
+                    <Link to="/events" className="menu-item">
                         אירועים
                     </Link>
-                    <Link to="/classes" className="block mt-4 md:inline-block md:mt-0 md:mr-8">
+                    <Link to="/classes" className="menu-item">
                         חוגים
                     </Link>
-                    <Link
-                        to="/newsAndUpdates"
-                        className="block mt-4 md:inline-block md:mt-0 md:mr-8">
+                    <Link to="/newsAndUpdates" className="menu-item">
                         חדשות ועדכונים
                     </Link>
-                    <Link to="/contact" className="block mt-4 md:inline-block md:mt-0 md:mr-8">
+                    <Link to="/contact" className="menu-item">
                         יצירת קשר
                     </Link>
                 </div>
                 <div>
                     {isLoggedIn ? (
                         <Link to="/">
-                            <button
-                                onClick={handleLogout}
-                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-8">
+                            <button className="logout-button" onClick={handleLogout}>
                                 יציאה
                             </button>
                         </Link>
                     ) : (
                         <Link to="/login">
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-8">
-                                כניסת מנהל
-                            </button>
+                            <button className="login-button">כניסת מנהל</button>
                         </Link>
                     )}
                 </div>

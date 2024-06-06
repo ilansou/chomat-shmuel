@@ -1,27 +1,24 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase";
-import { Home } from "./home";
+import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
+export const Login = ({ setIsAuth }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            setIsLoggedIn(true);
+            navigate("/");
         } catch (error) {
             setError("Failed to login");
         }
     };
-
-    if (isLoggedIn) {
-        return <Home />;
-    }
 
     return (
         <div className="flex flex-col min-h-screen items-center">
