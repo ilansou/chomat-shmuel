@@ -1,0 +1,134 @@
+/* About.css */
+.about-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f0f4f8;
+}
+
+@media (min-width: 1024px) {
+    .about-container {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+}
+
+.sidebar {
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.sidebar-title {
+    color: #1a73e8;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.sidebar-list {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-item {
+    background-color: #e5e7eb;
+    margin-bottom: 0.5rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-item:hover {
+    background-color: #cbd5e1;
+}
+
+.newsletter {
+    background-color: #e5e7eb;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 4px;
+}
+
+.newsletter-title {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+}
+
+.newsletter-label {
+    display: block;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.newsletter-input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.newsletter-button {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #10b981;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.newsletter-button:hover {
+    background-color: #059669;
+}
+
+.main-content {
+    max-width: 800px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.main-content p {
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.more-info {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.more-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.more-info p {
+    font-size: 1rem;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.social-link {
+    color: #1a73e8;
+    text-decoration: none;
+    font-size: 1.25rem;
+}
+
+.social-link:hover {
+    text-decoration: underline;
+}
