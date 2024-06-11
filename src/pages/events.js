@@ -4,7 +4,7 @@ import moment from "moment";
 import { format, isSameDay } from "date-fns";
 import { he } from "date-fns/locale";
 import { Link } from "react-router-dom";
-import { db, auth } from "../firebase";
+import { db } from "../firebase";
 import { getDocs, deleteDoc, doc, collection } from "firebase/firestore";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { EventModal } from "../components/eventModal";
@@ -76,7 +76,7 @@ export const Events = () => {
                             <p className="text-gray-500">
                                 {format(new Date(event.eventDate), "dd/MM/yyyy", { locale: he })}
                             </p>
-                            {auth.currentUser ? (
+                            {user?.email ? (
                                 <button
                                     className="mt-4 bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded"
                                     onClick={() => deleteEvent(event.id)}>
@@ -88,7 +88,7 @@ export const Events = () => {
                 </div>
             </div>
             <div className="mb-8">
-                {user.email ? (
+                {user?.email ? (
                     <button
                         className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded"
                         onClick={() => setShowCreateEvent(true)}>
