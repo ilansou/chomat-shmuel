@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faYoutube } from "@fortawesome/free-brands-svg-icons";
+import Newsletter from "./newsletter";
 
 export const Footer = () => {
     return (
@@ -28,71 +29,7 @@ export const Footer = () => {
                             </li>
                         </ul>
                     </div>
-                    <div>
-                        <h4 className="text-lg font-semibold mb-4">חוגים, צהרונים ואירועים</h4>
-                        <ul className="space-y-2">
-                            <li>
-                                <Link to="#" className="hover:underline">
-                                    חוג אומנות
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="#" className="hover:underline">
-                                    חוג העשרה
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="#" className="hover:underline">
-                                    גלריות
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="text-lg font-semibold mb-4">שירותים ואגפים בתנהל הקהילתי</h4>
-                        <ul className="space-y-2">
-                            <li>
-                                <Link to="#" className="hover:underline">
-                                    הגיל השלישי
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="#" className="hover:underline">
-                                    אגף הנוער
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="#" className="hover:underline">
-                                    אגף תרבות ואירועים
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="#" className="hover:underline">
-                                    עבודה קהילתית
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="#" className="hover:underline">
-                                    שכונות צעירות
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="#" className="hover:underline">
-                                    אירועים - משפחתונים
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="#" className="hover:underline">
-                                    צח"רונים "נצנצים" בגני ילדים
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="#" className="hover:underline">
-                                    קליטה
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
+                    
                     <div>
                         <h4 className="text-lg font-semibold mb-4">צרו עמנו קשר</h4>
                         <ul className="space-y-2">
@@ -123,6 +60,7 @@ export const Footer = () => {
                                 </a>
                             </li>
                         </ul>
+                    
                         <div className="flex space-x-4 mt-4">
                             <a
                                 href="https://www.facebook.com/harhomat"
@@ -135,8 +73,10 @@ export const Footer = () => {
                                 <FontAwesomeIcon icon={faYoutube} size="2x" />
                             </a>
                         </div>
+                        
                     </div>
                 </div>
+                <Newsletter />
             </div>
         </footer>
     );
