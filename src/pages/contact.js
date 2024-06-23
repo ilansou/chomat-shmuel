@@ -110,7 +110,7 @@ export const Contact = () => {
                     </div>
                 </div>
             </main>
-            <Newsletter />
+          
         </div>
     );
 };

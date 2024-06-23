@@ -4,28 +4,7 @@ import "../styles/about.css";
 export const About = () => {
     return (
         <div className="about-container">
-            {/* Sidebar */}
-            <div className="sidebar">
-                <h2 className="sidebar-title">המנהל הקהילתי</h2>
-                <ul className="sidebar-list">
-                    <li className="sidebar-item">אודות המנהל הקהילתי</li>
-                    <li className="sidebar-item">הנהלה וצוות המינהל</li>
-                    <li className="sidebar-item">שכונת חומת שמואל</li>
-                </ul>
-                <div className="newsletter">
-                    <h3 className="newsletter-title">הירשאו לעדכונים</h3>
-                    <p>קבלו עדכונים שוטפים על אירועים, חוגים כל מה שחדש במנהל:</p>
-                    <form className="newsletter-form">
-                        <label className="newsletter-label">שם מלא*</label>
-                        <input type="text" className="newsletter-input" />
-                        <label className="newsletter-label">דוא"ל*</label>
-                        <input type="email" className="newsletter-input" />
-                        <button type="submit" className="newsletter-button">
-                            צרפו אותי
-                        </button>
-                    </form>
-                </div>
-            </div>
+            
             {/* Main Content */}
             <div className="main-content">
                 <p>
