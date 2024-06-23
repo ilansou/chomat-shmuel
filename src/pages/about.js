@@ -4,16 +4,7 @@ import "../styles/about.css";
 export const About = () => {
     return (
         <div className="about-container">
-            {/* Sidebar */}
-            <div className="sidebar">
-                <h2 className="sidebar-title">המנהל הקהילתי</h2>
-                <ul className="sidebar-list">
-                    <li className="sidebar-item">אודות המנהל הקהילתי</li>
-                    <li className="sidebar-item">הנהלה וצוות המינהל</li>
-                    <li className="sidebar-item">שכונת חומת שמואל</li>
-                </ul>
-                
-            </div>
+            
             {/* Main Content */}
             <div className="main-content">
                 <p>
