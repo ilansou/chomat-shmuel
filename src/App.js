@@ -8,30 +8,34 @@ import { NewsAndUpdates } from "./pages/newsAndUpdates";
 import { Contact } from "./pages/contact";
 import { Login } from "./pages/login";
 import { About } from "./pages/about";
-import { Navbar } from "./components/navbar";
-import { Footer } from "./components/footer";
+import { Navbar } from "./components/Navbar";
+import { Newsletter } from "./components/Newsletter";
 import { AuthContextProvider } from "./context/AuthContext";
 
 function App() {
-    return (
-        <>
-            <AuthContextProvider>
-                <Router>
-                    <Navbar />
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/events" element={<Events />} />
-                        <Route path="/classes" element={<Classes />} />
-                        <Route path="/newsAndUpdates" element={<NewsAndUpdates />} />
-                        <Route path="/contact" element={<Contact />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/about" element={<About />} />
-                    </Routes>
-                    <Footer />
-                </Router>
-            </AuthContextProvider>
-        </>
-    );
+  return (
+    <>
+      <AuthContextProvider>
+        <Router>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+            <main className="flex-grow">
+              <Routes className="flex-grow">
+                <Route path="/" element={<Home />} />
+                <Route path="/events" element={<Events />} />
+                <Route path="/classes" element={<Classes />} />
+                <Route path="/newsAndUpdates" element={<NewsAndUpdates />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/about" element={<About />} />
+              </Routes>
+            </main>
+            <Newsletter />
+          </div>
+        </Router>
+      </AuthContextProvider>
+    </>
+  );
 }
 
 export default App;
