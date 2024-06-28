@@ -1,4 +1,4 @@
-import { HDate } from "@hebcal/core";
+import { HDate, Zmanim } from "@hebcal/core";
 
 // Array to translate English month names to Hebrew
 const monthTranslations = {
@@ -14,13 +14,13 @@ const monthTranslations = {
     "Iyyar": "אייר",
     "Sivan": "סיוון",
     "Tammuz": "תמוז",
+    "Tamuz": "תמוז",
     "Av": "אב",
     "Elul": "אלול"
 };
 
-export const getJewishDate = (date) => {
+export const getFullJewishDate = (date) => {
     let hdate = new HDate(date);
-
     let hebrewDay = convertToHebrewDay(hdate.getDate());
     let hebrewYear = convertToHebrewYear(hdate.getFullYear());
     let hebrewMonth = translateMonth(hdate.getMonthName());
@@ -30,13 +30,36 @@ export const getJewishDate = (date) => {
     return jewishDate;
 };
 
+export const getMonthAndYearJewishDate = (date) => {
+    let hdate = new HDate(date);
+    
+    let hebrewYear = convertToHebrewYear(hdate.getFullYear());
+    let hebrewMonth = translateMonth(hdate.getMonthName());
+
+    let jewishDate = `${hebrewMonth} ${hebrewYear}`;
+
+    return jewishDate;
+};
+
+
 // Function to convert numeric day to Hebrew day format
-const convertToHebrewDay = (day) => {
-    const hebrewUnits = ["", "א", "ב", "ג", "ד", "ה", "ו", "ז", "ח", "ט"];
+export const convertToHebrewDay = (day) => {
+    if(typeof day !== 'number') {
+        day = new HDate(day).getDate();
+    }
+    const hebrewUnits = ["", "א", "ב", "ג", "ד", "ה", "ו", "ז", "ח", "ט", "י"];
     const hebrewTens = ["", "י", "כ", "ל", "מ", "נ", "ס", "ע", "פ", "צ"];
 
-    if (day <= 10 || day === 20 || day === 30) {
+    if (day <= 10) {
         return `${hebrewUnits[day]}'`;
+    } else if(day === 15) {
+        return `ט"ו`;
+    }else if(day === 16) {
+        return `ט"ז`;
+    } else if(day === 20) {
+        return `כ'`;
+    } else if(day === 30) {
+        return `ל'`;
     } else {
         let tens = Math.floor(day / 10);
         let units = day % 10;
@@ -45,12 +68,12 @@ const convertToHebrewDay = (day) => {
 };
 
 // Function to translate month name to Hebrew
-const translateMonth = (monthName) => {
+export const translateMonth = (monthName) => {
     return monthTranslations[monthName] || monthName; // If translation exists, return Hebrew name; otherwise, return original name
 };
 
 // Function to convert numeric year to Hebrew letters
-const convertToHebrewYear = (year) => {
+export const convertToHebrewYear = (year) => {
     const hebrewThousands = ["", "א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ז'", "ח'", "ט'"];
     const hebrewHundreds = ["", "ק", "ר", "ש", "ת", "תק", "תר", "תש", "תת"];
     const hebrewTens = ["", "י", "כ", "ל", "מ", "נ", "ס", "ע", "פ", "צ"];

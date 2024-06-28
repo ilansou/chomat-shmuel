@@ -5,14 +5,13 @@ import { format, isSameDay } from "date-fns";
 import { he } from "date-fns/locale";
 import { db } from "../firebase";
 import { getDocs, deleteDoc, doc, collection } from "firebase/firestore";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import { EventModal } from "../components/eventModal";
 import { CreateEvent } from "../components/createEvent";
 import "moment/locale/he";
 import { useAuth } from "../context/AuthContext";
-import { getJewishDate } from "../utils/hebrewDate";
+import { getFullJewishDate, getMonthAndYearJewishDate, convertToHebrewDay } from "../utils/hebrewDate";
+import { CalendarWithHe } from "../components/CalendarWithHe";
 
-// Set moment locale to Hebrew
 moment.locale("he");
 const localizer = momentLocalizer(moment);
 
@@ -77,6 +76,18 @@ export const Events = () => {
     isSameDay(new Date(eventList.eventDate), date)
   );
 
+  const DayWrapper = ({ date }) => {
+    const jewishDate = convertToHebrewDay(date);
+    console.log(date, " ooo");
+    return (
+      <div>
+        {/* <span>{moment(date).format('DD')}</span> */}
+        <br />
+        <span>{jewishDate}</span>
+      </div>
+    );
+  };
+
   return (
     <div className="container pt-28 mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-center">אירועים</h1>
@@ -84,9 +95,8 @@ export const Events = () => {
       {/* Today Events */}
       <div className="w-full mb-8">
         <h2 className="text-2xl font-semibold mb-4">
-          אירועים ב{format(date, "dd/MM/yyyy", { locale: he })}, {getJewishDate(date)}
+          אירועים ב{format(date, "dd/MM/yyyy", { locale: he })}, {getFullJewishDate(date)}
         </h2>
-
         {filteredEvents.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredEvents.map((event) => (
@@ -122,7 +132,7 @@ export const Events = () => {
 
       {/* Calendar */}
       <div className="w-full">
-        <Calendar
+        {/* <Calendar
           localizer={localizer}
           events={eventList.map((event) => ({
             ...event,
@@ -139,35 +149,43 @@ export const Events = () => {
             dayHeaderFormat: (date) => format(date, "EEEE dd/MM", { locale: he }),
           }}
           components={{
-            toolbar: (props) => (
-              <div className="rbc-toolbar">
-                <span className="rbc-btn-group">
-                  <button type="button" onClick={() => props.onNavigate("NEXT")}>
-                    &#8594;
-                  </button>
-                  <button type="button" onClick={() => props.onNavigate("TODAY")}>
-                    {messages.today}
-                  </button>
-                  <button type="button" onClick={() => props.onNavigate("PREV")}>
-                    &#8592;
-                  </button>
-                </span>
-                <span className="rbc-toolbar-label">{props.label}</span>
-                <span className="rbc-btn-group">
-                  {props.views.map((name) => (
-                    <button
-                      key={name}
-                      type="button"
-                      onClick={() => props.onView(name)}
-                      className={props.view === name ? "rbc-active" : ""}>
-                      {messages[name]}
+            // dateCellWrapper: DayWrapper,
+            toolbar: (props) => {
+              const label = props.label;
+              const jewishDate = getMonthAndYearJewishDate(moment(props.date).toDate());
+              return (
+                <div className="rbc-toolbar">
+                  <span className="rbc-btn-group">
+                    <button type="button" onClick={() => props.onNavigate("PREV")}>
+                      &#8592;
                     </button>
-                  ))}
-                </span>
-              </div>
-            ),
+                    <button type="button" onClick={() => props.onNavigate("TODAY")}>
+                      {messages.today}
+                    </button>
+                    <button type="button" onClick={() => props.onNavigate("NEXT")}>
+                      &#8594;
+                    </button>
+                  </span>
+                  <span className="rbc-toolbar-label">
+                    {label} / {jewishDate}
+                  </span>
+                  <span className="rbc-btn-group">
+                    {props.views.map((name) => (
+                      <button
+                        key={name}
+                        type="button"
+                        onClick={() => props.onView(name)}
+                        className={props.view === name ? "rbc-active" : ""}>
+                        {messages[name]}
+                      </button>
+                    ))}
+                  </span>
+                </div>
+              );
+            },
           }}
-        />
+        /> */}
+        <CalendarWithHe />
         {selectedEvent && <EventModal event={selectedEvent} onClose={handleCloseModal} />}
       </div>
 
