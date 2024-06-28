@@ -8,9 +8,10 @@ import { NewsAndUpdates } from "./pages/newsAndUpdates";
 import { Contact } from "./pages/contact";
 import { Login } from "./pages/login";
 import { About } from "./pages/about";
-import { Navbar } from "./components/Navbar";
-import { Newsletter } from "./components/Newsletter";
 import { AuthContextProvider } from "./context/AuthContext";
+import { Navbar } from "./components/navbar";
+import { Newsletter } from "./components/newsletter";
+
 
 function App() {
   return (
