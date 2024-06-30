@@ -7,6 +7,7 @@ const monthTranslations = {
     "Kislev": "כסלו",
     "Tevet": "טבת",
     "Shevat": "שבט",
+    "Sh'vat": "שבט",
     "Adar": "אדר",
     "Adar I": "אדר א",
     "Adar II": "אדר ב",
