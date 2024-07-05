@@ -17,8 +17,7 @@ const UpdateItem = ({ update, onClick }) => (
     </div>
     <button
       className="bg-blue-500 text-white rounded-lg p-2 max-w-full w-full shadow-md border border-gray-200 text-right"
-      onClick={() => onClick(update)}
-    >
+      onClick={() => onClick(update)}>
       <h3 className="text-lg font-bold">{update.title}</h3>
     </button>
   </div>
@@ -29,8 +28,7 @@ const UpdateModal = ({ update, onClose }) => (
     <div className="bg-white rounded-lg p-6 shadow-lg w-full max-w-xl relative text-right">
       <button
         className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-        onClick={onClose}
-      >
+        onClick={onClose}>
         &times;
       </button>
       <div>
@@ -68,32 +66,34 @@ export const NewsAndUpdates = () => {
     try {
       const data = await getDocs(updatesCollectionRef);
       const docs = data.docs;
-      const filteredUpdates = docs.map((doc) => {
-        const updateData = doc.data();
+      const filteredUpdates = docs
+        .map((doc) => {
+          const updateData = doc.data();
 
-        if (!updateData.hasOwnProperty("updateDate")) {
-          console.warn("Update date is missing:", updateData);
-          return null;
-        }
+          if (!updateData.hasOwnProperty("updateDate")) {
+            console.warn("Update date is missing:", updateData);
+            return null;
+          }
 
-        let updateDate;
-        if (typeof updateData["updateDate"] === "string") {
-          updateDate = parse(updateData["updateDate"], "dd.MM.yyyy", new Date());
-        } else {
-          updateDate = new Date(updateData["updateDate"]);
-        }
+          let updateDate;
+          if (typeof updateData["updateDate"] === "string") {
+            updateDate = parse(updateData["updateDate"], "dd.MM.yyyy", new Date());
+          } else {
+            updateDate = new Date(updateData["updateDate"]);
+          }
 
-        if (!isValid(updateDate)) {
-          console.error("Invalid date:", updateData["updateDate"]);
-          return null;
-        }
+          if (!isValid(updateDate)) {
+            console.error("Invalid date:", updateData["updateDate"]);
+            return null;
+          }
 
-        return {
-          id: doc.id,
-          ...updateData,
-          updateDate,
-        };
-      }).filter(Boolean);
+          return {
+            id: doc.id,
+            ...updateData,
+            updateDate,
+          };
+        })
+        .filter(Boolean);
 
       filteredUpdates.sort((a, b) => a.updateDate - b.updateDate);
 
@@ -123,19 +123,11 @@ export const NewsAndUpdates = () => {
           <p className="text-gray-500 text-center">אין עדכונים שותפים</p>
         ) : (
           updatesList.map((update) => (
-            <UpdateItem
-              key={update.id}
-              update={update}
-              onClick={handleTitleClick}
-            />
+            <UpdateItem key={update.id} update={update} onClick={handleTitleClick} />
           ))
         )}
       </div>
-
-      {selectedUpdate && (
-        <UpdateModal update={selectedUpdate} onClose={handleCloseModal} />
-      )}
-
+      {selectedUpdate && <UpdateModal update={selectedUpdate} onClose={handleCloseModal} />}
       <ExportComponent collectionName="news and updates" /> {/* Render ExportComponent here */}
     </div>
   );

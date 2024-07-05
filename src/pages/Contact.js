@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
-import { Newsletter } from "../components/Newsletter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faFax, faEnvelope, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 
@@ -161,7 +160,6 @@ export const Contact = () => {
           </div>
         </div>
       </main>
-      <Newsletter />
     </div>
   );
 };
