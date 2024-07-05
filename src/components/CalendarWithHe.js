@@ -1,23 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   convertToHebrewDay,
   getMonthAndYearJewishDate,
-  monthTranslations,
 } from "../utils/DatesToHebrew";
 import { EventModal } from "./events/EventModal";
+import { monthTranslations } from "../dictionary";
+import { useEvents } from "../hooks/useEvents";
 
 /**
  * CalendarWithHe component
  * @param {object} props - The props for the component
  * @param {function} props.setDate - Function to set the selected date
- * @param {array} props.eventList - List of events
- * @param {function} props.setEventList - Function to set the event list
  * @param {string} props.view - View mode, either "weekly" or "monthly"
  * @returns {JSX.Element}
  */
-export const CalendarWithHe = ({ setDate, eventList, view }) => {
+export const CalendarWithHe = ({ setDate, view }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [openModal, setOpenModal] = useState();
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const { eventList, getEventList } = useEvents();
+
+  useEffect(() => {
+    getEventList();
+  }, [getEventList]);
+
   const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
   const getMonthDays = (year, month, isCurrentMonth = true) => {
@@ -48,7 +54,7 @@ export const CalendarWithHe = ({ setDate, eventList, view }) => {
   };
 
   const selectEvent = (event) => {
-    setSelectedDate(new Date(event.eventDate));
+    setSelectedEvent(event);
     setOpenModal(true);
   };
 
@@ -117,6 +123,7 @@ export const CalendarWithHe = ({ setDate, eventList, view }) => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
+    setSelectedEvent(null);
   };
 
   return (
@@ -177,17 +184,16 @@ export const CalendarWithHe = ({ setDate, eventList, view }) => {
                     title={ev.title}
                   >
                     <span>{ev.title}</span>
-                    {openModal && (
-        <EventModal event={ev} onClose={handleCloseModal} />
-      )}
                   </div>
-                  
                 ))}
             </div>
           </div>
         ))}
       </div>
-      
+
+      {openModal && selectedEvent && (
+        <EventModal event={selectedEvent} onClose={handleCloseModal} />
+      )}
     </div>
   );
 };

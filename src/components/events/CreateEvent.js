@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useEvents } from "../../hooks/useEvents";
 
 const schema = yup.object().shape({
   title: yup.string().required("כותרת נדרשת"),
@@ -29,6 +30,7 @@ export const CreateEvent = ({ onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageBase64, setImageBase64] = useState(null);
   const navigate = useNavigate();
+  const { addEvent } = useEvents();
   const {
     register,
     handleSubmit,
@@ -38,29 +40,12 @@ export const CreateEvent = ({ onClose }) => {
     resolver: yupResolver(schema),
   });
 
-  const eventsCollectionRef = collection(db, "events");
-
   const onSubmit = async (data) => {
     setIsSubmitting(true);
   
     try {
-      const eventData = {
-        ...data,
-        imageUrl: imageBase64,
-        participant: data.participant ? parseInt(data.participant) : null,
-        price: data.price ? parseFloat(data.price) : null,
-        eventDuration: data.eventDuration ? parseInt(data.eventDuration) : null,
-      };
-  
-      await addDoc(eventsCollectionRef, eventData);
-      navigate("/events");
-      onClose();
+      await addEvent(data, imageBase64, setError, navigate, onClose);
     } catch (error) {
-      setError("root", {
-        type: "manual",
-        message: "שגיאה ביצירת האירוע: " + error.message,
-      });
-    } finally {
       setIsSubmitting(false);
     }
   };

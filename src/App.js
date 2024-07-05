@@ -13,32 +13,35 @@ import { Dashboard } from "./pages/Dashboard";
 import { AuthContextProvider } from "./context/AuthContext";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
+import {  EventsContextProvider } from "./context/EventsContext";
 
 function App() {
   return (
     <>
       <AuthContextProvider>
-        <Router>
-          <Navbar />
-          <Routes className="flex-grow">
-            <Route path="/" element={<Home />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/classes" element={<Classes />} />
-            <Route path="/newsAndUpdates" element={<NewsAndUpdates />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/about" element={<About />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-          <Footer />
-        </Router>
+        <EventsContextProvider>
+          <Router>
+            <Navbar />
+            <Routes className="flex-grow">
+              <Route path="/" element={<Home />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/classes" element={<Classes />} />
+              <Route path="/newsAndUpdates" element={<NewsAndUpdates />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/about" element={<About />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+            <Footer />
+          </Router>
+        </EventsContextProvider>
       </AuthContextProvider>
     </>
   );

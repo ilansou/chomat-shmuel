@@ -3,14 +3,13 @@ import { momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import { format, isSameDay } from "date-fns";
 import { he } from "date-fns/locale";
-import { db } from "../firebase";
-import { getDocs, deleteDoc, doc, collection } from "firebase/firestore";
 import { EventModal } from "../components/events/EventModal";
 import { CreateEvent } from "../components/events/CreateEvent";
 import "moment/locale/he";
 import { useAuth } from "../context/AuthContext";
 import { getFullJewishDate } from "../utils/DatesToHebrew";
 import { CalendarWithHe } from "../components/CalendarWithHe";
+import { useEvents } from "../hooks/useEvents";
 
 moment.locale("he");
 const localizer = momentLocalizer(moment);
@@ -32,9 +31,15 @@ const messages = {
 export const Events = () => {
   const { user } = useAuth();
   const [date, setDate] = useState(new Date());
-  const [eventList, setEventList] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
+  const { getEventList, eventList } = useEvents();
+
+  useEffect(() => {
+    
+    getEventList();
+    console.log(eventList);
+  }, [eventList]);
 
   const handleSelectEvent = (event) => {
     setSelectedEvent(event);
@@ -44,36 +49,8 @@ export const Events = () => {
     setSelectedEvent(null);
   };
 
-  const eventsCollectionRef = collection(db, "events");
-
-  const getEventList = async () => {
-    try {
-      const data = await getDocs(eventsCollectionRef);
-      const filteredEvents = data.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setEventList(filteredEvents);
-    } catch (error) {
-      console.error("Error getting events: ", error);
-    }
-  };
-
-  useEffect(() => {
-    getEventList();
-  }, []);
-
-  const deleteEvent = async (id) => {
-    try {
-      await deleteDoc(doc(eventsCollectionRef, id));
-      getEventList();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const filteredEvents = eventList.filter((eventList) =>
-    isSameDay(new Date(eventList.eventDate), date)
+  const filteredEvents = eventList?.filter((event) =>
+    isSameDay(new Date(event.eventDate), date)
   );
 
   return (
@@ -95,9 +72,7 @@ export const Events = () => {
       <div className="w-full">
         <CalendarWithHe
           setDate={setDate}
-          eventList={eventList}
-          setEventList={setEventList}
-          view={"weekly"}
+          view={"monthly"}
         />
         {selectedEvent && (
           <EventModal event={selectedEvent} onClose={handleCloseModal} />
@@ -110,23 +85,21 @@ export const Events = () => {
           אירועים ב{format(date, "dd/MM/yyyy", { locale: he })},{" "}
           {getFullJewishDate(date)}
         </h2>
-        {filteredEvents.length > 0 ? (
+        {filteredEvents?.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredEvents.map((event) => {
-              return (
-                <div
-                  key={event.id}
-                  className="bg-white shadow-md rounded p-4 cursor-pointer hover:shadow-lg transition-shadow"
-                  onClick={() => handleSelectEvent(event)}
-                >
-                  <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                  <p className="text-gray-700">{event.description}</p>
-                  <p className="text-gray-500">
-                    {format(new Date(event.eventDate), "HH:mm", { locale: he })}
-                  </p>
-                </div>
-              );
-            })}
+            {filteredEvents.map((event) => (
+              <div
+                key={event.id}
+                className="bg-white shadow-md rounded p-4 cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={() => handleSelectEvent(event)}
+              >
+                <h3 className="text-xl font-bold mb-2">{event.title}</h3>
+                <p className="text-gray-700">{event.description}</p>
+                <p className="text-gray-500">
+                  {format(new Date(event.eventDate), "HH:mm", { locale: he })}
+                </p>
+              </div>
+            ))}
           </div>
         ) : (
           <div className="bg-white shadow-md rounded p-4">
@@ -134,7 +107,6 @@ export const Events = () => {
           </div>
         )}
       </div>
-
 
       {/* Create Event Modal */}
       {showCreateEvent && (
