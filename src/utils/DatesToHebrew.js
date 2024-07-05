@@ -1,7 +1,7 @@
 import { HDate, Zmanim } from "@hebcal/core";
 
 // Array to translate English month names to Hebrew
-const monthTranslations = {
+const jewishMonthTranslations = {
     "Tishrei": "תשרי",
     "Cheshvan": "חשון",
     "Kislev": "כסלו",
@@ -19,6 +19,11 @@ const monthTranslations = {
     "Av": "אב",
     "Elul": "אלול"
 };
+
+export const monthTranslations = [
+    "ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני",
+    "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"
+];
 
 export const getFullJewishDate = (date) => {
     let hdate = new HDate(date);
@@ -70,7 +75,7 @@ export const convertToHebrewDay = (day) => {
 
 // Function to translate month name to Hebrew
 export const translateMonth = (monthName) => {
-    return monthTranslations[monthName] || monthName; // If translation exists, return Hebrew name; otherwise, return original name
+    return jewishMonthTranslations[monthName] || monthName; // If translation exists, return Hebrew name; otherwise, return original name
 };
 
 // Function to convert numeric year to Hebrew letters

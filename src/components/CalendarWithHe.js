@@ -2,57 +2,46 @@ import React, { useState } from "react";
 import {
   convertToHebrewDay,
   getMonthAndYearJewishDate,
-} from "../utils/hebrewDate";
+  monthTranslations,
+} from "../utils/DatesToHebrew";
 
-export const CalendarWithHe = ({ setDate, eventList, setEventList }) => {
+/**
+ * CalendarWithHe component
+ * @param {object} props - The props for the component
+ * @param {function} props.setDate - Function to set the selected date
+ * @param {array} props.eventList - List of events
+ * @param {function} props.setEventList - Function to set the event list
+ * @param {string} props.view - View mode, either "weekly" or "monthly"
+ * @returns {JSX.Element}
+ */
+export const CalendarWithHe = ({ setDate, eventList, view }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const daysInMonth = (year, month) => {
-    return new Date(year, month + 1, 0).getDate();
-  };
+  const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
-  const getPreviousMonthDays = (year, month, firstDayOfMonth) => {
-    const previousMonth = month === 0 ? 11 : month - 1; // Handle wrap around to previous year
-    const previousMonthYear = month === 0 ? year - 1 : year;
-    const daysInPreviousMonth = daysInMonth(previousMonthYear, previousMonth);
-    const previousMonthDays = [];
-
-    for (let i = firstDayOfMonth - 1; i >= 0; i--) {
-      previousMonthDays.push(daysInPreviousMonth - i);
-    }
-
-    return previousMonthDays.reverse();
-  };
-
-  const getNextMonthDays = (year, month, remainingDays) => {
-    const nextMonth = month === 11 ? 0 : month + 1; // Handle wrap around to next year
-    const nextMonthYear = month === 11 ? year + 1 : year;
-    const nextMonthDays = [];
-
-    for (let i = 1; i <= remainingDays; i++) {
-      nextMonthDays.push(i);
-    }
-
-    return nextMonthDays.map((day) => ({
-      day,
-      isCurrentMonth: false,
-      date: new Date(nextMonthYear, nextMonth, day),
-      month: nextMonth,
-      year: nextMonthYear,
+  const getMonthDays = (year, month, isCurrentMonth = true) => {
+    const daysCount = daysInMonth(year, month);
+    return Array.from({ length: daysCount }, (_, i) => ({
+      day: i + 1,
+      isCurrentMonth,
+      date: new Date(year, month, i + 1),
+      month,
+      year,
     }));
   };
 
-  const changeMonth = (delta) => {
+  const changeDate = (delta, isMonth) => {
     setSelectedDate((prevDate) => {
       const newDate = new Date(prevDate);
-      newDate.setMonth(newDate.getMonth() + delta);
+      isMonth ? newDate.setMonth(newDate.getMonth() + delta) : newDate.setDate(newDate.getDate() + delta * 7);
       return newDate;
     });
   };
 
   const selectDay = (dayObj) => {
-    setSelectedDate(new Date(dayObj.year, dayObj.month, dayObj.day));
-    setDate(new Date(dayObj.year, dayObj.month, dayObj.day));
+    const newDate = new Date(dayObj.year, dayObj.month, dayObj.day);
+    setSelectedDate(newDate);
+    setDate(newDate);
   };
 
   const selectEvent = (event) => {
@@ -62,132 +51,103 @@ export const CalendarWithHe = ({ setDate, eventList, setEventList }) => {
   const year = selectedDate.getFullYear();
   const month = selectedDate.getMonth();
   const daysCount = daysInMonth(year, month);
-
-  const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 for Sunday, 1 for Monday, etc.
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
   const weeks = [[]];
-  let currentWeek = 0;
 
-  const previousMonthDays = getPreviousMonthDays(year, month, firstDayOfMonth);
+  if (view === "monthly") {
+    const previousMonth = month === 0 ? 11 : month - 1;
+    const previousMonthYear = month === 0 ? year - 1 : year;
+    const previousMonthDays = getMonthDays(previousMonthYear, previousMonth, false).slice(-firstDayOfMonth);
 
-  // Fill in previous month days
-  for (let i = 0; i < previousMonthDays.length; i++) {
-    weeks[currentWeek].push({
-      day: previousMonthDays[i],
-      isCurrentMonth: false,
-      date: new Date(year, month - 1, previousMonthDays[i]),
-      month: month === 0 ? 11 : month - 1,
-      year: month === 0 ? year - 1 : year,
-    });
-  }
+    // Fill in previous month days
+    weeks[0] = previousMonthDays;
 
-  // Fill in current month days
-  for (let day = 1; day <= daysCount; day++) {
-    if (weeks[currentWeek].length === 7) {
-      weeks.push([]);
-      currentWeek++;
+    // Fill in current month days
+    weeks[0] = weeks[0].concat(getMonthDays(year, month));
+
+    // Fill in next month days to complete the last week
+    const remainingDays = 7 - weeks[0].length % 7;
+    const nextMonth = month === 11 ? 0 : month + 1;
+    const nextMonthYear = month === 11 ? year + 1 : year;
+    const nextMonthDays = getMonthDays(nextMonthYear, nextMonth, false).slice(0, remainingDays);
+
+    weeks[0] = weeks[0].concat(nextMonthDays);
+  } else if (view === "weekly") {
+    const startOfWeek = new Date(selectedDate);
+    startOfWeek.setDate(selectedDate.getDate() - selectedDate.getDay());
+
+    for (let i = 0; i < 7; i++) {
+      const currentDate = new Date(startOfWeek);
+      currentDate.setDate(startOfWeek.getDate() + i);
+      weeks[0].push({
+        day: currentDate.getDate(),
+        isCurrentMonth: currentDate.getMonth() === month,
+        date: currentDate,
+        month: currentDate.getMonth(),
+        year: currentDate.getFullYear(),
+      });
     }
-    weeks[currentWeek].push({
-      day: day,
-      isCurrentMonth: true,
-      date: new Date(year, month, day),
-      month: month,
-      year: year,
-    });
   }
 
-  // Fill in next month days to complete the last week
-  const lastWeek = weeks[weeks.length - 1];
-  const remainingDays = 7 - lastWeek.length;
-  const nextMonthDays = getNextMonthDays(year, month, remainingDays);
-
-  nextMonthDays.forEach((dayObj) => {
-    lastWeek.push(dayObj);
-  });
 
   const eventOccursOnDate = (eventDate, calendarDate) => {
     const eventDateObj = new Date(eventDate);
-    const eventDateString = `${eventDateObj.getFullYear()}-${String(
-      eventDateObj.getMonth() + 1
-    ).padStart(2, "0")}-${String(eventDateObj.getDate()).padStart(2, "0")}`;
+    if (isNaN(eventDateObj)) return false;
 
-    const calendarDateString = `${calendarDate.year}-${String(
-      calendarDate.month + 1
-    ).padStart(2, "0")}-${String(calendarDate.day).padStart(2, "0")}`;
+    const eventDateString = `${eventDateObj.getFullYear()}-${String(eventDateObj.getMonth() + 1).padStart(2, "0")}-${String(eventDateObj.getDate()).padStart(2, "0")}`;
+
+    const calendarDateString = `${calendarDate.year}-${String(calendarDate.month + 1).padStart(2, "0")}-${String(calendarDate.day).padStart(2, "0")}`;
 
     return eventDateString === calendarDateString;
   };
 
   return (
     <div className="w-full m-6">
-      <h2>{getMonthAndYearJewishDate(selectedDate)}</h2>
+      <h2>{getMonthAndYearJewishDate(selectedDate)} / {monthTranslations[month]} {year}</h2>
       <div className="flex justify-center mb-4">
         <button
           className="mr-2 px-4 py-2 bg-gray-200 rounded"
-          onClick={() => changeMonth(-1)}
+          onClick={() => changeDate(view === "monthly" ? -1 : -7, view === "monthly")}
         >
-          Previous Month
+          {view === "monthly" ? "Previous Month" : "Previous Week"}
         </button>
         <button
           className="ml-2 px-4 py-2 bg-gray-200 rounded"
-          onClick={() => changeMonth(1)}
+          onClick={() => changeDate(view === "monthly" ? 1 : 7, view === "monthly")}
         >
-          Next Month
+          {view === "monthly" ? "Next Month" : "Next Week"}
         </button>
       </div>
 
       <div className="grid grid-cols-7 gap-1 w-full">
-        {/* Header with Hebrew days */}
-        <div className="font-bold">א'</div>
-        <div className="font-bold">ב'</div>
-        <div className="font-bold">ג'</div>
-        <div className="font-bold">ד'</div>
-        <div className="font-bold">ה'</div>
-        <div className="font-bold">ו'</div>
-        <div className="font-bold">ש'</div>
+        {["א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ש'"].map((day, index) => (
+          <div key={index} className="font-bold">{day}</div>
+        ))}
 
-        {/* Calendar days */}
-        {weeks.map((week, index) =>
-          week.map((dayObj, idx) => (
-            <div
-              key={idx}
-              className={`p-2 ${dayObj.isCurrentMonth ? "" : "bg-gray-200"}`}
-              style={{
-                minHeight: "3rem",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
-              onClick={() => dayObj.day !== null && selectDay(dayObj)}
-            >
-              {dayObj.day !== null ? (
-                <>
-                  <div>{dayObj.day}</div>
-                  <div>{convertToHebrewDay(dayObj.date)}</div>
-                  <div className="events-container">
-                    {eventList
-                      .filter((ev) => eventOccursOnDate(ev.eventDate, dayObj))
-                      .map((ev) => (
-                        <div
-                          key={ev.id}
-                          className={`event ${
-                            selectedDate.getTime() ===
-                            new Date(ev.eventDate).getTime()
-                              ? "selected-event"
-                              : ""
-                          }`}
-                          onClick={() => selectEvent(ev)}
-                        >
-                          <span>{ev.title}</span>
-                        </div>
-                      ))}
+        {weeks.flat().map((dayObj, idx) => (
+          <div
+            key={idx}
+            className={`p-2 ${dayObj.isCurrentMonth ? "" : "bg-gray-200"} min-h-[3rem] flex flex-col justify-between overflow-hidden`}
+            onClick={() => selectDay(dayObj)}
+          >
+            <div>{dayObj.day}</div>
+            <div className="text-sm">{convertToHebrewDay(dayObj.date)}</div>
+            <div className="events-container">
+              {eventList
+                .filter((ev) => eventOccursOnDate(ev.eventDate, dayObj))
+                .map((ev) => (
+                  <div
+                    key={ev.id}
+                    className={`event truncate ${selectedDate.getTime() === new Date(ev.eventDate).getTime() ? "selected-event" : ""}`}
+                    onClick={() => selectEvent(ev)}
+                    title={ev.title}
+                  >
+                    <span>{ev.title}</span>
                   </div>
-                </>
-              ) : (
-                ""
-              )}
+                ))}
             </div>
-          ))
-        )}
+          </div>
+        ))}
       </div>
     </div>
   );

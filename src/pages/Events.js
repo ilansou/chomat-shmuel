@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import { momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import { format, isSameDay } from "date-fns";
 import { he } from "date-fns/locale";
@@ -9,11 +9,7 @@ import { EventModal } from "../components/EventModal";
 import { CreateEvent } from "../components/CreateEvent";
 import "moment/locale/he";
 import { useAuth } from "../context/AuthContext";
-import {
-  getFullJewishDate,
-  getMonthAndYearJewishDate,
-  convertToHebrewDay,
-} from "../utils/hebrewDate";
+import { getFullJewishDate } from "../utils/DatesToHebrew";
 import { CalendarWithHe } from "../components/CalendarWithHe";
 
 moment.locale("he");
@@ -57,7 +53,6 @@ export const Events = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      console.log(filteredEvents);
       setEventList(filteredEvents);
     } catch (error) {
       console.error("Error getting events: ", error);
@@ -85,20 +80,45 @@ export const Events = () => {
     <div className="container pt-28 mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-center">אירועים</h1>
 
+      {/* Create Event Button */}
+      <div className="mb-8">
+        {user ? (
+          <button
+            className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded"
+            onClick={() => setShowCreateEvent(true)}
+          >
+            הוסף אירוע
+          </button>
+        ) : null}
+      </div>
+
+      <div className="w-full">
+        <CalendarWithHe
+          setDate={setDate}
+          eventList={eventList}
+          setEventList={setEventList}
+          view={"weekly"}
+        />
+        {selectedEvent && (
+          <EventModal event={selectedEvent} onClose={handleCloseModal} />
+        )}
+      </div>
+
       {/* Today Events */}
       <div className="w-full mb-8">
         <h2 className="text-2xl font-semibold mb-4">
-          אירועים ב{format(date, "dd/MM/yyyy", { locale: he })}, {getFullJewishDate(date)}
+          אירועים ב{format(date, "dd/MM/yyyy", { locale: he })},{" "}
+          {getFullJewishDate(date)}
         </h2>
         {filteredEvents.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredEvents.map((event) => {
-              console.log(event);
               return (
                 <div
                   key={event.id}
                   className="bg-white shadow-md rounded p-4 cursor-pointer hover:shadow-lg transition-shadow"
-                  onClick={() => handleSelectEvent(event)}>
+                  onClick={() => handleSelectEvent(event)}
+                >
                   <h3 className="text-xl font-bold mb-2">{event.title}</h3>
                   <p className="text-gray-700">{event.description}</p>
                   <p className="text-gray-500">
@@ -115,22 +135,6 @@ export const Events = () => {
         )}
       </div>
 
-      {/* Create Event Button */}
-      <div className="mb-8">
-        {user ? (
-          <button
-            className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded"
-            onClick={() => setShowCreateEvent(true)}>
-            הוסף אירוע
-          </button>
-        ) : null}
-      </div>
-
-      {/* Calendar */}
-      <div className="w-full">
-        <CalendarWithHe setDate={setDate} eventList={eventList} setEventList={setEventList} />
-        {selectedEvent && <EventModal event={selectedEvent} onClose={handleCloseModal} />}
-      </div>
 
       {/* Create Event Modal */}
       {showCreateEvent && (
@@ -138,7 +142,8 @@ export const Events = () => {
           <div className="bg-white rounded-lg p-6 shadow-lg max-w-[800px] w-full relative">
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-              onClick={() => setShowCreateEvent(false)}>
+              onClick={() => setShowCreateEvent(false)}
+            >
               &times;
             </button>
             <CreateEvent onClose={() => setShowCreateEvent(false)} />
