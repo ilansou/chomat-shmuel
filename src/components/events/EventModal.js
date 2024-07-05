@@ -1,7 +1,7 @@
 import React from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { deleteDoc, doc } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 
 export const EventModal = ({ event, onClose, onDelete }) => {
   const { user } = useAuth();
