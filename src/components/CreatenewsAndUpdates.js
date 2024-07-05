@@ -3,7 +3,7 @@ import { db } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
-export const CreateUpdate = ({ onClose }) => {
+export const CreatUepdate = ({ onClose }) => {
   const [update, setUpdate] = useState({
     title: "",
     image: "",
@@ -42,11 +42,11 @@ export const CreateUpdate = ({ onClose }) => {
   };
 
   const fields = [
-    { label: "כותרת", name: "title", type: "text" },
+    { label: "כותרת", name: "title", type: "text" ,required: true},
     { label: "תמונה", name: "image", type: "file" },
-    { label: "תיאור", name: "description", type: "textarea" },
-    { label: "תאריך עדכון", name: "updateDate", type: "date" },
-    { label: "תאריך תפוגה", name: "expireDate", type: "date" },
+    { label: "תיאור", name: "description", type: "textarea",required: true },
+    { label: "תאריך עדכון", name: "updateDate", type: "date" ,required: true },
+    { label: "תאריך תפוגה", name: "expireDate", type: "date" ,required: true},
   ];
 
   return (
