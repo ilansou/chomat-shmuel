@@ -5,6 +5,8 @@ import { he } from "date-fns/locale";
 import logo from "../images/logo.png";
 import ExportComponent from "../utils/ExportComponent"; // Import ExportComponent
 import { db } from "../firebase";
+import { useAuth } from "../context/AuthContext";
+import { CreatUepdate } from "../components/CreatenewsAndUpdates";
 
 const UpdateItem = ({ update, onClick }) => (
   <div className="flex items-start mb-4 justify-end">
@@ -57,9 +59,10 @@ const UpdateModal = ({ update, onClose }) => (
 );
 
 export const NewsAndUpdates = () => {
+  const { user } = useAuth();
   const [updatesList, setUpdatesList] = useState([]);
   const [selectedUpdate, setSelectedUpdate] = useState(null);
-
+  const [ShowCreatUepdate, setShowCreatUepdate] = useState(false);
   const updatesCollectionRef = collection(db, "news and updates");
 
   const getUpdatesList = async () => {
@@ -129,6 +132,34 @@ export const NewsAndUpdates = () => {
       </div>
       {selectedUpdate && <UpdateModal update={selectedUpdate} onClose={handleCloseModal} />}
       <ExportComponent collectionName="news and updates" /> {/* Render ExportComponent here */}
+
+      {/* Create Event Button */}
+    <div className="mb-8">
+    {user?.email && (
+      <button
+        className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded"
+        onClick={() => setShowCreatUepdate(true)}>
+        הוסף אירוע
+      </button>
+    )}
     </div>
-  );
+
+
+
+{/* Create Event Modal */}
+{ShowCreatUepdate && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg p-6 shadow-lg max-w-[800px] w-full relative">
+      <button
+        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+        onClick={() => setShowCreatUepdate(false)}>
+        &times;
+      </button>
+      <CreatUepdate onClose={() => setShowCreatUepdate(false)} />
+    </div>
+  </div>
+)}
+
+</div>
+); 
 };

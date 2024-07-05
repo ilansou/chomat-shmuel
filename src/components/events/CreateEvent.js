@@ -8,16 +8,21 @@ import * as yup from "yup";
 
 const schema = yup.object().shape({
   title: yup.string().required("כותרת נדרשת"),
-  // imageUrl: yup.mixed().required("תמונה נדרשת"),
-  // description: yup.string().required("תיאור נדרש"),
-  // eventDate: yup.date().required("תאריך אירוע נדרש"),
-  // participant: yup.number().positive().integer().nullable(),
-  // audienceAge: yup.string(),
-  // location: yup.string().required("מיקום נדרש"),
-  // price: yup.number().positive().nullable(),
-  // expireDate: yup.date().min(yup.ref("eventDate"), "תאריך תפוגה חייב להיות אחרי תאריך האירוע"),
-  // eventDuration: yup.number().positive().integer().nullable(),
-  // URL: yup.string().url("נא להזין כתובת אתר תקינה"),
+  description: yup.string().required("תיאור נדרש"),
+  eventDate: yup
+    .date()
+    .nullable()
+    .typeError("תאריך אירוע נדרש")
+    .required("תאריך אירוע נדרש")
+    .min(new Date(), "תאריך האירוע חייב להיות תאריך עתידי"),
+  audienceAge: yup.string(),
+  expireDate: yup
+    .date()
+    .nullable()
+    .typeError("תאריך תפוגה נדרש")
+    .required("תאריך תפוגה נדרש")
+    .min(yup.ref("eventDate"), "תאריך תפוגה חייב להיות אחרי תאריך האירוע"),
+  URL: yup.string().url("נא להזין כתובת אתר תקינה"),
 });
 
 export const CreateEvent = ({ onClose }) => {
@@ -37,7 +42,7 @@ export const CreateEvent = ({ onClose }) => {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
-
+  
     try {
       const eventData = {
         ...data,
@@ -46,7 +51,7 @@ export const CreateEvent = ({ onClose }) => {
         price: data.price ? parseFloat(data.price) : null,
         eventDuration: data.eventDuration ? parseInt(data.eventDuration) : null,
       };
-
+  
       await addDoc(eventsCollectionRef, eventData);
       navigate("/events");
       onClose();
@@ -59,7 +64,7 @@ export const CreateEvent = ({ onClose }) => {
       setIsSubmitting(false);
     }
   };
-
+  
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -73,16 +78,16 @@ export const CreateEvent = ({ onClose }) => {
 
   const fields = [
     { label: "כותרת", name: "title", type: "text", required: true },
-    { label: "תמונה", name: "imageUrl", type: "file", accept: "image/*" },
-    { label: "תיאור", name: "description", type: "textarea" },
-    { label: "תאריך האירוע", name: "eventDate", type: "date" },
-    { label: "מספר משתתפים", name: "participant", type: "number" },
-    { label: "גיל קהל היעד", name: "audienceAge", type: "text" },
-    { label: "מיקום", name: "location", type: "text" },
-    { label: "מחיר", name: "price", type: "number", step: "0.1" },
-    { label: "תאריך תפוגה", name: "expireDate", type: "date" },
-    { label: "משך האירוע (בדקות)", name: "eventDuration", type: "number" },
+    { label: "תמונה", name: "imageUrl", type: "file", accept: "image/*", required: true },
+    { label: "תיאור", name: "description", type: "textarea", required: true },
     { label: "קישור", name: "URL", type: "url" },
+    { label: "תאריך ושעת האירוע", name: "eventDate", type: "datetime-local", required: true },
+    { label: "תאריך תפוגה", name: "expireDate", type: "date", required: true },
+    { label: "גיל קהל היעד", name: "audienceAge", type: "text" },
+    { label: "מיקום", name: "location", type: "text", required: true },
+    { label: "מחיר", name: "price", type: "number", step: "0.1" },
+    { label: "מספר משתתפים", name: "participant", type: "number" },
+    { label: "משך האירוע (בדקות)", name: "eventDuration", type: "number" },
   ];
 
   return (
@@ -131,7 +136,8 @@ export const CreateEvent = ({ onClose }) => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-300 disabled:opacity-50">
+          className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-300 disabled:opacity-50"
+        >
           {isSubmitting ? "יוצר אירוע..." : "צור אירוע"}
         </button>
       </form>
@@ -139,3 +145,5 @@ export const CreateEvent = ({ onClose }) => {
     </div>
   );
 };
+
+export default CreateEvent;
