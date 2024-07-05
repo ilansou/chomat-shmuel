@@ -117,13 +117,13 @@ export const Events = () => {
 
       {/* Create Event Button */}
       <div className="mb-8">
-        {user?.email && (
+        {user ? (
           <button
             className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded"
             onClick={() => setShowCreateEvent(true)}>
             הוסף אירוע
           </button>
-        )}
+        ) : null}
       </div>
 
       {/* Calendar */}

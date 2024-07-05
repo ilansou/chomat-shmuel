@@ -4,7 +4,7 @@ import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 
 export const EventModal = ({ event, onClose, onDelete }) => {
-  const { user } = useAuth(); 
+  const { user } = useAuth();
 
   const handleDelete = async () => {
     if (window.confirm("האם אתה בטוח שברצונך למחוק אירוע זה?")) {

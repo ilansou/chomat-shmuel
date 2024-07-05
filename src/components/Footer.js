@@ -1,4 +1,4 @@
-import React from "react";
+import React,  {useState} from "react";
 import { FaFacebook, FaYoutube, FaBookOpen } from "react-icons/fa";
 
 const socialItems = [
@@ -16,8 +16,8 @@ const socialItems = [
 ];
 
 export const Footer = () => {
-  const [email, setEmail] = React.useState("");
-  const [message, setMessage] = React.useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
