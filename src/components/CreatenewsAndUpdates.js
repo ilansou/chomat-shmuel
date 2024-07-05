@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { db } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns"; // Import from date-fns for date formatting
 
 export const CreatUepdate = ({ onClose }) => {
   const [update, setUpdate] = useState({
@@ -17,7 +18,7 @@ export const CreatUepdate = ({ onClose }) => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const updatesCollectionRef = collection(db, "news and updates");
+  const updatesCollectionRef = collection(db, "news and updates"); // Ensure the collection name matches your Firestore setup
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -34,7 +35,16 @@ export const CreatUepdate = ({ onClose }) => {
       await addDoc(updatesCollectionRef, {
         ...update,
       });
-      navigate("/updates");
+
+      // Instead of navigate("/updates"), show a confirmation message or action
+      alert("עדכון נוצר בהצלחה!");
+
+      // Optionally, update the updateDate field to a formatted date string
+      setUpdate({
+        ...update,
+        updateDate: format(new Date(), "yyyy-MM-dd"), // Example format using date-fns
+      });
+
       onClose();
     } catch (error) {
       setError("שגיאה ביצירת העדכון: " + error.message);
@@ -42,11 +52,11 @@ export const CreatUepdate = ({ onClose }) => {
   };
 
   const fields = [
-    { label: "כותרת", name: "title", type: "text" ,required: true},
+    { label: "כותרת", name: "title", type: "text", required: true },
     { label: "תמונה", name: "image", type: "file" },
-    { label: "תיאור", name: "description", type: "textarea",required: true },
-    { label: "תאריך עדכון", name: "updateDate", type: "date" ,required: true },
-    { label: "תאריך תפוגה", name: "expireDate", type: "date" ,required: true},
+    { label: "תיאור", name: "description", type: "textarea", required: true },
+    { label: "תאריך עדכון", name: "updateDate", type: "date", required: true },
+    { label: "תאריך תפוגה", name: "expireDate", type: "date", required: true },
   ];
 
   return (
@@ -82,11 +92,13 @@ export const CreatUepdate = ({ onClose }) => {
         ))}
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-300">
+          className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-300"
+        >
           צור עדכון
         </button>
       </form>
       {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+    
     </div>
   );
 };
