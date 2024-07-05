@@ -1,5 +1,4 @@
 import React from "react";
-import { Newsletter } from "../components/Newsletter";
 import { EventList } from "../components/EventList";
 import { Carousel } from "../components/Carousel";
 
