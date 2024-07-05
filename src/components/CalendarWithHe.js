@@ -4,6 +4,7 @@ import {
   getMonthAndYearJewishDate,
   monthTranslations,
 } from "../utils/DatesToHebrew";
+import { EventModal } from "./events/EventModal";
 
 /**
  * CalendarWithHe component
@@ -16,7 +17,7 @@ import {
  */
 export const CalendarWithHe = ({ setDate, eventList, view }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-
+  const [openModal, setOpenModal] = useState();
   const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
   const getMonthDays = (year, month, isCurrentMonth = true) => {
@@ -33,7 +34,9 @@ export const CalendarWithHe = ({ setDate, eventList, view }) => {
   const changeDate = (delta, isMonth) => {
     setSelectedDate((prevDate) => {
       const newDate = new Date(prevDate);
-      isMonth ? newDate.setMonth(newDate.getMonth() + delta) : newDate.setDate(newDate.getDate() + delta * 7);
+      isMonth
+        ? newDate.setMonth(newDate.getMonth() + delta)
+        : newDate.setDate(newDate.getDate() + delta * 7);
       return newDate;
     });
   };
@@ -46,6 +49,7 @@ export const CalendarWithHe = ({ setDate, eventList, view }) => {
 
   const selectEvent = (event) => {
     setSelectedDate(new Date(event.eventDate));
+    setOpenModal(true);
   };
 
   const year = selectedDate.getFullYear();
@@ -57,7 +61,11 @@ export const CalendarWithHe = ({ setDate, eventList, view }) => {
   if (view === "monthly") {
     const previousMonth = month === 0 ? 11 : month - 1;
     const previousMonthYear = month === 0 ? year - 1 : year;
-    const previousMonthDays = getMonthDays(previousMonthYear, previousMonth, false).slice(-firstDayOfMonth);
+    const previousMonthDays = getMonthDays(
+      previousMonthYear,
+      previousMonth,
+      false
+    ).slice(-firstDayOfMonth);
 
     // Fill in previous month days
     weeks[0] = previousMonthDays;
@@ -66,10 +74,13 @@ export const CalendarWithHe = ({ setDate, eventList, view }) => {
     weeks[0] = weeks[0].concat(getMonthDays(year, month));
 
     // Fill in next month days to complete the last week
-    const remainingDays = 7 - weeks[0].length % 7;
+    const remainingDays = 7 - (weeks[0].length % 7);
     const nextMonth = month === 11 ? 0 : month + 1;
     const nextMonthYear = month === 11 ? year + 1 : year;
-    const nextMonthDays = getMonthDays(nextMonthYear, nextMonth, false).slice(0, remainingDays);
+    const nextMonthDays = getMonthDays(nextMonthYear, nextMonth, false).slice(
+      0,
+      remainingDays
+    );
 
     weeks[0] = weeks[0].concat(nextMonthDays);
   } else if (view === "weekly") {
@@ -89,31 +100,45 @@ export const CalendarWithHe = ({ setDate, eventList, view }) => {
     }
   }
 
-
   const eventOccursOnDate = (eventDate, calendarDate) => {
     const eventDateObj = new Date(eventDate);
     if (isNaN(eventDateObj)) return false;
 
-    const eventDateString = `${eventDateObj.getFullYear()}-${String(eventDateObj.getMonth() + 1).padStart(2, "0")}-${String(eventDateObj.getDate()).padStart(2, "0")}`;
+    const eventDateString = `${eventDateObj.getFullYear()}-${String(
+      eventDateObj.getMonth() + 1
+    ).padStart(2, "0")}-${String(eventDateObj.getDate()).padStart(2, "0")}`;
 
-    const calendarDateString = `${calendarDate.year}-${String(calendarDate.month + 1).padStart(2, "0")}-${String(calendarDate.day).padStart(2, "0")}`;
+    const calendarDateString = `${calendarDate.year}-${String(
+      calendarDate.month + 1
+    ).padStart(2, "0")}-${String(calendarDate.day).padStart(2, "0")}`;
 
     return eventDateString === calendarDateString;
   };
 
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
   return (
     <div className="w-full m-6">
-      <h2>{getMonthAndYearJewishDate(selectedDate)} / {monthTranslations[month]} {year}</h2>
+      <h2>
+        {getMonthAndYearJewishDate(selectedDate)} / {monthTranslations[month]}{" "}
+        {year}
+      </h2>
       <div className="flex justify-center mb-4">
         <button
           className="mr-2 px-4 py-2 bg-gray-200 rounded"
-          onClick={() => changeDate(view === "monthly" ? -1 : -7, view === "monthly")}
+          onClick={() =>
+            changeDate(view === "monthly" ? -1 : -7, view === "monthly")
+          }
         >
           {view === "monthly" ? "Previous Month" : "Previous Week"}
         </button>
         <button
           className="ml-2 px-4 py-2 bg-gray-200 rounded"
-          onClick={() => changeDate(view === "monthly" ? 1 : 7, view === "monthly")}
+          onClick={() =>
+            changeDate(view === "monthly" ? 1 : 7, view === "monthly")
+          }
         >
           {view === "monthly" ? "Next Month" : "Next Week"}
         </button>
@@ -121,13 +146,17 @@ export const CalendarWithHe = ({ setDate, eventList, view }) => {
 
       <div className="grid grid-cols-7 gap-1 w-full">
         {["א'", "ב'", "ג'", "ד'", "ה'", "ו'", "ש'"].map((day, index) => (
-          <div key={index} className="font-bold">{day}</div>
+          <div key={index} className="font-bold">
+            {day}
+          </div>
         ))}
 
         {weeks.flat().map((dayObj, idx) => (
           <div
             key={idx}
-            className={`p-2 ${dayObj.isCurrentMonth ? "" : "bg-gray-200"} min-h-[3rem] flex flex-col justify-between overflow-hidden`}
+            className={`p-2 ${
+              dayObj.isCurrentMonth ? "" : "bg-gray-200"
+            } min-h-[3rem] flex flex-col justify-between overflow-hidden`}
             onClick={() => selectDay(dayObj)}
           >
             <div>{dayObj.day}</div>
@@ -138,17 +167,27 @@ export const CalendarWithHe = ({ setDate, eventList, view }) => {
                 .map((ev) => (
                   <div
                     key={ev.id}
-                    className={`event truncate ${selectedDate.getTime() === new Date(ev.eventDate).getTime() ? "selected-event" : ""}`}
+                    className={`event truncate ${
+                      selectedDate.getTime() ===
+                      new Date(ev.eventDate).getTime()
+                        ? "selected-event"
+                        : ""
+                    }`}
                     onClick={() => selectEvent(ev)}
                     title={ev.title}
                   >
                     <span>{ev.title}</span>
+                    {openModal && (
+        <EventModal event={ev} onClose={handleCloseModal} />
+      )}
                   </div>
+                  
                 ))}
             </div>
           </div>
         ))}
       </div>
+      
     </div>
   );
 };
