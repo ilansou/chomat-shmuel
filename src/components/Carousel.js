@@ -62,7 +62,7 @@ export const Carousel = ({ slides }) => {
       </button>
 
       <div className="absolute bottom-4 left-0 right-0">
-        <div className="flex items-center justify-center space-x-2">
+        <div className="flex items-center justify-center gap-3">
           {slides.map((_, index) => (
             <button
               key={index}

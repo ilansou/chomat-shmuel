@@ -5,8 +5,8 @@ import { format, isSameDay } from "date-fns";
 import { he } from "date-fns/locale";
 import { db } from "../firebase";
 import { getDocs, deleteDoc, doc, collection } from "firebase/firestore";
-import { EventModal } from "../components/EventModal";
-import { CreateEvent } from "../components/CreateEvent";
+import { EventModal } from "../components/events/EventModal";
+import { CreateEvent } from "../components/events/CreateEvent";
 import "moment/locale/he";
 import { useAuth } from "../context/AuthContext";
 import {
