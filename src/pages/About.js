@@ -1,3 +1,5 @@
+import { Newsletter } from "../components/Newsletter";
+
 export const About = () => {
   return (
     <div className="about-container ">
@@ -38,6 +40,7 @@ export const About = () => {
             </a>
           </p>
         </div>
+        <Newsletter />
       </div>
     </div>
   );

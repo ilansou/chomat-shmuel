@@ -4,6 +4,11 @@ import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebas
 
 const AuthContext = createContext();
 
+// Custom hook to use the auth context
+export function useAuth() {
+  return useContext(AuthContext);
+}
+
 export function AuthContextProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -65,9 +70,4 @@ export function AuthContextProvider({ children }) {
       {!loading && children}
     </AuthContext.Provider>
   );
-}
-
-// Custom hook to use the auth context
-export function useAuth() {
-  return useContext(AuthContext);
 }

@@ -13,7 +13,6 @@ export const Newsletter = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Replace these with your actual EmailJS service ID and template ID
     const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID;
     const templateId = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
 

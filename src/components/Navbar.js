@@ -64,10 +64,17 @@ export const Navbar = () => {
                 {link.name}
               </Link>
             ))}
+            {user ? (
+              <Link
+                to="/statistics"
+                className="group relative inline-block cursor-pointer text-white hover:text-gray-200">
+                סטטיסטיקות
+              </Link>
+            ) : null}
           </div>
 
           <div className="hidden md:block">
-            {user?.email ? (
+            {user ? (
               <button
                 onClick={handleLogout}
                 className="bg-purple-400 hover:bg-red-700 text-white text-xl font-medium py-2 px-4 rounded transition duration-300">
@@ -115,7 +122,7 @@ export const Navbar = () => {
             </Link>
           ))}
           <div className="relative z-10">
-            {user?.email ? (
+            {user ? (
               <button
                 onClick={() => {
                   handleLogout();

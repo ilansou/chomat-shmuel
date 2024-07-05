@@ -1,12 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
+import emailjs from "@emailjs/browser";
+import { Newsletter } from "../components/Newsletter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faFax, faEnvelope, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 
 export const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitMessage("");
+
+    const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+    const templateId = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+
+    try {
+      await emailjs.send(serviceId, templateId, formData);
+      setSubmitMessage("הודעה נשלחה בהצלחה!");
+      setFormData({ name: "", email: "", message: "" });
+    } catch (error) {
+      console.error("Error sending email:", error);
+      setSubmitMessage("אירעה שגיאה בשליחת ההודעה. נסה שוב מאוחר יותר.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <div className="pt-28 bg-gray-100 min-h-screen">
+    <div className="pt-24 bg-gray-100 min-h-screen">
       <main className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">צרו עמנו קשר</h1>
+        <h1 className="text-4xl font-bold text-center mb-6 text-gray-800">צרו עמנו קשר</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Map Section */}
@@ -28,7 +62,7 @@ export const Contact = () => {
           {/* Contact Form Section */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-semibold mb-4 text-gray-700">שלחו לנו הודעה</h2>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                   שם מלא
@@ -37,8 +71,11 @@ export const Contact = () => {
                   type="text"
                   id="name"
                   name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="הכנס את שמך המלא"
+                  required
                 />
               </div>
 
@@ -50,8 +87,11 @@ export const Contact = () => {
                   type="email"
                   id="email"
                   name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="הכנס את כתובת הדואר האלקטרוני שלך"
+                  required
                 />
               </div>
 
@@ -62,16 +102,29 @@ export const Contact = () => {
                 <textarea
                   id="message"
                   name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   rows="4"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="הכנס את ההודעה שלך"></textarea>
+                  placeholder="הכנס את ההודעה שלך"
+                  required></textarea>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
-                שלח
+                disabled={isSubmitting}
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 disabled:opacity-50">
+                {isSubmitting ? "שולח..." : "שלח"}
               </button>
+
+              {submitMessage && (
+                <p
+                  className={`text-center ${
+                    submitMessage.includes("שגיאה") ? "text-red-500" : "text-green-500"
+                  }`}>
+                  {submitMessage}
+                </p>
+              )}
             </form>
           </div>
 
@@ -108,6 +161,7 @@ export const Contact = () => {
           </div>
         </div>
       </main>
+      <Newsletter />
     </div>
   );
 };
