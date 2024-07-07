@@ -185,7 +185,7 @@ export function useEvents() {
     }
   }
 
-  function updateEvent(id) {}
+  function editEvent(id) {}
 
-  return { getEventList, deleteEvent, addEvent, updateEvent, eventList };
+  return { getEventList, deleteEvent, addEvent, editEvent, eventList };
 }
