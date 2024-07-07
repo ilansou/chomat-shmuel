@@ -190,7 +190,6 @@
 //   );
 // };
 
-
 import React, { useState, useEffect } from "react";
 import {
   convertToHebrewDay,
@@ -235,8 +234,16 @@ export const CalendarWithHe = ({ setDate, view }) => {
     // Calculate start and end dates based on the selected view
     let startDate, endDate;
     if (view === "monthly") {
-      startDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-      endDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
+      startDate = new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth(),
+        1
+      );
+      endDate = new Date(
+        selectedDate.getFullYear(),
+        selectedDate.getMonth() + 1,
+        0
+      );
     } else if (view === "weekly") {
       startDate = new Date(selectedDate);
       startDate.setDate(selectedDate.getDate() - selectedDate.getDay());
@@ -313,7 +320,7 @@ export const CalendarWithHe = ({ setDate, view }) => {
     const eventDateString = `${eventDateObj.getFullYear()}-${String(
       eventDateObj.getMonth() + 1
     ).padStart(2, "0")}-${String(eventDateObj.getDate()).padStart(2, "0")}`;
-    
+
     const calendarDateString = `${calendarDate.year}-${String(
       calendarDate.month + 1
     ).padStart(2, "0")}-${String(calendarDate.day).padStart(2, "0")}`;
@@ -334,7 +341,15 @@ export const CalendarWithHe = ({ setDate, view }) => {
       </h2>
       <div className="flex justify-center mb-4">
         <button
-          className="mr-2 px-4 py-2 bg-gray-      200 rounded"
+          className="mr-2 px-4 py-2 bg-gray-200 rounded"
+          onClick={() =>
+            changeDate(view === "monthly" ? -1 : -7, view === "monthly")
+          }
+        >
+          {view === "monthly" ? "Previous Month" : "Previous Week"}
+        </button>
+        <button
+          className="ml-2 px-4 py-2 bg-gray-200 rounded"
           onClick={() =>
             changeDate(view === "monthly" ? 1 : 7, view === "monthly")
           }
