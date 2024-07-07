@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { db } from "../../firebase";
-import { addDoc, collection } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -42,14 +40,14 @@ export const CreateEvent = ({ onClose }) => {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
-  
     try {
       await addEvent(data, imageBase64, setError, navigate, onClose);
+      setIsSubmitting(false);
     } catch (error) {
       setIsSubmitting(false);
     }
   };
-  
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
