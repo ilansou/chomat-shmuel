@@ -1,35 +1,35 @@
-import React, { useState, useEffect } from "react";
-import { getDocs, collection } from "firebase/firestore";
-import { format, parse, isValid } from "date-fns";
+import React, { useState, useEffect, useRef } from "react";
+import { format, isValid } from "date-fns";
 import { he } from "date-fns/locale";
 import logo from "../images/logo.png";
-import ExportComponent from "../utils/ExportComponent"; // Import ExportComponent
-import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 import { CreatUepdate } from "../components/CreatenewsAndUpdates";
+import { useNewsAndUpdates } from "../hooks/useNewsAndUpdates";
 
-const UpdateItem = ({ update, onClick }) => (
-  <div className="flex items-start mb-4 justify-end">
-    <div className="bg-black rounded-full overflow-hidden ml-4">
-      <img
-        src={logo} // Adjust the path to your logo image
-        alt="Logo"
-        className="w-10 h-10 object-cover"
-      />
+const UpdateBubble = ({ update, onClick }) => (
+  <div className="flex items-end mb-4 justify-start">
+    <div className="bg-black rounded-full overflow-hidden mr-2 flex-shrink-0">
+      <img src={logo} alt="Logo" className="w-8 h-8 object-cover" />
     </div>
     <button
-      className="bg-blue-500 text-white rounded-lg p-2 max-w-full w-full shadow-md border border-gray-200 text-right"
+      className="bg-blue-100 text-black rounded-lg p-3 max-w-[80%] shadow-md border border-blue-200 text-left hover:bg-blue-200 transition-colors"
       onClick={() => onClick(update)}>
-      <h3 className="text-lg font-bold">{update.title}</h3>
+      <h3 className="text-md font-semibold mb-1">{update.title}</h3>
+      <p className="text-sm text-gray-600 mb-1 line-clamp-2">{update.description}</p>
+      <p className="text-xs text-gray-500">
+        {isValid(new Date(update.date))
+          ? format(new Date(update.date), "dd/MM/yyyy HH:mm", { locale: he })
+          : "תאריך לא תקין"}
+      </p>
     </button>
   </div>
 );
 
 const UpdateModal = ({ update, onClose }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
     <div className="bg-white rounded-lg p-6 shadow-lg w-full max-w-xl relative text-right">
       <button
-        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+        className="absolute top-2 left-2 text-gray-500 hover:text-gray-700"
         onClick={onClose}>
         &times;
       </button>
@@ -38,14 +38,14 @@ const UpdateModal = ({ update, onClose }) => (
           <img
             src={update.imagePath}
             alt={update.title}
-            className="w-40 h-40 rounded-lg object-cover mb-4"
+            className="w-full h-48 rounded-lg object-cover mb-4"
           />
         )}
         <h3 className="text-xl font-bold mb-2">{update.title}</h3>
         <p className="text-gray-700 mb-4">{update.description}</p>
         <p className="text-xs text-gray-500 mb-4">
-          {isValid(new Date(update.updateDate))
-            ? format(new Date(update.updateDate), "dd/MM/yyyy HH:mm", { locale: he })
+          {isValid(new Date(update.date))
+            ? format(new Date(update.date), "dd/MM/yyyy HH:mm", { locale: he })
             : "תאריך לא תקין"}
         </p>
         {update.expireDate && isValid(new Date(update.expireDate)) && (
@@ -60,55 +60,23 @@ const UpdateModal = ({ update, onClose }) => (
 
 export const NewsAndUpdates = () => {
   const { user } = useAuth();
-  const [updatesList, setUpdatesList] = useState([]);
+  const { newsAndUpdatesList, getNewsAndUpdates } = useNewsAndUpdates();
   const [selectedUpdate, setSelectedUpdate] = useState(null);
-  const [ShowCreatUepdate, setShowCreatUepdate] = useState(false);
-  const updatesCollectionRef = collection(db, "news and updates");
-
-  const getUpdatesList = async () => {
-    try {
-      const data = await getDocs(updatesCollectionRef);
-      const docs = data.docs;
-      const filteredUpdates = docs
-        .map((doc) => {
-          const updateData = doc.data();
-
-          if (!updateData.hasOwnProperty("updateDate")) {
-            console.warn("Update date is missing:", updateData);
-            return null;
-          }
-
-          let updateDate;
-          if (typeof updateData["updateDate"] === "string") {
-            updateDate = parse(updateData["updateDate"], "dd.MM.yyyy", new Date());
-          } else {
-            updateDate = new Date(updateData["updateDate"]);
-          }
-
-          if (!isValid(updateDate)) {
-            console.error("Invalid date:", updateData["updateDate"]);
-            return null;
-          }
-
-          return {
-            id: doc.id,
-            ...updateData,
-            updateDate,
-          };
-        })
-        .filter(Boolean);
-
-      filteredUpdates.sort((a, b) => a.updateDate - b.updateDate);
-
-      setUpdatesList(filteredUpdates);
-    } catch (error) {
-      console.error("Error getting updates: ", error);
-    }
-  };
+  const [showCreateUpdate, setShowCreateUpdate] = useState(false);
+  const chatContainerRef = useRef(null);
 
   useEffect(() => {
-    getUpdatesList();
-  }, []);
+    getNewsAndUpdates();
+  }, [getNewsAndUpdates]);
+
+  console.log(newsAndUpdatesList);
+  console.log("hereee");
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [newsAndUpdatesList]);
 
   const handleTitleClick = (update) => {
     setSelectedUpdate(update);
@@ -119,47 +87,51 @@ export const NewsAndUpdates = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-8">
-      <h1 className="text-3xl font-bold mb-8 text-center">עדכונים שותפים</h1>
-      <div className="max-w-5xl mx-auto">
-        {updatesList.length === 0 ? (
-          <p className="text-gray-500 text-center">אין עדכונים שותפים</p>
-        ) : (
-          updatesList.map((update) => (
-            <UpdateItem key={update.id} update={update} onClick={handleTitleClick} />
-          ))
+    <div className="container mx-auto px-4 py-8 mt-8 flex flex-col h-screen">
+      <h1 className="text-3xl font-bold mb-4 text-center">עדכונים שותפים</h1>
+      
+      <div className="flex-grow overflow-hidden bg-gray-100 rounded-lg shadow-inner">
+        <div 
+          ref={chatContainerRef}
+          className="h-full overflow-y-auto p-4 space-y-4"
+          style={{ direction: 'ltr' }} // Set direction to left-to-right
+        >
+          {newsAndUpdatesList.length === 0 ? (
+            <p className="text-gray-500 text-center">אין עדכונים שותפים</p>
+          ) : (
+            newsAndUpdatesList.map((update) => (
+              <UpdateBubble key={update.id} update={update} onClick={handleTitleClick} />
+            ))
+          )}
+        </div>
+      </div>
+
+      {selectedUpdate && <UpdateModal update={selectedUpdate} onClose={handleCloseModal} />}
+
+      {/* Create Update Button */}
+      <div className="mt-4">
+        {user?.email && (
+          <button
+            className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded w-full"
+            onClick={() => setShowCreateUpdate(true)}>
+            הוסף עדכון
+          </button>
         )}
       </div>
-      {selectedUpdate && <UpdateModal update={selectedUpdate} onClose={handleCloseModal} />}
-      <ExportComponent collectionName="news and updates" /> {/* Render ExportComponent here */}
 
-      {/* Create Event Button */}
-    <div className="mb-8">
-    {user?.email && (
-      <button
-        className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded"
-        onClick={() => setShowCreatUepdate(true)}>
-        הוסף אירוע
-      </button>
-    )}
+      {/* Create Update Modal */}
+      {showCreateUpdate && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 shadow-lg max-w-[800px] w-full relative">
+            <button
+              className="absolute top-2 left-2 text-gray-500 hover:text-gray-700"
+              onClick={() => setShowCreateUpdate(false)}>
+              &times;
+            </button>
+            <CreatUepdate onClose={() => setShowCreateUpdate(false)} />
+          </div>
+        </div>
+      )}
     </div>
-
-
-
-{/* Create Event Modal */}
-{ShowCreatUepdate && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg p-6 shadow-lg max-w-[800px] w-full relative">
-      <button
-        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-        onClick={() => setShowCreatUepdate(false)}>
-        &times;
-      </button>
-      <CreatUepdate onClose={() => setShowCreatUepdate(false)} />
-    </div>
-  </div>
-)}
-
-</div>
-); 
+  );
 };

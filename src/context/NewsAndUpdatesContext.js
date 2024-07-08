@@ -14,7 +14,7 @@ export const EventsContextProvider = ({ children }) => {
 
 
   return (
-    <NewsAndUpdatesContext.Provider value={{ eventList, setEventList, eventsCollectionRef }}>
+    <NewsAndUpdatesContext.Provider value={{ newsAndUpdatesList, setnewsAndUpdatesList }}>
       {children}
     </NewsAndUpdatesContext.Provider>
   );

@@ -69,6 +69,8 @@ import {
   query,
   orderBy,
   startAfter,
+  updateDoc,
+  Timestamp,
   limit,
   where,
 } from "firebase/firestore";
@@ -185,7 +187,58 @@ export function useEvents() {
     }
   }
 
-  function editEvent(id) {}
+  async function editEvent(id, updatedData, imageBase64, setError, navigate, onClose) {
+    try {
+      const eventRef = doc(eventsCollectionRef, id);
+      const eventData = {
+        ...updatedData,
+        imageUrl: imageBase64,
+        participant: updatedData.participant ? parseInt(updatedData.participant) : null,
+        price: updatedData.price ? parseFloat(updatedData.price) : null,
+        eventDuration: updatedData.eventDuration ? parseInt(updatedData.eventDuration) : null,
+      };
 
-  return { getEventList, deleteEvent, addEvent, editEvent, eventList };
+      await updateDoc(eventRef, eventData);
+
+      setEventList((prevEvents) =>
+        prevEvents.map((event) => (event.id === id ? { ...event, ...eventData } : event))
+      );
+
+      // Invalidate cache
+      cache.timestamp = 0;
+
+      navigate("/events");
+      onClose();
+    } catch (error) {
+      setError("root", {
+        type: "manual",
+        message: "שגיאה בעדכון האירוע: " + error.message,
+      });
+    }
+  }
+
+  const getNearestEvents = useCallback(async (k) => {
+    try {
+      const now = Timestamp.now();
+      const eventQuery = query(
+        eventsCollectionRef,
+        where("eventDate", ">=", now),
+        orderBy("eventDate"),
+        limit(k)
+      );
+
+      const data = await getDocs(eventQuery);
+      const nearestEvents = data.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      return nearestEvents;
+    } catch (error) {
+      console.error("Error getting nearest events: ", error);
+      return [];
+    }
+  }, [eventsCollectionRef]);
+
+  return { getEventList, deleteEvent, addEvent, editEvent, getNearestEvents, eventList };
 }

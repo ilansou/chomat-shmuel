@@ -57,8 +57,6 @@ export const Navbar = () => {
               <Link
                 key={index}
                 to={link.link}
-                spy={true}
-                smooth={true}
                 duration={500}
                 className="group relative inline-block cursor-pointer text-white hover:text-gray-200">
                 {link.name}
@@ -113,8 +111,6 @@ export const Navbar = () => {
             <Link
               key={index}
               to={link.link}
-              spy={true}
-              smooth={true}
               duration={500}
               className="transition-all cursor-pointer text-white hover:text-gray-200 relative z-10"
               onClick={handleCloseMenu}>
