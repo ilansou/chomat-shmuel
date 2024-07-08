@@ -1,32 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { momentLocalizer } from "react-big-calendar";
-import moment from "moment";
 import { format, isSameDay } from "date-fns";
 import { he } from "date-fns/locale";
 import { EventModal } from "../components/events/EventModal";
 import { CreateEvent } from "../components/events/CreateEvent";
-import "moment/locale/he";
 import { useAuth } from "../context/AuthContext";
 import { getFullJewishDate } from "../utils/DatesToHebrew";
 import { CalendarWithHe } from "../components/CalendarWithHe";
 import { useEvents } from "../hooks/useEvents";
-
-moment.locale("he");
-const localizer = momentLocalizer(moment);
-
-const messages = {
-  allDay: "כל היום",
-  previous: "הקודם",
-  next: "הבא",
-  today: "היום",
-  month: "חודש",
-  week: "שבוע",
-  day: "יום",
-  agenda: "סדר יום",
-  date: "תאריך",
-  time: "שעה",
-  event: "אירוע",
-};
 
 export const Events = () => {
   const { user } = useAuth();
@@ -34,12 +14,11 @@ export const Events = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const { getEventList, eventList } = useEvents();
+  const [view, setView] = useState("monthly");
 
   useEffect(() => {
-    
     getEventList();
-    console.log(eventList);
-  }, [eventList]);
+  }, []);
 
   const handleSelectEvent = (event) => {
     setSelectedEvent(event);
@@ -54,33 +33,28 @@ export const Events = () => {
   );
 
   return (
-    <div className="container pt-28 mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center">אירועים</h1>
+    <div className="container mx-auto px-4 pt-32 max-w-6xl">
 
-      {/* Create Event Button */}
-      <div className="mb-8">
-        {user ? (
+      <div className="mb-8 flex justify-between items-center">
+        <h1 className="text-3xl font-bold text-center">אירועים</h1>
+        {user && (
           <button
-            className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded"
+            className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded transition-colors duration-200"
             onClick={() => setShowCreateEvent(true)}
           >
             הוסף אירוע
           </button>
-        ) : null}
+        )}
       </div>
 
-      <div className="w-full">
-        <CalendarWithHe
-          setDate={setDate}
-          view={"monthly"}
-        />
+      <div className="mb-3">
+        <CalendarWithHe setDate={setDate} view={view} />
         {selectedEvent && (
           <EventModal event={selectedEvent} onClose={handleCloseModal} />
         )}
       </div>
 
-      {/* Today Events */}
-      <div className="w-full mb-8">
+      <div className="bg-white shadow-md rounded-lg p-6">
         <h2 className="text-2xl font-semibold mb-4">
           אירועים ב{format(date, "dd/MM/yyyy", { locale: he })},{" "}
           {getFullJewishDate(date)}
@@ -94,7 +68,7 @@ export const Events = () => {
                 onClick={() => handleSelectEvent(event)}
               >
                 <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                <p className="text-gray-700">{event.description}</p>
+                <p className="text-gray-700 mb-2">{event.description}</p>
                 <p className="text-gray-500">
                   {format(new Date(event.eventDate), "HH:mm", { locale: he })}
                 </p>
@@ -102,13 +76,12 @@ export const Events = () => {
             ))}
           </div>
         ) : (
-          <div className="bg-white shadow-md rounded p-4">
+          <div className="bg-gray-100 rounded p-4">
             <p>אין אירועים בתאריך זה</p>
           </div>
         )}
       </div>
 
-      {/* Create Event Modal */}
       {showCreateEvent && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 shadow-lg max-w-[800px] w-full relative">

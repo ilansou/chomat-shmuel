@@ -126,6 +126,7 @@ export function useEvents() {
         const filteredEvents = data.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
+          eventDate: doc.data().eventDate.toDate(),
         }));
 
         if (isPagination) {

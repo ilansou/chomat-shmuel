@@ -1,18 +1,11 @@
-import React,  {useState} from "react";
-import { FaFacebook, FaYoutube, FaBookOpen } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaFacebook, FaYoutube, FaBookOpen, FaWhatsapp } from "react-icons/fa"; // Import the WhatsApp icon
 
 const socialItems = [
   { name: "Facebook", icon: FaFacebook, link: "https://www.facebook.com/harhomat" },
-  {
-    name: "Youtube",
-    icon: FaYoutube,
-    link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw",
-  },
-  {
-    name: "About Us",
-    icon: FaBookOpen,
-    link: "https://online.fliphtml5.com/qfboh/fyni/?1609945510152#p=1",
-  },
+  { name: "Youtube", icon: FaYoutube, link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw" },
+  { name: "About Us", icon: FaBookOpen, link: "https://online.fliphtml5.com/qfboh/fyni/?1609945510152#p=1" },
+  { name: "WhatsApp", icon: FaWhatsapp, link: "https://wa.me/972524337664" }, // Add the WhatsApp item
 ];
 
 export const Footer = () => {
@@ -37,8 +30,7 @@ export const Footer = () => {
                 הישארו מעודכנים
               </h2>
               <p className="mt-3 max-w-3xl text-lg text-gray-500">
-                תהיו הראשונים לדעת על אירועים, חוגים וכל מה שחדש במנהל. אל תדאגו, לא נחפור לכם יותר
-                מדי :)
+                תהיו הראשונים לדעת על אירועים, חוגים וכל מה שחדש במנהל. אל תדאגו, לא נחפור לכם יותר מדי :)
               </p>
             </div>
             <div className="mt-8 lg:mt-0 lg:ml-8">
@@ -55,7 +47,7 @@ export const Footer = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-5 py-3 border border-gray-300 shadow-sm placeholder-gray-400 focus:ring-1 focus:ring-purple-500 focus:border-purple-500 sm:max-w-xs rounded-md"
-                  placeholder="הזינו את כתובת המייל שלכם"
+                  placeholder="הזינו כתובת מייל שלכם"
                 />
                 <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3 sm:flex-shrink-0">
                   <button

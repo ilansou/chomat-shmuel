@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -14,7 +13,7 @@ const schema = yup.object().shape({
     .typeError("תאריך אירוע נדרש")
     .required("תאריך אירוע נדרש")
     .min(new Date(), "תאריך האירוע חייב להיות תאריך עתידי"),
-  audienceAge: yup.string(),
+  audienceAge: yup.string().required("קהל יעד נדרש"),
   expireDate: yup
     .date()
     .nullable()
@@ -26,8 +25,8 @@ const schema = yup.object().shape({
 
 export const CreateEvent = ({ onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [imageBase64, setImageBase64] = useState(null);
-  const navigate = useNavigate();
+  const [fileBase64, setFileBase64] = useState(null);
+  const [showOtherTextInput, setShowOtherTextInput] = useState(false);
   const { addEvent } = useEvents();
   const {
     register,
@@ -40,9 +39,9 @@ export const CreateEvent = ({ onClose }) => {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
+
     try {
-      await addEvent(data, imageBase64, setError, navigate, onClose);
-      setIsSubmitting(false);
+      await addEvent(data, fileBase64, setError, onClose);
     } catch (error) {
       setIsSubmitting(false);
     }
@@ -53,20 +52,53 @@ export const CreateEvent = ({ onClose }) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImageBase64(reader.result);
+        setFileBase64(reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const handleAudienceChange = (e) => {
+    setShowOtherTextInput(e.target.value === "אחר");
+  };
+
   const fields = [
     { label: "כותרת", name: "title", type: "text", required: true },
-    { label: "תמונה", name: "imageUrl", type: "file", accept: "image/*", required: true },
+    { label: "קובץ", name: "file", type: "file", accept: "image/*,.pdf", required: true },
     { label: "תיאור", name: "description", type: "textarea", required: true },
     { label: "קישור", name: "URL", type: "url" },
     { label: "תאריך ושעת האירוע", name: "eventDate", type: "datetime-local", required: true },
     { label: "תאריך תפוגה", name: "expireDate", type: "date", required: true },
-    { label: "גיל קהל היעד", name: "audienceAge", type: "text" },
+    {
+      label: "קהל היעד",
+      name: "audienceAge",
+      type: "select",
+      options: [
+        { label: "בחר קהל יעד", value: "" },
+        { label: "שכונה צעירה", value: "שכונה צעירה" },
+        { label: "נוער", value: "נוער" },
+        { label: "לכל המשפחה", value: "לכל המשפחה" },
+        { label: "הגיל הרך", value: "הגיל הרך" },
+        { label: "תרבות", value: "תרבות" },
+        { label: "הגיל השלישי", value: "הגיל השלישי" },
+        { label: "טבע עירוני", value: "טבע עירוני" },
+        { label: "עמיתים", value: "עמיתים" },
+        { label: "ספורט", value: "ספורט" },
+        { label: "לכל הקהילה", value: "לכל הקהילה" },
+        { label: "צמי'ד", value: "צמי'ד" },
+        { label: "חרדי-תורני", value: "חרדי-תורני" },
+        { label: "אחר", value: "אחר" },
+      ],
+      required: true,
+      onChange: handleAudienceChange,
+    },
+    {
+      label: "אחר",
+      name: "otherAudience",
+      type: "text",
+      show: showOtherTextInput,
+      required: showOtherTextInput,
+    },
     { label: "מיקום", name: "location", type: "text", required: true },
     { label: "מחיר", name: "price", type: "number", step: "0.1" },
     { label: "מספר משתתפים", name: "participant", type: "number" },
@@ -74,15 +106,15 @@ export const CreateEvent = ({ onClose }) => {
   ];
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md overflow-y-auto max-h-[90vh]">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">יצירת אירוע חדש</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">יצירת אירוע חדש</h1>
         <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
           &#x2716;
         </button>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {fields.map((field) => (
             <div key={field.name} className="space-y-1">
               <label className="block text-sm font-medium text-gray-700">
@@ -92,7 +124,7 @@ export const CreateEvent = ({ onClose }) => {
               {field.type === "textarea" ? (
                 <textarea
                   {...register(field.name)}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 resize-vertical"
                   rows="3"
                 />
               ) : field.type === "file" ? (
@@ -101,6 +133,24 @@ export const CreateEvent = ({ onClose }) => {
                   accept={field.accept}
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   onChange={handleFileChange}
+                />
+              ) : field.type === "select" ? (
+                <select
+                  {...register(field.name)}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  onChange={field.onChange}
+                >
+                  {field.options.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              ) : field.type === "text" && field.show ? (
+                <input
+                  type="text"
+                  {...register(field.name)}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                 />
               ) : (
                 <input
@@ -111,22 +161,21 @@ export const CreateEvent = ({ onClose }) => {
                 />
               )}
               {errors[field.name] && (
-                <p className="text-red-500 text-xs mt-1">{errors[field.name].message}</p>
+                <p className="text-xs sm:text-sm text-red-500">{errors[field.name].message}</p>
               )}
             </div>
           ))}
         </div>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-300 disabled:opacity-50"
-        >
-          {isSubmitting ? "יוצר אירוע..." : "צור אירוע"}
-        </button>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-300 disabled:opacity-70 disabled:cursor-not-allowed transition duration-150 ease-in-out"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "שולח..." : "שלח"}
+          </button>
+        </div>
       </form>
-      {errors.root && <p className="text-red-500 mt-4 text-center">{errors.root.message}</p>}
     </div>
   );
 };
-
-export default CreateEvent;

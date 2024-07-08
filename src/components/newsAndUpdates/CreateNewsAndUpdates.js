@@ -1,24 +1,24 @@
 import React, { useState } from "react";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { format } from "date-fns"; // Import from date-fns for date formatting
+import { format } from "date-fns";
 
 export const CreatUepdate = ({ onClose }) => {
   const [update, setUpdate] = useState({
     title: "",
     image: "",
     description: "",
-    updateDate: new Date().toISOString().substring(0, 10),
+    eventDate: new Date().toISOString().substring(0, 16), // Format for datetime-local input
     expireDate: new Date(new Date().setMonth(new Date().getMonth() + 1))
       .toISOString()
-      .substring(0, 10),
+      .substring(0, 10), // Format for date input
   });
 
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const updatesCollectionRef = collection(db, "news and updates"); // Ensure the collection name matches your Firestore setup
+  const updatesCollectionRef = collection(db, "news and updates");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -36,13 +36,17 @@ export const CreatUepdate = ({ onClose }) => {
         ...update,
       });
 
-      // Instead of navigate("/updates"), show a confirmation message or action
       alert("עדכון נוצר בהצלחה!");
 
-      // Optionally, update the updateDate field to a formatted date string
+      // Optionally, reset form fields after submission
       setUpdate({
-        ...update,
-        updateDate: format(new Date(), "yyyy-MM-dd"), // Example format using date-fns
+        title: "",
+        image: "",
+        description: "",
+        eventDate: new Date().toISOString().substring(0, 16),
+        expireDate: new Date(new Date().setMonth(new Date().getMonth() + 1))
+          .toISOString()
+          .substring(0, 10),
       });
 
       onClose();
@@ -55,7 +59,7 @@ export const CreatUepdate = ({ onClose }) => {
     { label: "כותרת", name: "title", type: "text", required: true },
     { label: "תמונה", name: "image", type: "file" },
     { label: "תיאור", name: "description", type: "textarea", required: true },
-    { label: "תאריך עדכון", name: "updateDate", type: "date", required: true },
+    { label: "תאריך ושעת עידכון", name: "eventDate", type: "datetime-local", required: true },
     { label: "תאריך תפוגה", name: "expireDate", type: "date", required: true },
   ];
 
@@ -98,7 +102,6 @@ export const CreatUepdate = ({ onClose }) => {
         </button>
       </form>
       {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
-    
     </div>
   );
 };

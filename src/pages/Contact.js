@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faFax, faEnvelope, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 
 export const Contact = () => {
   const [formData, setFormData] = useState({
@@ -42,24 +43,9 @@ export const Contact = () => {
         <h1 className="text-4xl font-bold text-center mb-6 text-gray-800">צרו עמנו קשר</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Map Section */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-700">המיקום שלנו</h2>
-            <div className="w-full h-[80%]">
-              <iframe
-                className="w-full h-full rounded-md"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3393.7177046176353!2d35.217681576311456!3d31.72360547412151!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x150327f754c2070f%3A0x448a43583223c9f5!2sSha&#39;ul%20Avigur%20St%207%2C%20Jerusalem!5e0!3m2!1sen!2sil!4v1719265800431!5m2!1sen!2sil"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-                allowFullScreen=""
-                aria-hidden="false"
-                tabIndex="0"
-                title="Map"></iframe>
-            </div>
-          </div>
 
-          {/* Contact Form Section */}
-          <div className="bg-white rounded-lg shadow-md p-6">
+             {/* Contact Form Section */}
+             <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-semibold mb-4 text-gray-700">שלחו לנו הודעה</h2>
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
@@ -127,9 +113,26 @@ export const Contact = () => {
             </form>
           </div>
 
+        {/* Map Section */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-700">כתובת מינהל קהילתי מרכזי</h2>
+          <div className="w-full h-[80%]">
+            <iframe
+              className="w-full h-full rounded-md"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3393.6987644475485!2d35.22980992405314!3d31.72412273704668!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x150327e4e0c93a6d%3A0x9f2134ce46ad2a1b!2z15DXodeq16gg16jXlteZ15DXnCDXoNeQ15XXqCA4LCDXmdeo15XXqdec15nXnQ!5e0!3m2!1siw!2sil!4v1720339605119!5m2!1siw!2sil"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowFullScreen=""
+              aria-hidden="false"
+              tabIndex="0"
+              title="Map"
+            ></iframe>
+          </div>
+        </div>
+       
           {/* Contact Info Section */}
           <div className="bg-white rounded-lg shadow-md p-6 md:col-span-2">
-            <h2 className="text-2xl font-semibold mb-4 text-gray-700">פרטי התקשרות</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-gray-700">פרטי תקשורת</h2>
             <ul className="space-y-4">
               {[
                 { icon: faPhone, text: "02-6453891", href: "tel:02-6453891" },
@@ -141,8 +144,19 @@ export const Contact = () => {
                 },
                 {
                   icon: faMapMarkerAlt,
-                  text: "רח' שאול אביגור 7, שכונת חומת שמואל, ירושלים",
-                  href: "https://www.google.com/maps/place/Sha'ul+Avigur+St+7,+Jerusalem/@31.7236055,35.2176816,17z/data=!3m1!4b1!4m6!3m5!1s0x150327f754c2070f:0x448a43583223c9f5!8m2!3d31.7236055!4d35.2202565!16s%2Fg%2F11h_fs8sv6?hl=en&entry=ttu",
+                  text: "מינהל קהילתי מרכזי - רח' אסתר רזיאל נאור 8, שכונת חומת שמואל, ירושלים",
+                  href: "https://maps.app.goo.gl/f8jXb2S4vdo8WWbT9",
+                }
+                ,
+                {
+                  icon: faMapMarkerAlt,
+                  text: "שלוחת המינהל הקהילתי - רח' שאול אביגור 7, שכונת חומת שמואל, ירושלים",
+                  href: "https://maps.app.goo.gl/PsTRBmJS8jTnbno59",
+                },
+                {
+                  icon: faWhatsapp,
+                  text: "WhatsApp",
+                  href: "https://wa.me/972524337664",
                 },
               ].map((item, index) => (
                 <li key={index} className="flex items-center gap-3">

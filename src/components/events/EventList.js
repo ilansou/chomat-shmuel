@@ -61,30 +61,36 @@ export const EventList = () => {
 
   return (
     <div className="max-w-6xl pt-4 mx-auto px-4">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
-        {currentEvents.map((event) => (
-          <EventCard key={event.id} event={event} />
-        ))}
-      </div>
-      <div className="flex justify-between items-center mt-6">
-        
-        <span className="text-gray-600">
-          עמוד {currentPage + 1} מתוך {totalPages}
-        </span>
-        <button
-          onClick={goToNextPage}
-          disabled={currentPage === totalPages - 1}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed"
-        >
-          <ChevronRightIcon className="h-5 w-5" />
-        </button>
+      <div className="relative flex items-center">
         <button
           onClick={goToPrevPage}
           disabled={currentPage === 0}
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed"
+          className="absolute left-0 z-10 bg-blue-500 text-white px-4 py-2 rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed"
         >
-          <ChevronLeftIcon className="h-5 w-5" />
+          <ChevronLeftIcon className="h-5 w-5 cursor-pointer" />
         </button>
+        <div className="w-full overflow-hidden">
+          <div className="flex transition-transform duration-700 ease-in-out"
+               style={{ transform: `translateX(-${currentPage * 100}%)` }}>
+            {nearestEvents.map((event) => (
+              <div key={event.id} className="w-full px-14 md:w-1/3 flex-shrink-0">
+                <EventCard event={event} />
+              </div>
+            ))}
+          </div>
+        </div>
+        <button
+          onClick={goToNextPage}
+          disabled={currentPage === totalPages - 1}
+          className="absolute right-0 z-10 bg-blue-500 text-white px-4 py-2 rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed"
+        >
+          <ChevronRightIcon className="h-5 w-5 cursor-pointer" />
+        </button>
+      </div>
+      <div className="flex justify-center items-center mt-6">
+        <span className="text-gray-600">
+          עמוד {currentPage + 1} מתוך {totalPages}
+        </span>
       </div>
     </div>
   );

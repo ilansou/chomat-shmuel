@@ -5,6 +5,9 @@ import homeImage from "../images/home.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { AiOutlineMenuUnfold, AiOutlineClose } from "react-icons/ai";
+import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
 export const Navbar = () => {
   const Links = [
@@ -57,6 +60,8 @@ export const Navbar = () => {
               <Link
                 key={index}
                 to={link.link}
+                spy={true}
+                smooth={true}
                 duration={500}
                 className="group relative inline-block cursor-pointer text-white hover:text-gray-200">
                 {link.name}
@@ -75,15 +80,15 @@ export const Navbar = () => {
             {user ? (
               <button
                 onClick={handleLogout}
-                className="bg-purple-400 hover:bg-red-700 text-white text-xl font-medium py-2 px-4 rounded transition duration-300">
-                יציאה
+                className="bg-red-400 hover:bg-red-700 text-white text-xl font-medium py-2 px-4 rounded transition duration-300">
+                 <FontAwesomeIcon icon={faSignOutAlt} className="fa-sm" />
               </button>
             ) : (
               <Link to="/login">
-                <button className="bg-purple-400 hover:bg-blue-700 text-white text-xl font-medium py-2 px-4 rounded-xl transition-all duration-300">
-                  כניסת מנהל
-                </button>
-              </Link>
+              <button className="bg-green-400 hover:bg-blue-700 text-white text-xl font-medium py-2 px-4 rounded-xl transition-all duration-300">
+                <FontAwesomeIcon icon={faSignInAlt} />
+              </button>
+            </Link>
             )}
           </div>
 
@@ -111,6 +116,8 @@ export const Navbar = () => {
             <Link
               key={index}
               to={link.link}
+              spy={true}
+              smooth={true}
               duration={500}
               className="transition-all cursor-pointer text-white hover:text-gray-200 relative z-10"
               onClick={handleCloseMenu}>
@@ -119,18 +126,18 @@ export const Navbar = () => {
           ))}
           <div className="relative z-10">
             {user ? (
-              <button
-                onClick={() => {
-                  handleLogout();
-                  handleCloseMenu();
-                }}
-                className="bg-purple-400 hover:bg-red-700 text-white text-xl font-medium py-2 px-4 rounded transition duration-300">
-                יציאה
-              </button>
+            <button
+            onClick={() => {
+              handleLogout();
+              handleCloseMenu();
+            }}
+            className="bg-red-400 hover:bg-red-700 text-white text-xl font-medium py-2 px-4 rounded transition duration-300">
+            <FontAwesomeIcon icon={faSignOutAlt} style={{ fontSize: "0.75rem" }} />
+          </button>
             ) : (
               <Link to="/login" onClick={handleCloseMenu}>
-                <button className="bg-purple-400 hover:bg-blue-700 text-white text-xl font-medium py-2 px-4 rounded-xl transition-all duration-300">
-                  כניסת מנהל
+                <button className="bg-green-400 hover:bg-blue-700 text-white text-xl font-medium py-2 px-4 rounded-xl transition-all duration-300">
+                <FontAwesomeIcon icon={faSignInAlt} style={{ fontSize: "0.75rem" }} />
                 </button>
               </Link>
             )}

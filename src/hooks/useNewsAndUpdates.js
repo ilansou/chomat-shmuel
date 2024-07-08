@@ -63,6 +63,7 @@ export function useNewsAndUpdates() {
         const filteredNewsAndUpdates = data.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
+          newsAndUpdatesDate: doc.data().updateDate.toDate(),
         }));
   
         if (isPagination) {
