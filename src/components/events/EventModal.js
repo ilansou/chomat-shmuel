@@ -6,7 +6,7 @@ import { format } from "date-fns";
 
 export const EventModal = ({ event, onClose }) => {
   const { user } = useAuth();
-  const { deleteEvent, editEvent } = useEvents();
+  const { deleteEvent } = useEvents();
   const [isEditing, setIsEditing] = useState(false);
 
   const handleDelete = async () => {
@@ -24,24 +24,14 @@ export const EventModal = ({ event, onClose }) => {
     setIsEditing(true);
   };
 
-  const handleUpdate = async (updatedEvent) => {
-    try {
-      await editEvent(event.id, updatedEvent);
-      setIsEditing(false);
-      onClose();
-    } catch (error) {
-      console.error("Error updating event: ", error);
-    }
-  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         {isEditing ? (
-          <CreateEvent 
-            event={event} 
-            onClose={() => setIsEditing(false)} 
-            onSubmit={handleUpdate}
+          <CreateEvent
+            event={event}
+            onClose={() => setIsEditing(false)}
             isEditing={true}
           />
         ) : (

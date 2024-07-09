@@ -37,7 +37,7 @@ export const CreateNews = ({ onClose }) => {
   const fields = [
     { label: "כותרת", name: "title", type: "text", required: true },
     { label: "תיאור", name: "description", type: "textarea", required: true },
-    { label: "תאריך ושעת החדשות", name: "newsDate", type: "date", required: true },
+    { label: "תאריך ושעת החדשות", name: "updateDate", type: "datetime-local", required: true },
     { label: "תאריך תפוגה", name: "expireDate", type: "date", required: true },
     { label: "תמונה (קישור)", name: "image", type: "url", required: true },
   ];

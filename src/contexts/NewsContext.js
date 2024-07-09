@@ -7,11 +7,10 @@ import {
   updateDoc,
   query,
   orderBy,
+  collection,
   limit,
-  Timestamp,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import { collection } from "firebase/firestore";
 
 export const NewsContext = createContext();
 
@@ -30,6 +29,7 @@ export const NewsContextProvider = ({ children }) => {
       const filteredNews = data.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
+        updateDate: doc.data().updateDate.toDate(),
       }));
       setNewsList(filteredNews);
     } catch (error) {
@@ -51,7 +51,6 @@ export const NewsContextProvider = ({ children }) => {
     try {
       const newsData = {
         ...data,
-        date: Timestamp.fromDate(new Date(data.date)),
       };
       const docRef = await addDoc(newsCollectionRef, newsData);
       const newItem = { id: docRef.id, ...newsData };
@@ -67,7 +66,6 @@ export const NewsContextProvider = ({ children }) => {
       const newsRef = doc(newsCollectionRef, id);
       const newsData = {
         ...updatedData,
-        date: Timestamp.fromDate(new Date(updatedData.date)),
       };
       await updateDoc(newsRef, newsData);
       setNewsList((prevList) =>

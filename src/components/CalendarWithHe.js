@@ -7,7 +7,7 @@ import {
 } from "../utils/DatesToHebrew";
 import { EventModal } from "./events/EventModal";
 import { monthTranslations } from "../dictionary";
-import { useEvents } from "../hooks/useEvents";
+import { useEvents } from "../contexts/EventsContext";
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 
 export const CalendarWithHe = ({ setDate, view }) => {

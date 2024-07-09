@@ -65,7 +65,7 @@ export const News = () => {
             >
               <h3 className="font-bold text-lg mb-2">{news.title}</h3>
               <p className="mb-2">{news.description}</p>
-              <p className="text-sm opacity-75">{news.updateDate}</p>
+              <p className="text-sm opacity-75">{format(news.updateDate, "dd/MM/yyyy HH:mm")}</p>
             </div>
           </div>
         ))}

@@ -41,7 +41,7 @@ export const Events = () => {
         <h1 className="text-3xl font-bold text-center">אירועים</h1>
         {user && (
           <button
-            className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded transition-colors duration-200"
+            className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors duration-200"
             onClick={() => setShowCreateEvent(true)}
           >
             הוסף אירוע

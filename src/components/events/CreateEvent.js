@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -23,29 +23,43 @@ const schema = yup.object().shape({
   URL: yup.string().url("נא להזין כתובת אתר תקינה"),
 });
 
-export const CreateEvent = ({ onClose }) => {
+export const CreateEvent = ({ event, onClose, onSubmit: handleUpdate, isEditing }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileBase64, setFileBase64] = useState(null);
   const [showOtherTextInput, setShowOtherTextInput] = useState(false);
-  const { addEvent } = useEvents();
+  const { addEvent, editEvent } = useEvents();
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  useEffect(() => {
+    if (isEditing && event) {
+      reset(event);
+      setFileBase64(event.fileBase64 || null);
+      setShowOtherTextInput(event.audienceAge === "אחר");
+    }
+  }, [isEditing, event, reset]);
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
 
     try {
-      await addEvent(data, fileBase64);
+      if (isEditing) {
+        await editEvent(event.id, data, fileBase64);
+      } else {
+        await addEvent(data, fileBase64);
+      }
       setIsSubmitting(false);
       onClose();
     } catch (error) {
       setIsSubmitting(false);
+      console.error("Error submitting form: ", error);
     }
   };
 
@@ -66,7 +80,7 @@ export const CreateEvent = ({ onClose }) => {
 
   const fields = [
     { label: "כותרת", name: "title", type: "text", required: true },
-    { label: "קובץ", name: "file", type: "file", accept: "image/*,.pdf", required: true },
+    { label: "קובץ", name: "file", type: "file", accept: "image/*,.pdf" },
     { label: "תיאור", name: "description", type: "textarea", required: true },
     { label: "קישור", name: "URL", type: "url" },
     { label: "תאריך ושעת האירוע", name: "eventDate", type: "datetime-local", required: true },
@@ -110,7 +124,7 @@ export const CreateEvent = ({ onClose }) => {
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md overflow-y-auto max-h-[90vh]">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">יצירת אירוע חדש</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">{isEditing ? "ערוך אירוע" : "יצירת אירוע חדש"}</h1>
         <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
           &#x2716;
         </button>
