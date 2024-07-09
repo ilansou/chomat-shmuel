@@ -30,6 +30,7 @@ export const NewsContextProvider = ({ children }) => {
         id: doc.id,
         ...doc.data(),
         updateDate: doc.data().updateDate.toDate(),
+        expireDate: doc.data().expireDate.toDate(),
       }));
       setNewsList(filteredNews);
     } catch (error) {

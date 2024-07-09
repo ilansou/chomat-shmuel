@@ -1,33 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { format } from "date-fns";
 import { useNews } from "../../contexts/NewsContext";
+import { Timestamp } from "firebase/firestore";
 
 const schema = yup.object().shape({
   title: yup.string().required("כותרת נדרשת"),
   description: yup.string().required("תיאור נדרש"),
-  updateDate: yup.date().required("תאריך חדשות נדרש").typeError("תאריך לא תקין"),
-  expireDate: yup.date().required("תאריך תפוגה נדרש").typeError("תאריך לא תקין"),
+  updateDate: yup
+    .date()
+    .nullable()
+    .typeError("תאריך חדשות נדרש")
+    .required("תאריך חדשות נדרש"),
+  expireDate: yup
+    .date()
+    .nullable()
+    .typeError("תאריך תפוגה נדרש")
+    .required("תאריך תפוגה נדרש")
+    .min(yup.ref("updateDate"), "תאריך תפוגה חייב להיות אחרי תאריך החדשות"),
 });
 
-export const CreateNews = ({ onClose }) => {
+export const CreateNews = ({ news, onClose, onSubmit: handleUpdate, isEditing }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileBase64, setFileBase64] = useState(null);
-
-  const { addNews } = useNews();
+  const { addNews, editNews } = useNews();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
+  useEffect(() => {
+    if (isEditing && news) {
+      reset({
+        ...news,
+        updateDate: news.updateDate ? format(news.updateDate, "yyyy-MM-dd'T'HH:mm") : '',
+        expireDate: news.expireDate ? format(news.expireDate, "yyyy-MM-dd") : '',
+      });
+      setFileBase64(news.imageUrl || null);
+    }
+  }, [isEditing, news, reset]);
+
   const onSubmit = async (data) => {
     setIsSubmitting(true);
+
     try {
-      await addNews(data, fileBase64);
+      const newsData = {...data }
+
+      if (isEditing) {
+        // If editing and no new file is selected, keep the existing imageUrl
+        if (!fileBase64 && news.imageUrl) {
+          newsData.imageUrl = news.imageUrl;
+        } else {
+          newsData.imageUrl = fileBase64;
+        }
+        await editNews(news.id, newsData, fileBase64);
+      } else {
+        await addNews(newsData, fileBase64);
+      }
       setIsSubmitting(false);
       onClose();
     } catch (error) {
@@ -58,7 +93,9 @@ export const CreateNews = ({ onClose }) => {
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md overflow-y-auto max-h-[90vh]">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">יצירת חדשות חדשות</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+          {isEditing ? "עריכת חדשות" : "יצירת חדשות חדשות"}
+        </h1>
         <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
           &#x2716;
         </button>

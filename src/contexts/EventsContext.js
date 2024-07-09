@@ -25,13 +25,14 @@ export const EventsContextProvider = ({ children }) => {
       const eventQuery = query(
         eventsCollectionRef,
         orderBy("eventDate"),
-        limit(10)
+        limit(30)
       );
       const data = await getDocs(eventQuery);
       const filteredEvents = data.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
         eventDate: doc.data().eventDate.toDate(),
+        expireDate: doc.data().expireDate.toDate(),
       }));
       setEventList(filteredEvents);
     } catch (error) {
@@ -100,6 +101,7 @@ export const EventsContextProvider = ({ children }) => {
         id: doc.id,
         ...doc.data(),
         eventDate: doc.data().eventDate.toDate(),
+        expireDate: doc.data().expireDate.toDate(),
       }));
     } catch (error) {
       console.error("Error getting nearest events: ", error);

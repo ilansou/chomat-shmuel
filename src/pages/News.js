@@ -5,6 +5,7 @@ import { CreateNews } from "../components/news/CreateNews";
 import { format } from "date-fns";
 import { NewsModal } from "../components/news/NewsModal";
 import whatsappBackground from "../images/WhatsApp.png";
+import { FacebookProvider, Page } from 'react-facebook';
 
 export const News = () => {
   const { newsList, getNews } = useNews();
@@ -57,8 +58,8 @@ export const News = () => {
   };
 
   return (
-    <div className="flex justify-start pt-28 px-20 pb-20">
-      <div className="w-1/3 min-w-[300px] shadow-lg">
+    <div className="flex flex-col lg:flex-row justify-between pt-28 px-4 lg:px-20 pb-20 space-y-8 lg:space-y-0 lg:space-x-8">
+      <div className="w-full lg:w-[calc(50%-16px)] xl:w-[calc(50%-16px)] shadow-lg">
         {/* WhatsApp-like header */}
         <div className="bg-[#075e54] text-white p-3 flex justify-between items-center rounded-t-lg">
           <h1 className="text-lg font-bold">חדשות ועדכונים</h1>
@@ -75,7 +76,7 @@ export const News = () => {
         {/* Chat area */}
         <div
           ref={scrollContainerRef}
-          className="flex-1 overflow-y-auto p-3 h-[calc(100vh-300px)] flex flex-col-reverse"
+          className="flex-1 overflow-y-auto p-3 h-[60vh] lg:h-[calc(100vh-300px)] flex flex-col-reverse"
           style={{ backgroundImage: `url(${whatsappBackground})`, backgroundSize: '210px' }}
         >
           <div className="flex flex-col">
@@ -115,6 +116,23 @@ export const News = () => {
             </svg>
           </button>
         </div>
+      </div>
+
+      {/* Facebook Page Plugin */}
+      <div className="w-full lg:w-1/2 xl:w-1/3 shadow-lg p-3 rounded-lg bg-white flex flex-col items-center">
+        <h2 className="text-lg font-bold mb-4">עקבו אחרינו בפייסבוק</h2>
+        <FacebookProvider appId="YOUR_FACEBOOK_APP_ID">
+          <Page 
+            href="https://www.facebook.com/harhomat"
+            tabs="timeline"
+            width="340"
+            height="500"
+            smallHeader={false}
+            adaptContainerWidth={true}
+            hideCover={false}
+            showFacepile={true}
+          />
+        </FacebookProvider>
       </div>
 
       {selectedNews && (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { useNews } from "../../hooks/useNews";
+import { useNews } from "../../contexts/NewsContext";
 import { CreateNews } from "./CreateNews";
 import { format } from "date-fns";
 
@@ -24,23 +24,14 @@ export const NewsModal = ({ news, onClose }) => {
     setIsEditing(true);
   };
 
-  const handleUpdate = async (updatedNews) => {
-    try {
-      await editNews(news.id, updatedNews);
-      setIsEditing(false);
-      onClose();
-    } catch (error) {
-      console.error("Error updating news item: ", error);
-    }
-  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         {isEditing ? (
           <CreateNews 
-            onClose={() => setIsEditing(false)} 
-            onSubmit={handleUpdate}
+            news={news}
+            onClose={ () => setIsEditing(false) }
             isEditing={true}
           />
         ) : (
@@ -76,7 +67,7 @@ export const NewsModal = ({ news, onClose }) => {
                 {user && (
                   <div className="flex flex-col space-y-2">
                     <button
-                      onClick={handleEdit}
+                      onClick={ () => handleEdit() && onClose() }
                       className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors w-full"
                     >
                       ערוך עדכון

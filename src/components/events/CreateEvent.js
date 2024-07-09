@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { format } from "date-fns";
 import { useEvents } from "../../contexts/EventsContext";
+import { Timestamp } from "firebase/firestore";
 
 const schema = yup.object().shape({
   title: yup.string().required("כותרת נדרשת"),
@@ -40,8 +42,12 @@ export const CreateEvent = ({ event, onClose, onSubmit: handleUpdate, isEditing 
 
   useEffect(() => {
     if (isEditing && event) {
-      reset(event);
-      setFileBase64(event.fileBase64 || null);
+      reset({
+        ...event,
+        eventDate: event.eventDate ? format(event.eventDate, "yyyy-MM-dd'T'HH:mm") : '',
+        expireDate: event.expireDate ? format(event.expireDate, "yyyy-MM-dd") : '',
+      });
+      setFileBase64(event.imageUrl || null);
       setShowOtherTextInput(event.audienceAge === "אחר");
     }
   }, [isEditing, event, reset]);
@@ -50,10 +56,21 @@ export const CreateEvent = ({ event, onClose, onSubmit: handleUpdate, isEditing 
     setIsSubmitting(true);
 
     try {
+      const eventData = { ...data };
+
       if (isEditing) {
-        await editEvent(event.id, data, fileBase64);
+        // If editing and no new file is selected, keep the existing imageUrl
+        if (!fileBase64 && event.imageUrl) {
+          eventData.imageUrl = event.imageUrl;
+        } else if (fileBase64) {
+          eventData.imageUrl = fileBase64;
+        }
+        await editEvent(event.id, eventData, fileBase64);
       } else {
-        await addEvent(data, fileBase64);
+        if (fileBase64) {
+          eventData.imageUrl = fileBase64;
+        }
+        await addEvent(eventData, fileBase64);
       }
       setIsSubmitting(false);
       onClose();
