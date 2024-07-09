@@ -80,7 +80,7 @@ export const CreateEvent = ({ event, onClose, onSubmit: handleUpdate, isEditing 
 
   const fields = [
     { label: "כותרת", name: "title", type: "text", required: true },
-    { label: "קובץ", name: "file", type: "file", accept: "image/*,.pdf" },
+    { label: "קובץ", name: "imageUrl", type: "file", accept: "image/*,.pdf" },
     { label: "תיאור", name: "description", type: "textarea", required: true },
     { label: "קישור", name: "URL", type: "url" },
     { label: "תאריך ושעת האירוע", name: "eventDate", type: "datetime-local", required: true },

@@ -61,7 +61,7 @@ export const EventModal = ({ event, onClose }) => {
 
               <div className="space-y-4">
                 <div className="bg-gray-100 p-4 rounded-lg">
-                  <p><strong>תאריך:</strong> {format(new Date(event.eventDate), "dd/MM/yyyy HH:mm")}</p>
+                  <p><strong>תאריך:</strong> {format((event.eventDate), "dd/MM/yyyy HH:mm")}</p>
                   <p><strong>מיקום:</strong> {event.location}</p>
                   <p><strong>מחיר:</strong> {event.price} ₪</p>
                   {event.URL && (

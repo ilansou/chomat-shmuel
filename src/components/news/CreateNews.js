@@ -9,11 +9,12 @@ const schema = yup.object().shape({
   description: yup.string().required("תיאור נדרש"),
   updateDate: yup.date().required("תאריך חדשות נדרש").typeError("תאריך לא תקין"),
   expireDate: yup.date().required("תאריך תפוגה נדרש").typeError("תאריך לא תקין"),
-  image: yup.string().url("קישור תמונה לא תקין").required("תמונה נדרשת"),
 });
 
 export const CreateNews = ({ onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fileBase64, setFileBase64] = useState(null);
+
   const { addNews } = useNews();
   const {
     register,
@@ -26,11 +27,23 @@ export const CreateNews = ({ onClose }) => {
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      await addNews(data);
+      await addNews(data, fileBase64);
       setIsSubmitting(false);
       onClose();
     } catch (error) {
       setIsSubmitting(false);
+      console.error("Error submitting form: ", error);
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFileBase64(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -39,7 +52,7 @@ export const CreateNews = ({ onClose }) => {
     { label: "תיאור", name: "description", type: "textarea", required: true },
     { label: "תאריך ושעת החדשות", name: "updateDate", type: "datetime-local", required: true },
     { label: "תאריך תפוגה", name: "expireDate", type: "date", required: true },
-    { label: "תמונה (קישור)", name: "image", type: "url", required: true },
+    { label: "קובץ", name: "imageUrl", type: "file", accept: "image/*,.pdf" },
   ];
 
   return (
@@ -63,6 +76,13 @@ export const CreateNews = ({ onClose }) => {
                   {...register(field.name)}
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 resize-vertical"
                   rows="3"
+                />
+              ) : field.type === "file" ? (
+                <input
+                  type={field.type}
+                  accept={field.accept}
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  onChange={handleFileChange}
                 />
               ) : (
                 <input

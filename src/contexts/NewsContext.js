@@ -47,10 +47,11 @@ export const NewsContextProvider = ({ children }) => {
     }
   };
 
-  const addNews = async (data) => {
+  const addNews = async (data, imageBase64) => {
     try {
       const newsData = {
         ...data,
+        imageUrl: imageBase64,
       };
       const docRef = await addDoc(newsCollectionRef, newsData);
       const newItem = { id: docRef.id, ...newsData };
@@ -61,11 +62,12 @@ export const NewsContextProvider = ({ children }) => {
     }
   };
 
-  const editNews = async (id, updatedData) => {
+  const editNews = async (id, updatedData, imageBase64) => {
     try {
       const newsRef = doc(newsCollectionRef, id);
       const newsData = {
         ...updatedData,
+        imageUrl: imageBase64,
       };
       await updateDoc(newsRef, newsData);
       setNewsList((prevList) =>

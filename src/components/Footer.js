@@ -20,7 +20,7 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="bg-gray-100 pt-28 text-gray-800">
+    <footer className="bg-gray-100 text-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Newsletter Section */}
         <div className="py-12 border-b border-gray-200">

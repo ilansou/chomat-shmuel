@@ -59,8 +59,8 @@ export const NewsModal = ({ news, onClose }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                {news.image && (
-                  <img src={news.image} alt={news.title} className="w-full h-64 object-cover rounded-lg" />
+                {news.imageUrl && (
+                  <img src={news.imageUrl} alt={news.title} className="w-full h-64 object-cover rounded-lg" />
                 )}
                 <div className="bg-gray-100 p-4 rounded-lg">
                   <p className="font-semibold">תיאור:</p>
@@ -70,8 +70,7 @@ export const NewsModal = ({ news, onClose }) => {
 
               <div className="space-y-4">
                 <div className="bg-gray-100 p-4 rounded-lg">
-                  <p><strong>תאריך:</strong> {format(new Date(news.updateDate), "dd/MM/yyyy HH:mm")}</p>
-                  <p><strong>תאריך תפוגה:</strong> {format(new Date(news.expireDate), "dd/MM/yyyy")}</p>
+                  <p><strong>תאריך:</strong> {format(news.updateDate, "dd/MM/yyyy HH:mm")}</p>
                 </div>
 
                 {user && (
