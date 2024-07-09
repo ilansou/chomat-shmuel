@@ -15,12 +15,11 @@ export const Events = () => {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const { getEventList, eventList } = useEvents();
   const [view, setView] = useState("monthly");
+  const [audienceFilter, setAudienceFilter] = useState("all");
 
   useEffect(() => {
     getEventList();
   }, []);
-
-  console.log(eventList);
 
   const handleSelectEvent = (event) => {
     setSelectedEvent(event);
@@ -31,26 +30,56 @@ export const Events = () => {
   };
 
   const filteredEvents = eventList?.filter((event) =>
-    isSameDay(new Date(event.eventDate), date)
+    isSameDay(new Date(event.eventDate), date) &&
+    (audienceFilter === "all" || event.audienceAge === audienceFilter)
   );
+
+  const audienceOptions = [
+    { value: "all", label: "הכל" },
+    { value: "שכונה צעירה", label: "שכונה צעירה" },
+    { value: "נוער", label: "נוער" },
+    { value: "לכל המשפחה", label: "לכל המשפחה" },
+    { value: "הגיל הרך", label: "הגיל הרך" },
+    { value: "תרבות", label: "תרבות" },
+    { value: "הגיל השלישי", label: "הגיל השלישי" },
+    { value: "טבע עירוני", label: "טבע עירוני" },
+    { value: "עמיתים", label: "עמיתים" },
+    { value: "ספורט", label: "ספורט" },
+    { value: "לכל הקהילה", label: "לכל הקהילה" },
+    { value: "צמי'ד", label: "צמי'ד" },
+    { value: "חרדי-תורני", label: "חרדי-תורני" },
+    { value: "אחר", label: "אחר" },
+  ];
 
   return (
     <div className="container mx-auto px-4 pt-32 max-w-6xl">
-
       <div className="mb-8 flex justify-between items-center">
         <h1 className="text-3xl font-bold text-center">אירועים</h1>
-        {user && (
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors duration-200"
-            onClick={() => setShowCreateEvent(true)}
+        <div className="flex items-center">
+          <select
+            className="mr-4 p-2 border rounded"
+            value={audienceFilter}
+            onChange={(e) => setAudienceFilter(e.target.value)}
           >
-            הוסף אירוע
-          </button>
-        )}
+            {audienceOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          {user && (
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors duration-200"
+              onClick={() => setShowCreateEvent(true)}
+            >
+              הוסף אירוע
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="mb-3">
-        <CalendarWithHe setDate={setDate} view={view} />
+        <CalendarWithHe setDate={setDate} view={view} audienceFilter={audienceFilter} />
         {selectedEvent && (
           <EventModal event={selectedEvent} onClose={handleCloseModal} />
         )}

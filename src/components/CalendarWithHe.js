@@ -10,7 +10,7 @@ import { monthTranslations } from "../dictionary";
 import { useEvents } from "../contexts/EventsContext";
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 
-export const CalendarWithHe = ({ setDate, view }) => {
+export const CalendarWithHe = ({ setDate, view, audienceFilter }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [openModal, setOpenModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -85,6 +85,8 @@ export const CalendarWithHe = ({ setDate, view }) => {
     setSelectedEvent(null);
   };
 
+  const filteredEventList = audienceFilter === "all" ? eventList : eventList.filter((event) => event.audienceAge === audienceFilter);
+
   return (
     <div className="w-full max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
       <div className="bg-blue-600 text-white p-4">
@@ -115,7 +117,7 @@ export const CalendarWithHe = ({ setDate, view }) => {
           </div>
         ))}
 
-        {days.map((dayObj, idx) => (
+{days.map((dayObj, idx) => (
           <div
             key={idx}
             className={`p-1 border rounded-lg ${
@@ -132,7 +134,7 @@ export const CalendarWithHe = ({ setDate, view }) => {
               <span className="text-xs text-gray-500">{convertToHebrewDay(dayObj.date)}</span>
             </div>
             <div className="flex-grow overflow-y-auto">
-              {eventList
+              {filteredEventList
                 .filter((ev) => isSameDay(new Date(ev.eventDate), dayObj.date))
                 .slice(0, 3)
                 .map((ev) => (
@@ -148,9 +150,9 @@ export const CalendarWithHe = ({ setDate, view }) => {
                     {format(new Date(ev.eventDate), "HH:mm")} {ev.title}
                   </div>
                 ))}
-              {eventList.filter((ev) => isSameDay(new Date(ev.eventDate), dayObj.date)).length > 3 && (
+              {filteredEventList.filter((ev) => isSameDay(new Date(ev.eventDate), dayObj.date)).length > 3 && (
                 <div className="text-xs text-gray-500">
-                  +{eventList.filter((ev) => isSameDay(new Date(ev.eventDate), dayObj.date)).length - 3} more
+                  +{filteredEventList.filter((ev) => isSameDay(new Date(ev.eventDate), dayObj.date)).length - 3} more
                 </div>
               )}
             </div>
