@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { useEvents } from "../../contexts/EventsContext";
-import { CreateEvent } from "./CreateEvent";
+import { useNews } from "../../hooks/useNews";
+import { CreateNews } from "./CreateNews";
 import { format } from "date-fns";
 
-export const EventModal = ({ event, onClose }) => {
+export const NewsModal = ({ newsItem, onClose }) => {
   const { user } = useAuth();
-  const { deleteEvent, editEvent } = useEvents();
+  const { deleteNews, editNews } = useNews();
   const [isEditing, setIsEditing] = useState(false);
 
   const handleDelete = async () => {
-    if (window.confirm("האם אתה בטוח שברצונך למחוק אירוע זה?")) {
+    if (window.confirm("האם אתה בטוח שברצונך למחוק עדכון זה?")) {
       try {
-        await deleteEvent(event.id);
+        await deleteNews(newsItem.id);
         onClose();
       } catch (error) {
-        console.error("Error deleting event: ", error);
+        console.error("Error deleting news item: ", error);
       }
     }
   };
@@ -24,13 +24,13 @@ export const EventModal = ({ event, onClose }) => {
     setIsEditing(true);
   };
 
-  const handleUpdate = async (updatedEvent) => {
+  const handleUpdate = async (updatedNews) => {
     try {
-      await editEvent(event.id, updatedEvent);
+      await editNews(newsItem.id, updatedNews);
       setIsEditing(false);
       onClose();
     } catch (error) {
-      console.error("Error updating event: ", error);
+      console.error("Error updating news item: ", error);
     }
   };
 
@@ -38,8 +38,8 @@ export const EventModal = ({ event, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         {isEditing ? (
-          <CreateEvent 
-            event={event} 
+          <CreateNews 
+            newsItem={newsItem} 
             onClose={() => setIsEditing(false)} 
             onSubmit={handleUpdate}
             isEditing={true}
@@ -47,7 +47,7 @@ export const EventModal = ({ event, onClose }) => {
         ) : (
           <div className="p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">{event.title}</h2>
+              <h2 className="text-2xl font-bold text-gray-800">{newsItem.title}</h2>
               <button
                 className="text-gray-500 hover:text-gray-700 transition-colors"
                 onClick={onClose}
@@ -60,28 +60,19 @@ export const EventModal = ({ event, onClose }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                {event.imageUrl && (
-                  <img src={event.imageUrl} alt={event.title} className="w-full h-64 object-cover rounded-lg" />
+                {newsItem.image && (
+                  <img src={newsItem.image} alt={newsItem.title} className="w-full h-64 object-cover rounded-lg" />
                 )}
                 <div className="bg-gray-100 p-4 rounded-lg">
                   <p className="font-semibold">תיאור:</p>
-                  <p className="text-gray-700">{event.description}</p>
+                  <p className="text-gray-700">{newsItem.description}</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="bg-gray-100 p-4 rounded-lg">
-                  <p><strong>תאריך:</strong> {format(new Date(event.eventDate), "dd/MM/yyyy HH:mm")}</p>
-                  <p><strong>מיקום:</strong> {event.location}</p>
-                  <p><strong>מחיר:</strong> {event.price} ₪</p>
-                  {event.URL && (
-                    <p>
-                      <strong>קישור:</strong>{" "}
-                      <a href={event.URL} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-700 transition-colors">
-                        לחץ כאן
-                      </a>
-                    </p>
-                  )}
+                  <p><strong>תאריך:</strong> {format(new Date(newsItem.eventDate), "dd/MM/yyyy HH:mm")}</p>
+                  <p><strong>תאריך תפוגה:</strong> {format(new Date(newsItem.expireDate), "dd/MM/yyyy")}</p>
                 </div>
 
                 {user && (
@@ -90,13 +81,13 @@ export const EventModal = ({ event, onClose }) => {
                       onClick={handleEdit}
                       className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors w-full"
                     >
-                      ערוך אירוע
+                      ערוך עדכון
                     </button>
                     <button
                       onClick={handleDelete}
                       className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition-colors w-full"
                     >
-                      מחק אירוע
+                      מחק עדכון
                     </button>
                   </div>
                 )}

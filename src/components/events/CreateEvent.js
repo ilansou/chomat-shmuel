@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useEvents } from "../../hooks/useEvents";
+import { useEvents } from "../../contexts/EventsContext";
 
 const schema = yup.object().shape({
   title: yup.string().required("כותרת נדרשת"),
@@ -41,7 +41,9 @@ export const CreateEvent = ({ onClose }) => {
     setIsSubmitting(true);
 
     try {
-      await addEvent(data, fileBase64, setError, onClose);
+      await addEvent(data, fileBase64);
+      setIsSubmitting(false);
+      onClose();
     } catch (error) {
       setIsSubmitting(false);
     }

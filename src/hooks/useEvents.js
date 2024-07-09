@@ -1,5 +1,5 @@
 // import { useContext, useCallback } from "react";
-// import { EventsContext } from "../context/EventsContext";
+// import { EventsContext } from "../contexts/EventsContext";
 // import { getDocs, deleteDoc, doc, addDoc } from "firebase/firestore";
 
 // export function useEvents() {
@@ -60,7 +60,7 @@
 
 
 import { useContext, useCallback, useState } from "react";
-import { EventsContext } from "../context/EventsContext";
+import { EventsContext } from "../contexts/EventsContext";
 import {
   getDocs,
   deleteDoc,
@@ -232,6 +232,7 @@ export function useEvents() {
       const nearestEvents = data.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
+        eventDate: doc.data().eventDate.toDate(),
       }));
 
       return nearestEvents;

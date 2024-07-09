@@ -1,5 +1,5 @@
 import { useContext, useCallback, useState } from "react";
-import { NewsAndUpdatesContext } from "../context/NewsAndUpdatesContext";
+import { NewsContext } from "../contexts/NewsContext";
 import {
   getDocs,
   deleteDoc,
@@ -20,32 +20,32 @@ let cache = {
   data: null,
 };
 
-export function useNewsAndUpdates() {
-  const { newsAndUpdatesList, setNewsAndUpdatesList, newsAndUpdatesCollectionRef } = useContext(NewsAndUpdatesContext);
+export function useNews() {
+  const { newsList, setNewsList, newsCollectionRef } = useContext(NewsContext);
   const [lastVisible, setLastVisible] = useState(null);
 
-  const getNewsAndUpdates = useCallback(
+  const getNews = useCallback(
     async (startDate, endDate, isPagination = false) => {
       const now = Date.now();
-  
+
       // Use cached data if it's still valid
       if (!isPagination && cache.data && now - cache.timestamp < CACHE_DURATION) {
-        setNewsAndUpdatesList(cache.data);
+        setNewsList(cache.data);
         return;
       }
-  
+
       try {
-        if (!newsAndUpdatesCollectionRef) {
-          console.error("newsAndUpdatesCollectionRef is not defined");
+        if (!newsCollectionRef) {
+          console.error("newsCollectionRef is not defined");
           return;
         }
-  
+
         let newsQuery = query(
-          newsAndUpdatesCollectionRef,
+          newsCollectionRef,
           orderBy("date", "desc"),
           limit(20)
         );
-  
+
         // Apply date range filter if start and end dates are provided
         if (startDate && endDate) {
           newsQuery = query(
@@ -54,75 +54,75 @@ export function useNewsAndUpdates() {
             where("date", "<=", endDate)
           );
         }
-  
+
         if (isPagination && lastVisible) {
           newsQuery = query(newsQuery, startAfter(lastVisible));
         }
-  
+
         const data = await getDocs(newsQuery);
-        const filteredNewsAndUpdates = data.docs.map((doc) => ({
+        const filteredNews = data.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-          newsAndUpdatesDate: doc.data().updateDate.toDate(),
+          newsDate: doc.data().date.toDate(),
         }));
-  
+
         if (isPagination) {
-          setNewsAndUpdatesList((prev) => [...prev, ...filteredNewsAndUpdates]);
+          setNewsList((prev) => [...prev, ...filteredNews]);
         } else {
-          setNewsAndUpdatesList(filteredNewsAndUpdates);
+          setNewsList(filteredNews);
           // Update cache
           cache.timestamp = Date.now();
-          cache.data = filteredNewsAndUpdates;
+          cache.data = filteredNews;
         }
-  
+
         // Update the last visible document for pagination
         setLastVisible(data.docs[data.docs.length - 1]);
       } catch (error) {
-        console.error("Error getting news and updates: ", error);
+        console.error("Error getting news: ", error);
       }
     },
-    [newsAndUpdatesCollectionRef, setNewsAndUpdatesList, lastVisible]
+    [newsCollectionRef, setNewsList, lastVisible]
   );
 
-  async function deleteNewAndUpdate(id) {
+  async function deleteNews(id) {
     try {
-      await deleteDoc(doc(newsAndUpdatesCollectionRef, id));
-      setNewsAndUpdatesList((prevList) =>
+      await deleteDoc(doc(newsCollectionRef, id));
+      setNewsList((prevList) =>
         prevList.filter((item) => item.id !== id)
       );
       // Invalidate cache
       cache.timestamp = 0;
     } catch (err) {
-      console.error("Error deleting news/update: ", err);
+      console.error("Error deleting news: ", err);
       throw err;
     }
   }
 
-  async function addNewsAndUpdates(data, setError) {
+  async function addNews(data, setError) {
     try {
       const newsData = {
         ...data,
         date: Timestamp.fromDate(new Date(data.date)),
       };
 
-      const docRef = await addDoc(newsAndUpdatesCollectionRef, newsData);
+      const docRef = await addDoc(newsCollectionRef, newsData);
       const newItem = { id: docRef.id, ...newsData };
-      setNewsAndUpdatesList((prevList) => [newItem, ...prevList]);
+      setNewsList((prevList) => [newItem, ...prevList]);
 
       // Invalidate cache
       cache.timestamp = 0;
     } catch (error) {
       setError("root", {
         type: "manual",
-        message: "Error creating news/update: " + error.message,
+        message: "Error creating news: " + error.message,
       });
       throw error;
     }
   }
 
-  async function editNewsAndUpdates(id, updatedData, setError) {
+  async function editNews(id, updatedData, setError) {
     try {
-      const newsRef = doc(newsAndUpdatesCollectionRef, id);
+      const newsRef = doc(newsCollectionRef, id);
       const newsData = {
         ...updatedData,
         date: Timestamp.fromDate(new Date(updatedData.date)),
@@ -130,7 +130,7 @@ export function useNewsAndUpdates() {
 
       await updateDoc(newsRef, newsData);
 
-      setNewsAndUpdatesList((prevList) =>
+      setNewsList((prevList) =>
         prevList.map((item) =>
           item.id === id ? { ...item, ...newsData } : item
         )
@@ -141,11 +141,11 @@ export function useNewsAndUpdates() {
     } catch (error) {
       setError("root", {
         type: "manual",
-        message: "Error updating news/update: " + error.message,
+        message: "Error updating news: " + error.message,
       });
       throw error;
     }
   }
 
-  return { getNewsAndUpdates, deleteNewAndUpdate, addNewsAndUpdates, editNewsAndUpdates, newsAndUpdatesList };
+  return { getNews, deleteNews, addNews, editNews, newsList };
 }

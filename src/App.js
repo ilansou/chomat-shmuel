@@ -5,20 +5,23 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { Home } from "./pages/Home";
 import { Events } from "./pages/Events";
 import { Classes } from "./pages/Classes";
-import { NewsAndUpdates } from "./pages/NewsAndUpdates";
+import { News } from "./pages/News";
 import { Contact } from "./pages/Contact";
 import { Login } from "./pages/Login";
 import { About } from "./pages/About";
 import { Dashboard } from "./pages/Dashboard";
-import { AuthContextProvider } from "./context/AuthContext";
+import { AuthContextProvider } from "./contexts/AuthContext";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
-import {  EventsContextProvider } from "./context/EventsContext";
+import {  EventsContextProvider } from "./contexts/EventsContext";
+import { NewsContextProvider } from "./contexts/NewsContext";
+
 
 function App() {
   return (
     <>
       <AuthContextProvider>
+        <NewsContextProvider>
         <EventsContextProvider>
           <Router>
             <Navbar />
@@ -26,7 +29,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/events" element={<Events />} />
               <Route path="/classes" element={<Classes />} />
-              <Route path="/newsAndUpdates" element={<NewsAndUpdates />} />
+              <Route path="/newsAndUpdates" element={<News />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/about" element={<About />} />
@@ -42,6 +45,7 @@ function App() {
             <Footer />
           </Router>
         </EventsContextProvider>
+        </NewsContextProvider>
       </AuthContextProvider>
     </>
   );

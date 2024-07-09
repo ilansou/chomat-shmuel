@@ -3,10 +3,10 @@ import { format, isSameDay } from "date-fns";
 import { he } from "date-fns/locale";
 import { EventModal } from "../components/events/EventModal";
 import { CreateEvent } from "../components/events/CreateEvent";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import { getFullJewishDate } from "../utils/DatesToHebrew";
 import { CalendarWithHe } from "../components/CalendarWithHe";
-import { useEvents } from "../hooks/useEvents";
+import { useEvents } from "../contexts/EventsContext";
 
 export const Events = () => {
   const { user } = useAuth();
@@ -19,6 +19,8 @@ export const Events = () => {
   useEffect(() => {
     getEventList();
   }, []);
+
+  console.log(eventList);
 
   const handleSelectEvent = (event) => {
     setSelectedEvent(event);
@@ -85,12 +87,6 @@ export const Events = () => {
       {showCreateEvent && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 shadow-lg max-w-[800px] w-full relative">
-            <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-              onClick={() => setShowCreateEvent(false)}
-            >
-              &times;
-            </button>
             <CreateEvent onClose={() => setShowCreateEvent(false)} />
           </div>
         </div>

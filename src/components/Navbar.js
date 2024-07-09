@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import logo from "../images/logo.png";
 import homeImage from "../images/home.png";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import { AiOutlineMenuUnfold, AiOutlineClose } from "react-icons/ai";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -60,8 +60,6 @@ export const Navbar = () => {
               <Link
                 key={index}
                 to={link.link}
-                spy={true}
-                smooth={true}
                 duration={500}
                 className="group relative inline-block cursor-pointer text-white hover:text-gray-200">
                 {link.name}
@@ -116,8 +114,6 @@ export const Navbar = () => {
             <Link
               key={index}
               to={link.link}
-              spy={true}
-              smooth={true}
               duration={500}
               className="transition-all cursor-pointer text-white hover:text-gray-200 relative z-10"
               onClick={handleCloseMenu}>

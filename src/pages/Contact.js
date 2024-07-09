@@ -121,7 +121,7 @@ export const Contact = () => {
               className="w-full h-full rounded-md"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3393.6987644475485!2d35.22980992405314!3d31.72412273704668!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x150327e4e0c93a6d%3A0x9f2134ce46ad2a1b!2z15DXodeq16gg16jXlteZ15DXnCDXoNeQ15XXqCA4LCDXmdeo15XXqdec15nXnQ!5e0!3m2!1siw!2sil!4v1720339605119!5m2!1siw!2sil"
               loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
+              referrerPolicy="no-referrer-when-downgrade"
               allowFullScreen=""
               aria-hidden="false"
               tabIndex="0"
