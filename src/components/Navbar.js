@@ -67,7 +67,7 @@ export const Navbar = () => {
             ))}
             {user ? (
               <Link
-                to="/statistics"
+                to="/dashboard"
                 className="group relative inline-block cursor-pointer text-white hover:text-gray-200">
                 סטטיסטיקות
               </Link>
@@ -79,7 +79,7 @@ export const Navbar = () => {
               <button
                 onClick={handleLogout}
                 className="bg-red-400 hover:bg-red-700 text-white text-xl font-medium py-2 px-4 rounded transition duration-300">
-                 <FontAwesomeIcon icon={faSignOutAlt} className="fa-sm" />
+                <FontAwesomeIcon icon={faSignOutAlt} className="fa-sm" />
               </button>
             ) : (
               <Link to="/login">
@@ -103,7 +103,7 @@ export const Navbar = () => {
         <div
           className={`${
             menu ? "translate-x-0" : "-translate-x-full"
-          } lg:hidden flex flex-col absolute text-white left-0 top-16 font-semibold text-2xl text-center pt-8 pb-4 gap-8 w-full h-fit transition-transform duration-300`}
+          } lg:hidden flex flex-col absolute text-white left-0 top-3 font-semibold text-2xl text-center pt-8 pb-4 gap-8 w-full h-fit transition-transform duration-300`}
           style={{
             backgroundImage: `url(${homeImage})`,
             backgroundSize: "cover",
@@ -120,6 +120,16 @@ export const Navbar = () => {
               {link.name}
             </Link>
           ))}
+          {user ? (
+              <Link
+                to="/dashboard"
+                duration={500}
+                className="transition-all cursor-pointer text-white hover:text-gray-200 relative z-10"
+                onClick={handleCloseMenu}
+                >
+                סטטיסטיקות
+              </Link>
+            ) : null}
           <div className="relative z-10">
             {user ? (
             <button

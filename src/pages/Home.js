@@ -1,41 +1,65 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { EventList } from "../components/events/EventList";
-import { Carousel } from "../components/Carousel";
+import { useNews } from "../contexts/NewsContext";
 
 export const Home = () => {
-  const slides = [
-    {
-      id: 1,
-      url: "https://images.unsplash.com/photo-1719922326745-0ba9484d02e2?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 2,
-      url: "https://images.unsplash.com/photo-1718049447951-27c218890810?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDJ8ajJ6ZWM2a2Q5Vmt8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 3,
-      url: "https://images.unsplash.com/photo-1710609942195-b9dab8f48fc6?q=80&w=1227&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-  ];
+  const { newsList, getNews } = useNews();
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      if (newsList.length === 0) {
+        await getNews();
+      }
+    };
+
+    fetchNews();
+  }, [getNews, newsList.length]);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'תאריך לא זמין';
+    
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString; // Return original string if invalid date
+    
+    return date.toLocaleDateString('he-IL', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <header className="bg-white shadow">
+      <header className="bg-white shadow-md">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900">ברוכים הבאים לאתר האירועים שלנו</h1>
+          <h1 className="text-4xl font-bold text-gray-900 text-center">ברוכים הבאים לאתר האירועים שלנו</h1>
         </div>
       </header>
-      <main>
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row gap-6">
-            <div className="w-full md:w-[70%]">
-              <EventList />
-            </div>
+
+      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <section className="mb-12 bg-white shadow-lg rounded-lg overflow-hidden">
+          <h2 className="text-3xl font-semibold mb-6 p-6 bg-blue-600 text-white">אירועים קרובים</h2>
+          <div className="p-6">
+            <EventList />
           </div>
-          <div className="p-4">
-            <Carousel slides={slides} />
+        </section>
+
+        <section className="bg-white shadow-lg rounded-lg overflow-hidden">
+          <h2 className="text-3xl font-semibold mb-6 p-6 bg-green-600 text-white">חדשות ועדכונים</h2>
+          <div className="p-6">
+            <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {newsList.slice(0, 6).map((newsItem) => (
+                <li key={newsItem.id} className="border rounded-lg p-4 shadow-md transition-all duration-300 hover:shadow-lg">
+                  <h3 className="font-semibold text-lg mb-2">{newsItem.title}</h3>
+                  <p className="text-sm text-gray-600 mb-2">{newsItem.description}</p>
+                  <span className="text-xs text-gray-500 block text-right">
+                    {newsItem.date}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
+        </section>
       </main>
     </div>
   );
