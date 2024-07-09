@@ -7,7 +7,7 @@ import { useNews } from "../../contexts/NewsContext";
 const schema = yup.object().shape({
   title: yup.string().required("כותרת נדרשת"),
   description: yup.string().required("תיאור נדרש"),
-  newsDate: yup.date().required("תאריך חדשות נדרש").typeError("תאריך לא תקין"),
+  updateDate: yup.date().required("תאריך חדשות נדרש").typeError("תאריך לא תקין"),
   expireDate: yup.date().required("תאריך תפוגה נדרש").typeError("תאריך לא תקין"),
   image: yup.string().url("קישור תמונה לא תקין").required("תמונה נדרשת"),
 });

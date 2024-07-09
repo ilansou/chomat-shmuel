@@ -23,7 +23,7 @@ export const NewsContextProvider = ({ children }) => {
     try {
       const newsQuery = query(
         newsCollectionRef,
-        orderBy("newsDate", "desc"),
+        orderBy("updateDate", "desc"),
         limit(20)
       );
       const data = await getDocs(newsQuery);

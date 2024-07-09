@@ -3,10 +3,12 @@ import { useNews } from "../contexts/NewsContext";
 import { useAuth } from "../contexts/AuthContext";
 import { CreateNews } from "../components/news/CreateNews";
 import { format } from "date-fns";
+import { NewsModal } from "../components/news/NewsModal";
 
 export const News = () => {
   const { newsList, getNews } = useNews();
   const { user } = useAuth();
+  const [selectedNews, setSelectedNews] = useState(null);
   const [showCreateNews, setShowCreateNews] = useState(false);
   const scrollContainerRef = useRef(null);
 
@@ -20,12 +22,16 @@ export const News = () => {
     }
   }, [newsList]);
 
-  const formatDate = (date) => {
-    return format(new Date(date), "dd/MM/yyyy");
+  const handleSelectNews = (news) => {
+    setSelectedNews(news);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedNews(null);
   };
 
   return (
-    <div className="container mx-auto pt-28 px-4 py-8">
+    <div className="container items-center mx-auto pt-28 px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">חדשות ועדכונים</h1>
         {user && (
@@ -40,7 +46,7 @@ export const News = () => {
 
       <div
         ref={scrollContainerRef}
-        className="bg-gray-100 rounded-lg p-4 h-[calc(100vh-200px)] overflow-y-auto"
+        className="bg-gray-100 flex flex-col rounded-lg p-4 h-[calc(100vh-200px)] xl:w-[70%] overflow-y-auto"
       >
         {newsList.map((news, index) => (
           <div
@@ -50,19 +56,24 @@ export const News = () => {
             } mb-4`}
           >
             <div
-              className={`max-w-3/4 p-4 rounded-lg shadow ${
+              className={`max-w-3/4 p-4 rounded-lg shadow cursor-pointer ${
                 index % 2 === 0
                   ? "bg-white text-gray-800"
                   : "bg-blue-500 text-white"
               }`}
+              onClick={() => handleSelectNews(news)}
             >
               <h3 className="font-bold text-lg mb-2">{news.title}</h3>
-              <p className="mb-2">{news.content}</p>
-              <p className="text-sm opacity-75">{news.newsDate}</p>
+              <p className="mb-2">{news.description}</p>
+              <p className="text-sm opacity-75">{news.updateDate}</p>
             </div>
           </div>
         ))}
       </div>
+
+      {selectedNews && (
+        <NewsModal news={selectedNews} onClose={handleCloseModal} />
+      )}
 
       {showCreateNews && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

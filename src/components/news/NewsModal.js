@@ -4,7 +4,7 @@ import { useNews } from "../../hooks/useNews";
 import { CreateNews } from "./CreateNews";
 import { format } from "date-fns";
 
-export const NewsModal = ({ newsItem, onClose }) => {
+export const NewsModal = ({ news, onClose }) => {
   const { user } = useAuth();
   const { deleteNews, editNews } = useNews();
   const [isEditing, setIsEditing] = useState(false);
@@ -12,7 +12,7 @@ export const NewsModal = ({ newsItem, onClose }) => {
   const handleDelete = async () => {
     if (window.confirm("האם אתה בטוח שברצונך למחוק עדכון זה?")) {
       try {
-        await deleteNews(newsItem.id);
+        await deleteNews(news.id);
         onClose();
       } catch (error) {
         console.error("Error deleting news item: ", error);
@@ -26,7 +26,7 @@ export const NewsModal = ({ newsItem, onClose }) => {
 
   const handleUpdate = async (updatedNews) => {
     try {
-      await editNews(newsItem.id, updatedNews);
+      await editNews(news.id, updatedNews);
       setIsEditing(false);
       onClose();
     } catch (error) {
@@ -39,7 +39,6 @@ export const NewsModal = ({ newsItem, onClose }) => {
       <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         {isEditing ? (
           <CreateNews 
-            newsItem={newsItem} 
             onClose={() => setIsEditing(false)} 
             onSubmit={handleUpdate}
             isEditing={true}
@@ -47,7 +46,7 @@ export const NewsModal = ({ newsItem, onClose }) => {
         ) : (
           <div className="p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">{newsItem.title}</h2>
+              <h2 className="text-2xl font-bold text-gray-800">{news.title}</h2>
               <button
                 className="text-gray-500 hover:text-gray-700 transition-colors"
                 onClick={onClose}
@@ -60,19 +59,19 @@ export const NewsModal = ({ newsItem, onClose }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                {newsItem.image && (
-                  <img src={newsItem.image} alt={newsItem.title} className="w-full h-64 object-cover rounded-lg" />
+                {news.image && (
+                  <img src={news.image} alt={news.title} className="w-full h-64 object-cover rounded-lg" />
                 )}
                 <div className="bg-gray-100 p-4 rounded-lg">
                   <p className="font-semibold">תיאור:</p>
-                  <p className="text-gray-700">{newsItem.description}</p>
+                  <p className="text-gray-700">{news.description}</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div className="bg-gray-100 p-4 rounded-lg">
-                  <p><strong>תאריך:</strong> {format(new Date(newsItem.eventDate), "dd/MM/yyyy HH:mm")}</p>
-                  <p><strong>תאריך תפוגה:</strong> {format(new Date(newsItem.expireDate), "dd/MM/yyyy")}</p>
+                  <p><strong>תאריך:</strong> {format(new Date(news.updateDate), "dd/MM/yyyy HH:mm")}</p>
+                  <p><strong>תאריך תפוגה:</strong> {format(new Date(news.expireDate), "dd/MM/yyyy")}</p>
                 </div>
 
                 {user && (
