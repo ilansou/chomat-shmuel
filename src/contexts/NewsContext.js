@@ -18,7 +18,7 @@ export const NewsContextProvider = ({ children }) => {
   const [newsList, setNewsList] = useState([]);
   const newsCollectionRef = collection(db, "news and updates");
 
-  const getNews = useCallback(async () => {
+  const getNewsList = useCallback(async () => {
     try {
       const newsQuery = query(
         newsCollectionRef,
@@ -84,7 +84,7 @@ export const NewsContextProvider = ({ children }) => {
 
   return (
     <NewsContext.Provider
-      value={{ newsList, getNews, deleteNews, addNews, editNews }}
+      value={{ newsList, getNewsList, deleteNews, addNews, editNews }}
     >
       {children}
     </NewsContext.Provider>

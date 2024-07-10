@@ -8,19 +8,20 @@ import { Classes } from "./pages/Classes";
 import { News } from "./pages/News";
 import { Contact } from "./pages/Contact";
 import { Login } from "./pages/Login";
-import { About } from "./pages/About";
 import { Dashboard } from "./pages/Dashboard";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import {  EventsContextProvider } from "./contexts/EventsContext";
 import { NewsContextProvider } from "./contexts/NewsContext";
+import { ClassesContextProvider } from "./contexts/ClassesContext";
 
 
 function App() {
   return (
     <>
       <AuthContextProvider>
+        <ClassesContextProvider>
         <NewsContextProvider>
         <EventsContextProvider>
           <Router>
@@ -32,7 +33,6 @@ function App() {
               <Route path="/newsAndUpdates" element={<News />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/about" element={<About />} />
               <Route
                 path="/dashboard"
                 element={
@@ -46,6 +46,7 @@ function App() {
           </Router>
         </EventsContextProvider>
         </NewsContextProvider>
+        </ClassesContextProvider>
       </AuthContextProvider>
     </>
   );

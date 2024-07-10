@@ -8,14 +8,14 @@ import whatsappBackground from "../images/WhatsApp.png";
 import { FacebookProvider, Page } from 'react-facebook';
 
 export const News = () => {
-  const { newsList, getNews } = useNews();
+  const { newsList, getNewsList } = useNews();
   const { user } = useAuth();
   const [selectedNews, setSelectedNews] = useState(null);
   const [showCreateNews, setShowCreateNews] = useState(false);
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
-    getNews();
+    getNewsList();
   }, []);
 
   useEffect(() => {

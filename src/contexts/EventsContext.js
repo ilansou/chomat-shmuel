@@ -87,31 +87,9 @@ export const EventsContextProvider = ({ children }) => {
     }
   };
 
-  const getNearestEvents = useCallback(async (k) => {
-    try {
-      const now = Timestamp.now();
-      const eventQuery = query(
-        eventsCollectionRef,
-        where("eventDate", ">=", now),
-        orderBy("eventDate"),
-        limit(k)
-      );
-      const data = await getDocs(eventQuery);
-      return data.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        eventDate: doc.data().eventDate.toDate(),
-        expireDate: doc.data().expireDate.toDate(),
-      }));
-    } catch (error) {
-      console.error("Error getting nearest events: ", error);
-      return [];
-    }
-  }, [eventsCollectionRef]);
-
   return (
     <EventsContext.Provider
-      value={{ eventList, getEventList, deleteEvent, addEvent, editEvent, getNearestEvents }}
+      value={{ eventList, getEventList, deleteEvent, addEvent, editEvent }}
     >
       {children}
     </EventsContext.Provider>

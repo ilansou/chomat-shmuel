@@ -18,9 +18,16 @@ export const Events = () => {
   const [audienceFilter, setAudienceFilter] = useState("all");
 
   useEffect(() => {
-    getEventList();
+    const fetchEvents = async () => {
+      try {
+        await getEventList();
+      } catch (err) {
+        console.error("Error fetching events:", err);
+      }
+    };
+    fetchEvents();
   }, []);
-
+  
   const handleSelectEvent = (event) => {
     setSelectedEvent(event);
   };
@@ -82,34 +89,6 @@ export const Events = () => {
         <CalendarWithHe setDate={setDate} view={view} audienceFilter={audienceFilter} />
         {selectedEvent && (
           <EventModal event={selectedEvent} onClose={handleCloseModal} />
-        )}
-      </div>
-
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <h2 className="text-2xl font-semibold mb-4">
-          אירועים ב{format(date, "dd/MM/yyyy", { locale: he })},{" "}
-          {getFullJewishDate(date)}
-        </h2>
-        {filteredEvents?.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredEvents.map((event) => (
-              <div
-                key={event.id}
-                className="bg-white shadow-md rounded p-4 cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => handleSelectEvent(event)}
-              >
-                <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                <p className="text-gray-700 mb-2">{event.description}</p>
-                <p className="text-gray-500">
-                  {format(new Date(event.eventDate), "HH:mm", { locale: he })}
-                </p>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="bg-gray-100 rounded p-4">
-            <p>אין אירועים בתאריך זה</p>
-          </div>
         )}
       </div>
 
