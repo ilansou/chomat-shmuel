@@ -3,7 +3,7 @@ import { useNews } from '../contexts/NewsContext';
 import { format } from 'date-fns';
 import { useAuth } from '../contexts/AuthContext';
 import whatsappBackground from '../images/WhatsApp.png';
-import { CreateNews } from './news/CreateNews';
+import { NewsForm } from './news/NewsForm';
 import { NewsModal } from './news/NewsModal';
 
 export const Chat = () => {
@@ -11,7 +11,7 @@ export const Chat = () => {
   const { newsList, getNewsList } = useNews();
   const { user } = useAuth();
   const [selectedNews, setSelectedNews] = useState(null);
-  const [showCreateNews, setShowCreateNews] = useState(false);
+  const [showNewsForm, setShowNewsForm] = useState(false);
 
   useEffect(() => {
     getNewsList();
@@ -29,7 +29,7 @@ export const Chat = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
     }
-  }, [newsList]);
+  }, []);
 
   const renderAttachment = (attachment) => {
     if (attachment.type.startsWith('image/')) {
@@ -57,13 +57,13 @@ export const Chat = () => {
   };
 
   return (
-    <div className="w-full lg:w-[calc(50%-16px)] xl:w-[calc(50%-16px)] shadow-lg">
+    <div className="w-full lg:w-[calc(100%-16px)] xl:w-[calc(100%-16px)] shadow-lg">
       {/* WhatsApp-like header */}
       <div className="bg-[#075e54] text-white p-3 flex justify-between items-center rounded-t-lg">
         <h1 className="text-lg font-bold">חדשות ועדכונים</h1>
         {user && (
           <button
-            onClick={() => setShowCreateNews(true)}
+            onClick={() => setShowNewsForm(true)}
             className="bg-[#128c7e] hover:bg-[#075e54] text-white font-bold py-1 px-2 rounded text-sm transition duration-300"
           >
             הוסף חדשות
@@ -117,10 +117,10 @@ export const Chat = () => {
         <NewsModal news={selectedNews} onClose={handleCloseModal} />
       )}
 
-      {showCreateNews && (
+      {showNewsForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-lg">
-            <CreateNews onClose={() => setShowCreateNews(false)} />
+            <NewsForm onClose={() => setShowNewsForm(false)} />
           </div>
         </div>
       )}

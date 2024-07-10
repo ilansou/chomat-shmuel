@@ -44,8 +44,8 @@ export const Contact = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-             {/* Contact Form Section */}
-             <div className="bg-white rounded-lg shadow-md p-6">
+          {/* Contact Form Section */}
+          <div className="bg-white rounded-3xl shadow-md p-6">
             <h2 className="text-2xl font-semibold mb-4 text-gray-700">שלחו לנו הודעה</h2>
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
@@ -58,7 +58,7 @@ export const Contact = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="הכנס את שמך המלא"
                   required
                 />
@@ -74,7 +74,7 @@ export const Contact = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="הכנס את כתובת הדואר האלקטרוני שלך"
                   required
                 />
@@ -90,7 +90,7 @@ export const Contact = () => {
                   value={formData.message}
                   onChange={handleChange}
                   rows="4"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="הכנס את ההודעה שלך"
                   required></textarea>
               </div>
@@ -98,7 +98,7 @@ export const Contact = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 disabled:opacity-50">
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700 transition duration-300 disabled:opacity-50">
                 {isSubmitting ? "שולח..." : "שלח"}
               </button>
 
@@ -113,25 +113,25 @@ export const Contact = () => {
             </form>
           </div>
 
-        {/* Map Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-700">כתובת מינהל קהילתי מרכזי</h2>
-          <div className="w-full h-[80%]">
-            <iframe
-              className="w-full h-full rounded-md"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3393.6987644475485!2d35.22980992405314!3d31.72412273704668!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x150327e4e0c93a6d%3A0x9f2134ce46ad2a1b!2z15DXodeq16gg16jXlteZ15DXnCDXoNeQ15XXqCA4LCDXmdeo15XXqdec15nXnQ!5e0!3m2!1siw!2sil!4v1720339605119!5m2!1siw!2sil"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              allowFullScreen=""
-              aria-hidden="false"
-              tabIndex="0"
-              title="Map"
-            ></iframe>
+          {/* Map Section */}
+          <div className="bg-white rounded-3xl shadow-md p-6">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-700">כתובת מינהל קהילתי מרכזי</h2>
+            <div className="w-full h-[80%]">
+              <iframe
+                className="w-full h-full rounded-3xl"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3393.6987644475485!2d35.22980992405314!3d31.72412273704668!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x150327e4e0c93a6d%3A0x9f2134ce46ad2a1b!2z15DXodeq16gg16jXlteZ15DXnCDXoNeQ15XXqCA4LCDXmdeo15XXqdec15nXnQ!5e0!3m2!1siw!2sil!4v1720339605119!5m2!1siw!2sil"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen=""
+                aria-hidden="false"
+                tabIndex="0"
+                title="Map"
+              ></iframe>
+            </div>
           </div>
-        </div>
        
           {/* Contact Info Section */}
-          <div className="bg-white rounded-lg shadow-md p-6 md:col-span-2">
+          <div className="bg-white rounded-3xl shadow-md p-6 md:col-span-2">
             <h2 className="text-2xl font-semibold mb-4 text-gray-700">פרטי תקשורת</h2>
             <ul className="space-y-4">
               {[

@@ -8,8 +8,6 @@ import {
   query,
   orderBy,
   limit,
-  where,
-  Timestamp,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { collection } from "firebase/firestore";

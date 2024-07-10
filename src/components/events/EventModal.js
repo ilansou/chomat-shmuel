@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useEvents } from "../../contexts/EventsContext";
-import { CreateEvent } from "./CreateEvent";
+import {EventForm } from "./EventForm";
 import { format } from "date-fns";
 
 export const EventModal = ({ event, onClose }) => {
@@ -29,7 +29,7 @@ export const EventModal = ({ event, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         {isEditing ? (
-          <CreateEvent
+          <EventForm
             event={event}
             onClose={() => setIsEditing(false)}
             isEditing={true}
@@ -51,7 +51,7 @@ export const EventModal = ({ event, onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 {event.imageUrl && (
-                  <img src={event.imageUrl} alt={event.title} className="w-full h-64 object-cover rounded-lg" />
+                  <img src={event.imageUrl} alt={event.title} className="w-full h-56 object-contain rounded-lg" />
                 )}
                 <div className="bg-gray-100 p-4 rounded-lg">
                   <p className="font-semibold">תיאור:</p>

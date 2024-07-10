@@ -8,26 +8,18 @@ import { useClasses } from "../../contexts/ClassesContext";
 const schema = yup.object().shape({
   title: yup.string().required("כותרת נדרשת"),
   description: yup.string().required("תיאור נדרש"),
-  classDate: yup
-    .date()
-    .nullable()
-    .typeError("תאריך שיעור נדרש")
-    .required("תאריך שיעור נדרש")
-    .min(new Date(), "תאריך השיעור חייב להיות תאריך עתידי"),
+  classDate: yup.date().nullable().typeError("תאריך שיעור נדרש").required("תאריך שיעור נדרש").min(new Date(), "תאריך השיעור חייב להיות תאריך עתידי"),
+  frequency: yup.string().required("תדירות נדרשת"),
   category: yup.string().required("קטגוריה נדרשת"),
-  expireDate: yup
-    .date()
-    .nullable()
-    .typeError("תאריך תפוגה נדרש")
-    .required("תאריך תפוגה נדרש")
-    .min(yup.ref("classDate"), "תאריך תפוגה חייב להיות אחרי תאריך השיעור"),
+  expireDate: yup.date().nullable().typeError("תאריך תפוגה נדרש").required("תאריך תפוגה נדרש").min(yup.ref("classDate"), "תאריך תפוגה חייב להיות אחרי תאריך השיעור"),
   URL: yup.string().url("נא להזין כתובת אתר תקינה"),
   teacherName: yup.string().required("שם המורה נדרש"),
   teacherPhone: yup.string().required("מספר טלפון המורה נדרש"),
   teacherEmail: yup.string().email("כתובת אימייל לא תקינה").required("אימייל המורה נדרש"),
+  weekday: yup.string().required("יום בשבוע נדרש"),
 });
 
-export const CreateClass = ({ classItem, onClose, onSubmit: handleUpdate, isEditing }) => {
+export const ClassForm = ({ classItem, onClose, onSubmit: handleUpdate, isEditing }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileBase64, setFileBase64] = useState(null);
   const [showOtherTextInput, setShowOtherTextInput] = useState(false);
@@ -96,6 +88,18 @@ export const CreateClass = ({ classItem, onClose, onSubmit: handleUpdate, isEdit
     setShowOtherTextInput(e.target.value === "אחר");
   };
 
+  // Weekday options
+  const weekdayOptions = [
+    { label: "בחר יום בשבוע", value: "" },
+    { label: "ראשון", value: "Sunday" },
+    { label: "שני", value: "Monday" },
+    { label: "שלישי", value: "Tuesday" },
+    { label: "רביעי", value: "Wednesday" },
+    { label: "חמישי", value: "Thursday" },
+    { label: "שישי", value: "Friday" },
+    { label: "שבת", value: "Saturday" }
+  ];
+
   const fields = [
     { label: "כותרת", name: "title", type: "text", required: true },
     { label: "קובץ", name: "imageUrl", type: "file", accept: "image/*,.pdf" },
@@ -104,31 +108,58 @@ export const CreateClass = ({ classItem, onClose, onSubmit: handleUpdate, isEdit
     { label: "תאריך ושעת השיעור", name: "classDate", type: "datetime-local", required: true },
     { label: "תאריך תפוגה", name: "expireDate", type: "date", required: true },
     {
-      label: "קטגוריה",
+      label: "תחום",
       name: "category",
       type: "select",
       options: [
-        { label: "בחר קטגוריה", value: "" },
-        { label: "יוגה", value: "יוגה" },
-        { label: "פילאטיס", value: "פילאטיס" },
-        { label: "ציור", value: "ציור" },
-        { label: "מוזיקה", value: "מוזיקה" },
-        { label: "בישול", value: "בישול" },
-        { label: "שפות", value: "שפות" },
-        { label: "מחשבים", value: "מחשבים" },
-        { label: "ספורט", value: "ספורט" },
+        { label: "בחר תחום", value: "" },
+        { label: "חוגי הגיל השלישי", value: "חוגי הגיל השלישי" },
+        { label: "התעלמות וספורט", value: "התעלמות וספורט" },
+        { label: "חוגי מחול", value: "חוגי מחול" },
+        { label: "חוגי אומנות", value: "חוגי אומנות" },
+        { label: "חוגי העשרה", value: "חוגי העשרה" },
+        { label: 'חוגי צמי"ד', value: 'חוגי צמי"ד' },
         { label: "אחר", value: "אחר" },
       ],
       required: true,
       onChange: handleCategoryChange,
     },
     {
-      label: "אחר",
-      name: "otherCategory",
-      type: "text",
-      show: showOtherTextInput,
-      required: showOtherTextInput,
+      label: "קהל היעד",
+      name: "audienceAge",
+      type: "select",
+      options: [
+        { label: "בחר קהל יעד", value: "" },
+        { label: "שכונה צעירה", value: "שכונה צעירה" },
+        { label: "נוער", value: "נוער" },
+        { label: "לכל המשפחה", value: "לכל המשפחה" },
+        { label: "הגיל הרך", value: "הגיל הרך" },
+        { label: "תרבות", value: "תרבות" },
+        { label: "הגיל השלישי", value: "הגיל השלישי" },
+        { label: "טבע עירוני", value: "טבע עירוני" },
+        { label: "עמיתים", value: "עמיתים" },
+        { label: "ספורט", value: "ספורט" },
+        { label: "לכל הקהילה", value: "לכל הקהילה" },
+        { label: "צמי'ד", value: "צמי'ד" },
+        { label: "חרדי-תורני", value: "חרדי-תורני" },
+        { label: "אחר", value: "אחר" },
+      ],
+      required: true,
     },
+    {
+      label: "תדירות",
+      name: "frequency",
+      type: "select",
+      options: [
+        { label: "חד פעמי", value: "one-time" },
+        { label: "שבועי", value: "weekly" },
+        { label: "דו-שבועי", value: "biweekly" },
+        { label: "חודשי", value: "monthly" },
+      ],
+      required: true,
+    },
+    { label: "משך השיעור (בדקות)", name: "duration", type: "number", required: true },
+    { label: "יום בשבוע", name: "weekday", type: "select", options: weekdayOptions, required: true },
     { label: "מיקום", name: "location", type: "text", required: true },
     { label: "מחיר", name: "price", type: "number", step: "0.1" },
     { label: "מספר משתתפים", name: "participant", type: "number" },
@@ -137,14 +168,13 @@ export const CreateClass = ({ classItem, onClose, onSubmit: handleUpdate, isEdit
     { label: "טלפון המורה", name: "teacherPhone", type: "tel", required: true },
     { label: "אימייל המורה", name: "teacherEmail", type: "email", required: true },
   ];
-
+  
+  // Existing return statement
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md overflow-y-auto max-h-[90vh]">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">{isEditing ? "ערוך שיעור" : "יצירת שיעור חדש"}</h1>
-        <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-          &#x2716;
-        </button>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">{isEditing ? "עריכת חוג" : "צור חוג חדש"}</h1>
+        <button onClick={onClose} className="text-gray-500 hover:text-gray-700">&#x2716;</button>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
@@ -174,9 +204,7 @@ export const CreateClass = ({ classItem, onClose, onSubmit: handleUpdate, isEdit
                   onChange={field.onChange}
                 >
                   {field.options.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
+                    <option key={option.value} value={option.value}>{option.label}</option>
                   ))}
                 </select>
               ) : field.type === "text" && field.show ? (
@@ -202,10 +230,10 @@ export const CreateClass = ({ classItem, onClose, onSubmit: handleUpdate, isEdit
         <div className="flex justify-end">
           <button
             type="submit"
-            className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-300 disabled:opacity-70 disabled:cursor-not-allowed transition duration-150 ease-in-out"
             disabled={isSubmitting}
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
-            {isSubmitting ? "שולח..." : "שלח"}
+            {isSubmitting ? "שולח..." : isEditing ? "שמור שינויים" : "צור שיעור"}
           </button>
         </div>
       </form>

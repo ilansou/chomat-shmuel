@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { format, isSameDay } from "date-fns";
-import { he } from "date-fns/locale";
 import { EventModal } from "../components/events/EventModal";
-import { CreateEvent } from "../components/events/CreateEvent";
+import { EventForm } from "../components/events/EventForm";
 import { useAuth } from "../contexts/AuthContext";
-import { getFullJewishDate } from "../utils/DatesToHebrew";
 import { CalendarWithHe } from "../components/CalendarWithHe";
 import { useEvents } from "../contexts/EventsContext";
 
@@ -12,34 +9,13 @@ export const Events = () => {
   const { user } = useAuth();
   const [date, setDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [showCreateEvent, setShowCreateEvent] = useState(false);
+  const [showEventForm, setShowEventForm] = useState(false);
   const { getEventList, eventList } = useEvents();
-  const [view, setView] = useState("monthly");
   const [audienceFilter, setAudienceFilter] = useState("all");
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        await getEventList();
-      } catch (err) {
-        console.error("Error fetching events:", err);
-      }
-    };
-    fetchEvents();
+    getEventList();
   }, []);
-  
-  const handleSelectEvent = (event) => {
-    setSelectedEvent(event);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedEvent(null);
-  };
-
-  const filteredEvents = eventList?.filter((event) =>
-    isSameDay(new Date(event.eventDate), date) &&
-    (audienceFilter === "all" || event.audienceAge === audienceFilter)
-  );
 
   const audienceOptions = [
     { value: "all", label: "הכל" },
@@ -58,6 +34,22 @@ export const Events = () => {
     { value: "אחר", label: "אחר" },
   ];
 
+  const audienceColors = {
+    'שכונה צעירה': 'bg-red-200',
+    'נוער': 'bg-blue-200',
+    'לכל המשפחה': 'bg-green-200',
+    'הגיל הרך': 'bg-yellow-200',
+    'תרבות': 'bg-purple-200',
+    'הגיל השלישי': 'bg-pink-200',
+    'טבע עירוני': 'bg-indigo-200',
+    'עמיתים': 'bg-orange-200',
+    'ספורט': 'bg-teal-200',
+    'לכל הקהילה': 'bg-cyan-200',
+    'צמי\'ד': 'bg-lime-200',
+    'חרדי-תורני': 'bg-amber-200',
+    'אחר': 'bg-gray-200'
+  };
+
   return (
     <div className="container mx-auto px-4 pt-32 max-w-6xl">
       <div className="mb-8 flex justify-between items-center">
@@ -69,15 +61,13 @@ export const Events = () => {
             onChange={(e) => setAudienceFilter(e.target.value)}
           >
             {audienceOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
+              <option key={option.value} value={option.value}>{option.label}</option>
             ))}
           </select>
           {user && (
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors duration-200"
-              onClick={() => setShowCreateEvent(true)}
+              className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
+              onClick={() => setShowEventForm(true)}
             >
               הוסף אירוע
             </button>
@@ -85,17 +75,23 @@ export const Events = () => {
         </div>
       </div>
 
-      <div className="mb-3">
-        <CalendarWithHe setDate={setDate} view={view} audienceFilter={audienceFilter} />
-        {selectedEvent && (
-          <EventModal event={selectedEvent} onClose={handleCloseModal} />
-        )}
-      </div>
+      <CalendarWithHe
+        setDate={setDate}
+        items={eventList.map(event => ({ ...event, date: event.eventDate }))}
+        view="monthly"
+        filter={audienceFilter}
+        categoryColors={audienceColors}
+        onSelectItem={setSelectedEvent}
+      />
 
-      {showCreateEvent && (
+      {selectedEvent && (
+        <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />
+      )}
+
+      {showEventForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 shadow-lg max-w-[800px] w-full relative">
-            <CreateEvent onClose={() => setShowCreateEvent(false)} />
+            <EventForm onClose={() => setShowEventForm(false)} />
           </div>
         </div>
       )}

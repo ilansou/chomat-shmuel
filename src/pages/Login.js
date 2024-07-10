@@ -24,12 +24,12 @@ export const Login = ({ setIsAuth }) => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-tr from-purple-100 to-purple-100 p-2">
-      <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full">
-        <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">התחברות מנהל</h1>
+    <div className="flex justify-center items-center min-h-screen bg-white p-4">
+      <div className="bg-gray-50 rounded-2xl shadow-lg p-10 max-w-xl w-full">
+        <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">התחברות מנהל</h1>
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label className="block text-gray-700 font-semibold text-lg">אימייל:</label>
+            <label className="block text-gray-700 font-medium text-lg mb-2">אימייל:</label>
             <input
               type="email"
               required
@@ -38,11 +38,11 @@ export const Login = ({ setIsAuth }) => {
                 setEmail(event.target.value);
                 setError("");
               }}
-              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition duration-200 text-md"
             />
           </div>
           <div>
-            <label className="block text-gray-700 font-semibold text-lg">סיסמה:</label>
+            <label className="block text-gray-700 font-medium text-lg mb-2">סיסמה:</label>
             <input
               type="password"
               required
@@ -51,14 +51,14 @@ export const Login = ({ setIsAuth }) => {
                 setPassword(event.target.value);
                 setError("");
               }}
-              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 transition duration-200 text-md"
             />
           </div>
-          {error && <p className="text-red-500 text-center">{error}</p>}
+          {error && <p className="text-red-500 text-center font-medium">{error}</p>}
           <div>
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-purple-500 to-purple-500 text-white py-3 rounded-md hover:from-purple-600 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 text-lg">
+              className="w-full bg-blue-500 text-white py-3 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 text-lg font-medium transition duration-200 shadow-md">
               התחבר
             </button>
           </div>

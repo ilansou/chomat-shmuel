@@ -20,10 +20,10 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="bg-gray-100 text-gray-800">
+    <footer className="bg-gray-100 text-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Newsletter Section */}
-        <div className="py-12 border-b border-gray-200">
+        <div className="py-12 border-b border-gray-300">
           <div className="lg:flex lg:items-center lg:justify-between">
             <div className="lg:w-0 lg:flex-1">
               <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl sm:tracking-tight">
@@ -46,13 +46,13 @@ export const Footer = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-5 py-3 border border-gray-300 shadow-sm placeholder-gray-400 focus:ring-1 focus:ring-purple-500 focus:border-purple-500 sm:max-w-xs rounded-md"
+                  className="w-full px-5 py-3 border border-gray-300 shadow-sm placeholder-gray-400 focus:ring-1 focus:ring-purple-500 focus:border-purple-500 sm:max-w-xs rounded-full"
                   placeholder="הזינו כתובת מייל שלכם"
                 />
-                <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3 sm:flex-shrink-0">
+                <div className="mt-3 rounded-full mx-5 shadow sm:mt-0 sm:ml-3 sm:flex-shrink-0">
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center py-3 px-5 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                    className="w-full flex items-center justify-center py-3 px-5 border border-transparent text-base font-medium rounded-full text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                     צרפו אותי
                   </button>
                 </div>
@@ -64,13 +64,13 @@ export const Footer = () => {
 
         {/* Bottom Section */}
         <div className="py-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-base text-gray-400">&copy; 2024 כל הזכויות שמורות</p>
+          <p className="text-base text-gray-500">&copy; 2024</p>
           <div className="flex mt-4 md:mt-0 space-x-6 rtl:space-x-reverse">
             {socialItems.map((item, index) => (
               <a
                 key={index}
                 href={item.link}
-                className="text-gray-400 hover:text-gray-500 transition-colors duration-300"
+                className="text-gray-500 hover:text-gray-600 transition-colors duration-300"
                 target="_blank"
                 rel="noopener noreferrer">
                 <span className="sr-only">{item.name}</span>
@@ -83,5 +83,3 @@ export const Footer = () => {
     </footer>
   );
 };
-
-export default Footer;

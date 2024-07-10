@@ -22,7 +22,7 @@ const schema = yup.object().shape({
     .min(yup.ref("updateDate"), "תאריך תפוגה חייב להיות אחרי תאריך החדשות"),
 });
 
-export const CreateNews = ({ news, onClose, onSubmit: handleUpdate, isEditing }) => {
+export const NewsForm = ({ news, onClose, onSubmit: handleUpdate, isEditing }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileBase64, setFileBase64] = useState(null);
   const { addNews, editNews } = useNews();

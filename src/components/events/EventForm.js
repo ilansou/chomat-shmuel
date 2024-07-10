@@ -25,7 +25,7 @@ const schema = yup.object().shape({
   URL: yup.string().url("נא להזין כתובת אתר תקינה"),
 });
 
-export const CreateEvent = ({ event, onClose, onSubmit: handleUpdate, isEditing }) => {
+export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileBase64, setFileBase64] = useState(null);
   const [showOtherTextInput, setShowOtherTextInput] = useState(false);
