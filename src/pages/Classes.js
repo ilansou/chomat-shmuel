@@ -22,7 +22,7 @@ export const Classes = () => {
       }
     };
     fetchClasses();
-  }, [getClassList]);
+  }, []);
 
   const handleSelectClass = (classItem) => {
     setSelectedClass(classItem);

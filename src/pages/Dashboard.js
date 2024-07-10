@@ -54,7 +54,7 @@ export const Dashboard = () => {
     // Calculate news stats
     const recentViews = newsList.reduce((sum, news) => sum + (news.views || 0), 0);
     setNewsStats({ total: newsList.length, recentViews });
-  }, [eventList, classList, newsList]);
+  }, []);
 
   const eventData = {
     labels: ['Total Events', 'Upcoming Events'],

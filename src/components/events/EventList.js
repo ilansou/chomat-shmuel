@@ -21,22 +21,25 @@ export const EventList = ({ limit = 6 }) => {
     fetchEvents();
   }, []);
 
+  console.log(eventList);
+  console.log("nearestEvents", nearestEvents);
+
   useEffect(() => {
     if (eventList.length > 0) {
       const sorted = [...eventList].sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
       setNearestEvents(sorted.slice(0, limit));
     }
-  }, [eventList, limit]);
+  }, [limit]);
 
   if (loading) return <div className="text-center">Loading events...</div>;
   if (error) return <div className="text-center text-red-500">Error: {error}</div>;
 
   return (
-    <div className="w-full lg:w-3/5 p-4">
-      <h2 className="text-2xl font-bold mb-4">Upcoming Events</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="w-full p-4">
+      <h2 className="text-2xl font-bold mb-8">Upcoming Events</h2>
+      <div className="grid grid-cols-3 gap-x-2 gap-y-8">
         {nearestEvents.map((event) => (
-          <div key={event.id} className="w-full">
+          <div key={event.id} className="flex justify-center">
             <EventCard event={event} />
           </div>
         ))}
