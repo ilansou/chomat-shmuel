@@ -1,20 +1,75 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNews } from '../contexts/NewsContext';
 import { format } from 'date-fns';
+import { useAuth } from '../contexts/AuthContext';
 import whatsappBackground from '../images/WhatsApp.png';
+import { CreateNews } from './news/CreateNews';
+import { NewsModal } from './news/NewsModal';
 
-export const Chat = ({ handleSelectNews, renderAttachment }) => {
-  const { newsList } = useNews();
-  const scrollContainerRef = useRef(null);
+export const Chat = () => {
+  const scrollContainerRef = useRef();
+  const { newsList, getNewsList } = useNews();
+  const { user } = useAuth();
+  const [selectedNews, setSelectedNews] = useState(null);
+  const [showCreateNews, setShowCreateNews] = useState(false);
+
+  useEffect(() => {
+    getNewsList();
+  }, []);
+
+  const handleSelectNews = (news) => {
+    setSelectedNews(news);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedNews(null);
+  };
 
   useEffect(() => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
     }
-  }, []);
+  }, [newsList]);
+
+  const renderAttachment = (attachment) => {
+    if (attachment.type.startsWith('image/')) {
+      return (
+        <img 
+          src={attachment.url} 
+          alt="News attachment" 
+          className="max-w-full h-auto rounded-lg mb-2"
+        />
+      );
+    } else {
+      return (
+        <a 
+          href={attachment.url} 
+          download 
+          className="flex items-center bg-gray-200 rounded-lg p-2 mb-2"
+        >
+          <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          Download {attachment.name}
+        </a>
+      );
+    }
+  };
 
   return (
-    <div>
+    <div className="w-full lg:w-[calc(50%-16px)] xl:w-[calc(50%-16px)] shadow-lg">
+      {/* WhatsApp-like header */}
+      <div className="bg-[#075e54] text-white p-3 flex justify-between items-center rounded-t-lg">
+        <h1 className="text-lg font-bold">חדשות ועדכונים</h1>
+        {user && (
+          <button
+            onClick={() => setShowCreateNews(true)}
+            className="bg-[#128c7e] hover:bg-[#075e54] text-white font-bold py-1 px-2 rounded text-sm transition duration-300"
+          >
+            הוסף חדשות
+          </button>
+        )}
+      </div>
       {/* Chat area */}
       <div
         ref={scrollContainerRef}
@@ -35,7 +90,7 @@ export const Chat = ({ handleSelectNews, renderAttachment }) => {
                 <p className="text-sm mb-1">{news.description}</p>
                 {news.attachment && renderAttachment(news.attachment)}
                 <p className="text-xs text-gray-500 text-left">
-                  {format(news.updateDate, "dd/MM/yyyy HH:mm")}
+                  {format(new Date(news.updateDate), "dd/MM/yyyy HH:mm")}
                 </p>
               </div>
             </div>
@@ -58,6 +113,17 @@ export const Chat = ({ handleSelectNews, renderAttachment }) => {
           </svg>
         </button>
       </div>
+      {selectedNews && (
+        <NewsModal news={selectedNews} onClose={handleCloseModal} />
+      )}
+
+      {showCreateNews && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-lg">
+            <CreateNews onClose={() => setShowCreateNews(false)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -46,10 +46,9 @@ export const Home = () => {
     <div className="flex flex-wrap pt-24">
       <div className="w-full lg:w-3/5 p-4 order-2 lg:order-1">
         <EventList />
-        <Chat handleSelectNews={handleSelectNews} renderAttachment={renderAttachment} />
+        <Chat/>
       </div>
       <div className="w-full lg:w-2/5 p-4 order-1 lg:order-2">
-        <useNews />
       </div>
     </div>
   );

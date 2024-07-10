@@ -21,15 +21,16 @@ export const EventList = ({ limit = 6 }) => {
     fetchEvents();
   }, []);
 
-  console.log(eventList);
-  console.log("nearestEvents", nearestEvents);
 
   useEffect(() => {
     if (eventList.length > 0) {
       const sorted = [...eventList].sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
       setNearestEvents(sorted.slice(0, limit));
     }
-  }, [limit]);
+  }, [limit, eventList]);
+
+  console.log(eventList);
+  console.log("nearestEvents", nearestEvents);
 
   if (loading) return <div className="text-center">Loading events...</div>;
   if (error) return <div className="text-center text-red-500">Error: {error}</div>;
