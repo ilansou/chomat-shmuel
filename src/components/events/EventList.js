@@ -25,7 +25,9 @@ export const EventList = ({ limit = 8 }) => {
 
   useEffect(() => {
     if (eventList.length > 0) {
-      const sorted = [...eventList].sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
+      const now = new Date();
+      const upcomingEvents = eventList.filter(event => new Date(event.eventDate) >= now);
+      const sorted = upcomingEvents.sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
       setNearestEvents(sorted.slice(0, limit));
     }
   }, [limit, eventList]);
@@ -43,7 +45,7 @@ export const EventList = ({ limit = 8 }) => {
       <div className="grid grid-cols-4 gap-x-2 gap-y-8 mt-4">
         {nearestEvents.map((event) => (
           <div key={event.id} className="flex justify-center" onClick={() => handleEventClick(event)}>
-            <EventCard event={event}/>
+            <EventCard event={event} />
           </div>
         ))}
       </div>
