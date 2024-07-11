@@ -3,6 +3,7 @@ import emailjs from "@emailjs/browser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faFax, faEnvelope, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import PageFeedback from '../components/PageFeedback'; // Adjust the import path as needed
 
 export const Contact = () => {
   const [formData, setFormData] = useState({
@@ -174,6 +175,9 @@ export const Contact = () => {
           </div>
         </div>
       </main>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <PageFeedback pageId="contact" />
+      </div>
     </div>
   );
 };

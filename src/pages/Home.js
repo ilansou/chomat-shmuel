@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNews } from "../contexts/NewsContext";
 import { EventList } from "../components/events/EventList";
 import { Chat } from "../components/Chat";
+import PageFeedback from '../components/PageFeedback'; // Adjust the import path as needed
 
 export const Home = () => {
   const { newsList, getNewsList } = useNews();
@@ -29,6 +30,9 @@ export const Home = () => {
             <Chat />
           </div>
         </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <PageFeedback pageId="home" />
       </div>
     </div>
   );

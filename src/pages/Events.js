@@ -4,6 +4,7 @@ import { EventForm } from "../components/events/EventForm";
 import { useAuth } from "../contexts/AuthContext";
 import { CalendarWithHe } from "../components/CalendarWithHe";
 import { useEvents } from "../contexts/EventsContext";
+import PageFeedback from '../components/PageFeedback'; // Adjust the import path as needed
 
 export const Events = () => {
   const { user } = useAuth();
@@ -95,6 +96,9 @@ export const Events = () => {
           </div>
         </div>
       )}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <PageFeedback pageId="events" />
+      </div>
     </div>
   );
 };

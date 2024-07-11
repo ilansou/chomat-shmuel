@@ -4,6 +4,7 @@ import { ClassForm } from "../components/classes/ClassForm";
 import { useAuth } from "../contexts/AuthContext";
 import { CalendarWithHe } from "../components/CalendarWithHe";
 import { useClasses } from "../contexts/ClassesContext";
+import PageFeedback from '../components/PageFeedback'; // Adjust the import path as needed
 
 export const Classes = () => {
   const { user } = useAuth();
@@ -83,6 +84,9 @@ export const Classes = () => {
           </div>
         </div>
       )}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <PageFeedback pageId="classes" />
+      </div>
     </div>
   );
 };
