@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { CalendarIcon, ClockIcon, LocationMarkerIcon } from '@heroicons/react/solid';
+import { getFullJewishDate } from "../../utils/DatesToHebrew";
 
 const getHebrewMonth = (date) => {
   const months = [
@@ -13,12 +14,15 @@ export const EventCard = ({ event }) => {
   const eventDate = new Date(event.eventDate);
   const hebrewMonth = getHebrewMonth(eventDate);
   const dayOfMonth = eventDate.getDate();
+  const year = eventDate.getFullYear();
+
+  const fullHebrewDate = getFullJewishDate(eventDate);
 
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col transform transition-all duration-300 hover:scale-105 w-64 cursor-pointer">
       {event.imageUrl && (
         <div className="relative h-40">
-          <img src={event.imageUrl} alt={event.title} className="w-full h-full object-cover"/>
+          <img src={event.imageUrl} alt={event.title} className="w-full h-full object-fill"/>
           <div className="absolute top-0 right-0 bg-orange-400 text-white px-2 py-1 rounded-bl-lg text-center">
             <div className="text-xl font-bold">{dayOfMonth}</div>
             <div className="text-sm">{hebrewMonth}</div>
@@ -30,7 +34,11 @@ export const EventCard = ({ event }) => {
           <h3 className="text-lg font-semibold mb-2 text-gray-800 line-clamp-2">{event.title}</h3>
           <div className="flex items-center text-sm text-gray-600 mb-2">
             <CalendarIcon className="w-4 mx-1 h-4 mr-1" />
-            <span>{format(eventDate, "dd MMM yyyy")}</span>
+            <span>{`${dayOfMonth} ${hebrewMonth} ${year}`}</span>
+          </div>
+          <div className="flex items-center text-sm text-gray-600 mb-2">
+            <CalendarIcon className="w-4 mx-1 h-4 mr-1" />
+            <span> {fullHebrewDate}</span>
           </div>
           <div className="flex items-center text-sm text-gray-600 mb-2">
             <ClockIcon className="w-4 mx-1 h-4 mr-1" />
