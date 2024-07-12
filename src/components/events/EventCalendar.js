@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import { format, isSameDay, startOfWeek, addDays } from "date-fns";
-import { getMonthAndYearJewishDate, convertToHebrewDay } from "../utils/DatesToHebrew";
-import { monthTranslations } from "../dictionary";
+import { format, isSameDay } from "date-fns";
+import { getMonthAndYearJewishDate, convertToHebrewDay } from "../../utils/dateUtils";
+import { monthTranslations } from "../../dictionary";
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 
-export const CalendarWithHe = ({ setDate, items, view, filter, categoryColors, onSelectItem }) => {
+export const EventCalendar = ({ setDate, events, filter, categoryColors, onSelectEvent }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
+  // Function to navigate to the previous or next month/week
   const changeDate = (delta) => {
-    setSelectedDate((prevDate) => {
+    setSelectedDate(prevDate => {
       const newDate = new Date(prevDate);
-      view === "monthly"
-        ? newDate.setMonth(newDate.getMonth() + delta)
-        : newDate.setDate(newDate.getDate() + delta * 7);
+      newDate.setMonth(newDate.getMonth() + delta) 
       return newDate;
     });
   };
@@ -20,32 +19,22 @@ export const CalendarWithHe = ({ setDate, items, view, filter, categoryColors, o
   const getDays = () => {
     const year = selectedDate.getFullYear();
     const month = selectedDate.getMonth();
-    
-    if (view === "monthly") {
-      const firstDay = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      return Array.from({ length: 42 }, (_, i) => {
-        const dayObj = new Date(year, month, i - firstDay + 1);
-        return {
-          date: dayObj,
-          isCurrentMonth: dayObj.getMonth() === month,
-        };
-      });
-    } else {
-      const startDate = startOfWeek(selectedDate);
-      return Array.from({ length: 7 }, (_, i) => ({
-        date: addDays(startDate, i),
-        isCurrentMonth: addDays(startDate, i).getMonth() === month,
-      }));
-    }
+    const firstDay = new Date(year, month, 1).getDay();
+    return Array.from({ length: 42 }, (_, i) => {
+      const dayObj = new Date(year, month, i - firstDay + 1);
+      return {
+        date: dayObj,
+        isCurrentMonth: dayObj.getMonth() === month,
+      };
+    });
   };
 
   const days = getDays();
 
-  const getItemsForDay = (dayObj) => {
-    return items.filter(item => 
-      isSameDay(new Date(item.date), dayObj.date) &&
-      (filter === "all" || item.category === filter || item.audienceAge === filter)
+  const getEventsForDay = (dayObj) => {
+    return events.filter(event => 
+      isSameDay(new Date(event.eventDate), dayObj.date) &&
+      (filter === "all" || event.audienceAge === filter)
     ).slice(0, 3);
   };
 
@@ -88,17 +77,17 @@ export const CalendarWithHe = ({ setDate, items, view, filter, categoryColors, o
               <span className="text-xs text-gray-500">{convertToHebrewDay(dayObj.date)}</span>
             </div>
             <div className="flex-grow overflow-y-auto">
-              {getItemsForDay(dayObj).map((item, index) => (
+              {getEventsForDay(dayObj).map((event, index) => (
                 <div
                   key={index}
-                  className={`text-xs ${categoryColors[item.category] || 'bg-gray-200'} text-gray-800 rounded px-1 py-0.5 mb-1 truncate cursor-pointer`}
+                  className={`text-xs ${categoryColors[event.category] || 'bg-gray-200'} text-gray-800 rounded px-1 py-0.5 mb-1 truncate cursor-pointer`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    onSelectItem(item);
+                    onSelectEvent(event);
                   }}
-                  title={item.title || item.className}
+                  title={event.title}
                 >
-                  {format(new Date(item.date), "HH:mm")} {item.title || item.className}
+                  {format(event.eventDate, "HH:mm")} {event.title}
                 </div>
               ))}
             </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { EventModal } from "../components/events/EventModal";
 import { EventForm } from "../components/events/EventForm";
 import { useAuth } from "../contexts/AuthContext";
-import { CalendarWithHe } from "../components/CalendarWithHe";
+import { EventCalendar } from "../components/events/EventCalendar";
 import { useEvents } from "../contexts/EventsContext";
 import PageFeedback from '../components/PageFeedback'; // Adjust the import path as needed
 
@@ -13,9 +13,15 @@ export const Events = () => {
   const [showEventForm, setShowEventForm] = useState(false);
   const { getEventList, eventList } = useEvents();
   const [audienceFilter, setAudienceFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getEventList();
+    const fetchClasses = async () => {
+      setLoading(true);
+      await getEventList();
+      setLoading(false);
+    };
+    fetchClasses();
   }, []);
 
   const audienceOptions = [
@@ -51,6 +57,10 @@ export const Events = () => {
     'אחר': 'bg-gray-200'
   };
 
+  if (loading) {
+    return <div className="container mx-auto px-4 pt-32 max-w-6xl"> טוען נתונים...</div>;
+  }
+
   return (
     <div className="container mx-auto px-4 pt-32 max-w-6xl">
       <div className="mb-8 flex justify-between items-center">
@@ -76,13 +86,12 @@ export const Events = () => {
         </div>
       </div>
 
-      <CalendarWithHe
+      <EventCalendar
         setDate={setDate}
-        items={eventList.map(event => ({ ...event, date: event.eventDate }))}
-        view="monthly"
+        events={eventList}
         filter={audienceFilter}
         categoryColors={audienceColors}
-        onSelectItem={setSelectedEvent}
+        onSelectEvent={setSelectedEvent}
       />
 
       {selectedEvent && (

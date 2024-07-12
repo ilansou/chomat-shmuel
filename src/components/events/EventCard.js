@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { CalendarIcon, ClockIcon, LocationMarkerIcon } from '@heroicons/react/solid';
-import { getFullJewishDate } from "../../utils/DatesToHebrew";
+import { getFullJewishDate } from "../../utils/dateUtils";
 
 const getHebrewMonth = (date) => {
   const months = [

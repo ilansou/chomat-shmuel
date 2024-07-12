@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { ClassModal } from "../components/classes/ClassModal";
 import { ClassForm } from "../components/classes/ClassForm";
 import { useAuth } from "../contexts/AuthContext";
-import { CalendarWithHe } from "../components/CalendarWithHe";
+import { ClassCalendar } from "../components/classes/ClassCalendar";
 import { useClasses } from "../contexts/ClassesContext";
-import PageFeedback from '../components/PageFeedback'; // Adjust the import path as needed
+import PageFeedback from '../components/PageFeedback';
 
 export const Classes = () => {
   const { user } = useAuth();
@@ -13,10 +13,18 @@ export const Classes = () => {
   const [showClassForm, setShowClassForm] = useState(false);
   const { getClassList, classList } = useClasses();
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getClassList();
+    const fetchClasses = async () => {
+      setLoading(true);
+      await getClassList();
+      setLoading(false);
+    };
+    fetchClasses();
   }, []);
+
+  console.log(classList);
 
   const categoryOptions = [
     { value: "all", label: "הכל" },
@@ -38,6 +46,10 @@ export const Classes = () => {
     'חוגי צמי"ד': 'bg-pink-200',
     'אחר': 'bg-gray-200'
   };
+
+  if (loading) {
+    return <div className="container mx-auto px-4 pt-32 max-w-6xl"> טוען נתונים...</div>;
+  }
 
   return (
     <div className="container mx-auto px-4 pt-32 max-w-6xl">
@@ -64,13 +76,12 @@ export const Classes = () => {
         </div>
       </div>
 
-      <CalendarWithHe
+      < ClassCalendar
         setDate={setDate}
-        items={classList.map(classItem => ({ ...classItem, date: classItem.classDate }))}
-        view="weekly"
+        classes={classList}
         filter={categoryFilter}
         categoryColors={categoryColors}
-        onSelectItem={setSelectedClass}
+        onSelectClass={setSelectedClass}
       />
 
       {selectedClass && (

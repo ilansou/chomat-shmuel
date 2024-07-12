@@ -22,8 +22,7 @@ export const ClassesContextProvider = ({ children }) => {
     try {
       const classQuery = query(
         classesCollectionRef,
-        orderBy("className"),
-        limit(30)
+        orderBy("title"),
       );
       const data = await getDocs(classQuery);
       const filteredClasses = data.docs.map((doc) => ({
