@@ -47,6 +47,11 @@ export const EventCalendar = ({ setDate, events, filter, categoryColors, onSelec
     setDate(date);
   };
 
+  const goToToday = () => {
+    setSelectedDate(new Date());
+    setDate(new Date());
+  };
+
   return (
     <div className="w-full max-w-full mx-auto bg-white shadow-2xl rounded-xl overflow-hidden">
       <div className={`${currentMonthColor} text-white p-4`}>
@@ -56,10 +61,18 @@ export const EventCalendar = ({ setDate, events, filter, categoryColors, onSelec
           onClick={() => changeDate(-1)}>
             <ChevronRightIcon className="h-6 w-6" />
           </button>
-          <h2 className="text-xl font-bold">
-            {getMonthAndYearJewishDate(selectedDate)} / {monthTranslations[selectedDate.getMonth()]}{" "}
-            {selectedDate.getFullYear()}
-          </h2>
+          <div className="flex items-center space-x-4">
+            <h2 className="text-xl font-bold">
+              {getMonthAndYearJewishDate(selectedDate)} / {monthTranslations[selectedDate.getMonth()]}{" "}
+              {selectedDate.getFullYear()}
+            </h2>
+            <button 
+              className="bg-white text-gray-800 text-sm font-medium py-1 px-3 rounded-full transition-colors duration-200 hover:bg-gray-200"
+              onClick={goToToday}
+            >
+              היום
+            </button>
+          </div>
           <button 
           className="bg-white text-gray-800 rounded-full p-1 transition-colors duration-200 hover:bg-gray-200" 
           onClick={() => changeDate(1)}>
