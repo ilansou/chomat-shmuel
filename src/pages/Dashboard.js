@@ -25,7 +25,6 @@ import {
 import * as XLSX from "xlsx";
 import moment from "moment";
 
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -131,7 +130,46 @@ export const Dashboard = () => {
     fetchFeedbackData();
   }, []);
 
+  const truncateText = (text, maxLength = 32767) => {
+    if (typeof text === "string" && text.length > maxLength) {
+      return text.substring(0, maxLength);
+    }
+    return text;
+  };
+
   const exportEventsToExcel = async () => {
+    const workbook = XLSX.utils.book_new();
+    const eventsRef = collection(db, "events");
+    const eventsSnapshot = await getDocs(eventsRef);
+
+    const eventsData = eventsSnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        title: truncateText(data.title),
+        expireDate: data.expireDate
+          ? data.expireDate.toDate().toISOString()
+          : null, // Convert Firestore timestamp to ISO string if exists
+          eventDate: data.expireDate
+          ? data.expireDate.toDate().toISOString()
+          : null,
+        imageUrl: truncateText(data.imageUrl),
+        location: truncateText(data.location),
+        participant: truncateText(data.participant),
+        otherAudience: truncateText(data.otherAudience),
+        price: truncateText(data.price),
+        eventDuration: data.eventDuration,
+        description: truncateText(data.description),
+        id: truncateText(data.id ?? ''), // TODO remove optional
+        audienceAge: data.audienceAge,
+        URL: truncateText(data.URL),
+      };
+    });
+
+    const sheetName = "Events";
+    exportToExcel(workbook, eventsData, sheetName);
+  };
+
+  const exportClassesToExcel = async () => {
     const workbook = XLSX.utils.book_new();
     const classesRef = collection(db, "classes");
     const classesSnapshot = await getDocs(classesRef);
@@ -140,7 +178,9 @@ export const Dashboard = () => {
       const data = doc.data();
       return {
         title: data.title,
-        expireDate: data.expireDate.toDate().toISOString(), // Convert Firestore timestamp to ISO string
+        expireDate: data.expireDate
+          ? moment(data.expireDate.toDate()).format("YYYY-MM-DD HH:mm:ss")
+          : null, // Format date with moment
         frequency: data.frequency,
         imageUrl: data.imageUrl,
         location: data.location,
@@ -150,63 +190,21 @@ export const Dashboard = () => {
         teacherName: data.teacherName,
         teacherPhone: data.teacherPhone,
         weekday: data.weekday,
+        classDuration: data.classDuration,
+        duration: data.duration,
+        audienceAge: data.audienceAge,
+        classDate: data.classDate
+          ? moment(data.classDate.toDate()).format("YYYY-MM-DD HH:mm:ss")
+          : null, // Format date with moment
+        description: data.description,
+        category: data.category,
+        URL: data.URL,
       };
     });
 
     const sheetName = "Classes";
     exportToExcel(workbook, classesData, sheetName);
   };
-
-  // const exportClassesToExcel = async () => {
-  //   const workbook = XLSX.utils.book_new();
-  //   const classesRef = collection(db, 'classes');
-  //   const classesSnapshot = await getDocs(classesRef);
-  //   const classesData = classesSnapshot.docs.map(doc => doc.data());
-  //   const sheetName = 'Classes';
-  //   exportToExcel(workbook, classesData, sheetName);
-  // };
-
-  const exportClassesToExcel = async () => {
-    const workbook = XLSX.utils.book_new();
-  const classesRef = collection(db, 'classes');
-  const classesSnapshot = await getDocs(classesRef);
-
-  const classesData = classesSnapshot.docs.map(doc => {
-    const data = doc.data();
-    return {
-      title: data.title,
-      expireDate: data.expireDate ? moment(data.expireDate.toDate()).format('YYYY-MM-DD HH:mm:ss') : null, // Format date with moment
-      frequency: data.frequency,
-      imageUrl: data.imageUrl,
-      location: data.location,
-      participant: data.participant,
-      price: data.price,
-      teacherEmail: data.teacherEmail,
-      teacherName: data.teacherName,
-      teacherPhone: data.teacherPhone,
-      weekday: data.weekday,
-      classDuration: data.classDuration,
-      duration: data.duration,
-      audienceAge: data.audienceAge,
-      classDate: data.classDate ? moment(data.classDate.toDate()).format('YYYY-MM-DD HH:mm:ss') : null, // Format date with moment
-      description: data.description,
-      category: data.category,
-      URL: data.URL,
-    };
-  });
-
-  const sheetName = 'Classes';
-  exportToExcel(workbook, classesData, sheetName);  
-};
-
-  // const exportNewsToExcel = async () => {
-  //   const workbook = XLSX.utils.book_new();
-  //   const newsRef = collection(db, 'news and updates');
-  //   const newsSnapshot = await getDocs(newsRef);
-  //   const newsData = newsSnapshot.docs.map(doc => doc.data());
-  //   const sheetName = 'News';
-  //   exportToExcel(workbook, newsData, sheetName);
-  // };
 
   const exportNewsToExcel = async () => {
     const workbook = XLSX.utils.book_new();
