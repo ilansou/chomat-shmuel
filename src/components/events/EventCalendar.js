@@ -62,7 +62,7 @@ export const EventCalendar = ({ setDate, events, filter, categoryColors, onSelec
             <ChevronRightIcon className="h-6 w-6" />
           </button>
           <div className="flex items-center space-x-4">
-            <h2 className="text-xl font-bold">
+            <h2 className="text-xl ml-8 font-bold">
               {getMonthAndYearJewishDate(selectedDate)} / {monthTranslations[selectedDate.getMonth()]}{" "}
               {selectedDate.getFullYear()}
             </h2>

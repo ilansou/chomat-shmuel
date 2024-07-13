@@ -4,6 +4,7 @@ import { ClassForm } from "../components/classes/ClassForm";
 import { useAuth } from "../contexts/AuthContext";
 import { ClassCalendar } from "../components/classes/ClassCalendar";
 import { useClasses } from "../contexts/ClassesContext";
+import { ClassCard } from "../components/classes/ClassCard";
 import PageFeedback from '../components/PageFeedback';
 
 export const Classes = () => {
@@ -108,6 +109,23 @@ export const Classes = () => {
             </div>
           </div>
         )}
+      </div>
+
+      {/* Class Cards List */}
+      <div className="mt-12">
+        <h2 className="text-2xl font-bold mb-6">רשימת החוגים</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {classList
+            .filter(classItem => categoryFilter === "all" || classItem.category === categoryFilter)
+            .map(classItem => (
+              <ClassCard 
+                key={classItem.id} 
+                classItem={classItem} 
+                onClick={() => setSelectedClass(classItem)}
+              />
+            ))
+          }
+        </div>
       </div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">

@@ -23,7 +23,7 @@ export const EventCard = ({ event }) => {
       {event.imageUrl && (
         <div className="relative h-40">
           <img src={event.imageUrl} alt={event.title} className="w-full h-full object-fill"/>
-          <div className="absolute top-0 right-0 bg-orange-400 text-white px-2 py-1 rounded-bl-lg text-center">
+          <div className="absolute top-0 right-0 bg-indigo-500 text-white px-2 py-1 rounded-bl-lg text-center">
             <div className="text-xl font-bold">{dayOfMonth}</div>
             <div className="text-sm">{hebrewMonth}</div>
           </div>

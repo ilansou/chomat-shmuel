@@ -41,7 +41,6 @@ export const EventList = ({ limit = 8 }) => {
 
   return (
     <div className="w-full">
-      <h2 className="text-2xl font-bold text-gray-800 pb-2 border-b-2 border-gray-300">אירועים קרובים</h2>
       <div className="grid grid-cols-4 gap-x-2 gap-y-8 mt-4">
         {nearestEvents.map((event) => (
           <div key={event.id} className="flex justify-center" onClick={() => handleEventClick(event)}>

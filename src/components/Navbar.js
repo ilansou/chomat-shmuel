@@ -84,7 +84,7 @@ export const Navbar = () => {
                   <Link
                     key={index}
                     to={link.link}
-                    className={`text-blue-800 ${link.hoverColor} px-3 py-2 rounded-md text-lg font-bold transition duration-300 ease-in-out`}
+                    className={`text-blue-800 ${link.hoverColor} px-4 py-2 rounded-md text-2xl font-bold transition duration-300 ease-in-out`}
                   >
                     {link.name}
                   </Link>
@@ -92,7 +92,7 @@ export const Navbar = () => {
                 {user && (
                   <Link
                     to="/dashboard"
-                    className="text-blue-800 hover:text-pink-400 px-3 py-2 rounded-md text-lg font-bold transition duration-300 ease-in-out"
+                    className="text-blue-800 hover:text-pink-400 px-4 py-2 rounded-md text-2xl font-bold transition duration-300 ease-in-out"
                   >
                     סטטיסטיקות
                   </Link>
@@ -102,7 +102,7 @@ export const Navbar = () => {
 
             <div className="hidden lg:flex items-center">
               {!loading && (
-                <div className="mr-4 text-blue-800">
+                <div className="mx-4 text-xl text-blue-800">
                   {weather ? (
                     <>
                       <FontAwesomeIcon icon={getWeatherIcon()} className="mr-2 ml-1" />
