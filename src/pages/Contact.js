@@ -6,17 +6,13 @@ import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import PageFeedback from '../components/PageFeedback'; // Adjust the import path as needed
 
 export const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,12 +20,21 @@ export const Contact = () => {
     setSubmitMessage("");
 
     const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID;
-    const templateId = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+    const templateId = "template_q2rtmca";
+    const publicKey = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
+
+    const templateParams = {
+      from_name: name,
+      from_email: email,
+      message: message,
+    };
 
     try {
-      await emailjs.send(serviceId, templateId, formData);
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
       setSubmitMessage("הודעה נשלחה בהצלחה!");
-      setFormData({ name: "", email: "", message: "" });
+      setName("");
+      setEmail("");
+      setMessage("");
     } catch (error) {
       console.error("Error sending email:", error);
       setSubmitMessage("אירעה שגיאה בשליחת ההודעה. נסה שוב מאוחר יותר.");
@@ -39,7 +44,7 @@ export const Contact = () => {
   };
 
   return (
-    <div className="pt-24 bg-gray-100 min-h-screen">
+    <div className="pt-16 bg-gray-100 min-h-screen">
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold text-center mb-6 text-gray-800">צרו עמנו קשר</h1>
 
@@ -57,8 +62,8 @@ export const Contact = () => {
                   type="text"
                   id="name"
                   name="name"
-                  value={formData.name}
-                  onChange={handleChange}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="הכנס את שמך המלא"
                   required
@@ -73,8 +78,8 @@ export const Contact = () => {
                   type="email"
                   id="email"
                   name="email"
-                  value={formData.email}
-                  onChange={handleChange}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="הכנס את כתובת הדואר האלקטרוני שלך"
                   required
@@ -88,8 +93,8 @@ export const Contact = () => {
                 <textarea
                   id="message"
                   name="message"
-                  value={formData.message}
-                  onChange={handleChange}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                   rows="4"
                   className="w-full px-3 py-2 border border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="הכנס את ההודעה שלך"
