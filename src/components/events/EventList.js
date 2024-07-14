@@ -26,7 +26,12 @@ export const EventList = ({ limit = 8 }) => {
   useEffect(() => {
     if (eventList.length > 0) {
       const now = new Date();
-      const upcomingEvents = eventList.filter(event => new Date(event.eventDate) >= now);
+      const todayStart = new Date(now.setHours(0, 0, 0, 0));
+    
+      const upcomingEvents = eventList.filter(event => {
+        const eventDate = new Date(event.eventDate);
+        return eventDate >= todayStart;
+      });
       const sorted = upcomingEvents.sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
       setNearestEvents(sorted.slice(0, limit));
     }
