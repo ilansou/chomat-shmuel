@@ -54,7 +54,7 @@ export const Events = () => {
     'לכל הקהילה': 'bg-cyan-200',
     'צמי\'ד': 'bg-lime-200',
     'חרדי-תורני': 'bg-amber-200',
-    'אחר': 'bg-gray-800'
+    // 'אחר': 'bg-gray-800'
   };
 
   if (loading) {
