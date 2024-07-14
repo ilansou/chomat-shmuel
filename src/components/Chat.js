@@ -113,7 +113,15 @@ export const Chat = () => {
         style={{ backgroundImage: `url(${whatsappBackground})`, backgroundSize: '210px' }}
       >
         <div className="flex flex-col">
-          {newsList.slice().reverse().map((news) => (
+          {newsList
+            .filter((news) => {
+              const today = new Date();
+              const expireDate = new Date(news.expireDate);
+              return expireDate >= today.setHours(0, 0, 0, 0);
+            })
+            .slice()
+            .reverse()
+            .map((news) => (
             <div
               key={news.id}
               className="flex justify-start mb-3"
