@@ -29,31 +29,67 @@ export const Chat = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
     }
-  }, []);
+  }, [newsList]);
 
-  const renderAttachment = (attachment) => {
-    if (attachment.type.startsWith('image/')) {
-      return (
-        <img 
-          src={attachment.url} 
-          alt="News attachment" 
-          className="max-w-full h-auto rounded-lg mb-2"
-        />
-      );
-    } else {
-      return (
-        <a 
-          href={attachment.url} 
-          download 
-          className="flex items-center bg-gray-200 rounded-lg p-2 mb-2"
-        >
-          <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          Download {attachment.name}
-        </a>
-      );
-    }
+  const renderAttachment = (imageUrl, title) => {
+    if (!imageUrl) return null;
+
+    const getFileType = (dataUrl) => {
+      if (dataUrl.startsWith('data:image/')) return 'image';
+      if (dataUrl.startsWith('data:application/pdf')) return 'pdf';
+      return 'other';
+    };
+
+    const fileType = getFileType(imageUrl);
+
+    return (
+      <div className="mb-2 border rounded-lg overflow-hidden">
+        <div className="p-2 bg-gray-100">
+          {fileType === 'image' && (
+            <img
+              src={imageUrl}
+              alt={title || "News attachment"}
+              className="max-w-full h-auto rounded-lg"
+              onError={(e) => {
+                console.error("Error loading image:", imageUrl);
+                e.target.onerror = null;
+                e.target.src = "/path/to/fallback/image.png"; // Replace with path to default image
+              }}
+            />
+          )}
+          {fileType === 'pdf' && (
+            <embed
+              src={imageUrl}
+              type="application/pdf"
+              width="100%"
+              height="250px"
+              className="rounded-lg"
+            />
+          )}
+          {fileType === 'other' && (
+            <div className="flex flex-col items-center justify-center h-40 bg-gray-200 rounded-lg">
+              <svg
+                className="w-16 h-16 text-gray-400 mb-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                />
+              </svg>
+              <p className="text-sm text-gray-600">
+                לחץ על 'הורד' לצפייה בקובץ
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -88,7 +124,7 @@ export const Chat = () => {
               >
                 <h3 className="font-bold text-base mb-1">{news.title}</h3>
                 <p className="text-sm mb-1">{news.description}</p>
-                {news.attachment && renderAttachment(news.attachment)}
+                {news.imageUrl && renderAttachment(news.imageUrl, news.title)}
                 <p className="text-xs text-gray-500 text-left">
                   {format(new Date(news.updateDate), "dd/MM/yyyy HH:mm")}
                 </p>

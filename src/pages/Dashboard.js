@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import { db } from "../firebase"; // Adjust path as per your Firebase setup
 import {
   Chart as ChartJS,
@@ -19,8 +18,6 @@ import {
   getDocs,
   query,
   collection,
-  where,
-  Timestamp,
 } from "firebase/firestore";
 import * as XLSX from "xlsx";
 import moment from "moment";
@@ -38,12 +35,12 @@ ChartJS.register(
 );
 
 export const Dashboard = () => {
-  const { user } = useAuth();
   const [eventStats, setEventStats] = useState({
     total: 0,
     upcoming: 0,
     categories: {},
     audienceAgeStats: {},
+    monthlyStats: {},
   });
   const [classStats, setClassStats] = useState({ total: 0, categories: {} });
   const [newsStats, setNewsStats] = useState({
@@ -74,11 +71,18 @@ export const Dashboard = () => {
         return acc;
       }, {});
 
+      const monthlyStats = eventsData.reduce((acc, event) => {
+        const month = moment(event.eventDate.toDate()).format('MMMM');
+        acc[month] = (acc[month] || 0) + 1;
+        return acc;
+      }, {});
+
       setEventStats({
         total: eventsData.length,
         upcoming,
         categories,
         audienceAgeStats,
+        monthlyStats,
       });
     };
 
@@ -232,6 +236,46 @@ export const Dashboard = () => {
     XLSX.writeFile(workbook, "dashboard_data.xlsx");
   };
 
+  const monthlyEventData = {
+    labels: Object.keys(eventStats.monthlyStats),
+    datasets: [
+      {
+        data: Object.values(eventStats.monthlyStats),
+        backgroundColor: 'gray',
+        borderColor: 'gray',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const monthlyEventOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: true,
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'מספר אירועים',
+        },
+      },
+      x: {
+        title: {
+          display: true,
+          // text: 'Month',
+        },
+      },
+    },
+  };
+
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -260,7 +304,9 @@ export const Dashboard = () => {
       y: {
         beginAtZero: true,
         title: {
-          display: false, // Hide the y-axis title
+          display: true, // Hide the y-axis title
+          text: 'מספר חוגים ',
+
         },
       },
     },
@@ -352,7 +398,7 @@ export const Dashboard = () => {
         {
           label: "Feedback",
           data: [feedback.likes || 0, feedback.dislikes || 0],
-          backgroundColor: ["green", "red"],
+          backgroundColor: ["#10B981", "#F87171"],
         },
       ],
     };
@@ -360,13 +406,19 @@ export const Dashboard = () => {
     return (
       <div
         key={index}
-        className="bg-white p-6 rounded-lg shadow-md text-center mx-4"
+        className="bg-white p-2 rounded-lg shadow-md text-center flex-1 min-w-0"
       >
-        {" "}
-        {/* Added mx-4 for margin */}
-        <h2 className="text-xl font-semibold mb-4">{`פידבק - ${feedback.type}`}</h2>
-        <div className="h-64 flex justify-center items-center">
-          <Doughnut data={data} options={pieChartOptions} />
+        <h2 className="text-sm font-semibold mb-2">{`פידבק - ${feedback.type}`}</h2>
+        <div className="h-32 flex justify-center items-center">
+          <Doughnut data={data} options={{
+            ...pieChartOptions,
+            plugins: {
+              ...pieChartOptions.plugins,
+              legend: {
+                display: true,
+              },
+            },
+          }} />
         </div>
       </div>
     );
@@ -416,7 +468,14 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-6 mb-8">
+      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 className="text-xl font-semibold mb-4 text-center">אירועים לפי חודשים</h2>
+        <div className="h-[300px]">
+          <Bar data={monthlyEventData} options={monthlyEventOptions} />
+        </div>
+      </div>
+      
+      <div className="flex flex-nowrap overflow-x-auto gap-2 mb-8 pb-4">
         {feedbackCharts}
       </div>
 

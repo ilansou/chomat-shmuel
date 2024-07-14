@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import emailjs from "@emailjs/browser";
 import { FaFacebook, FaYoutube, FaBookOpen, FaWhatsapp } from "react-icons/fa"; // Import the WhatsApp icon
 
 const socialItems = [
@@ -10,13 +11,33 @@ const socialItems = [
 
 export const Footer = () => {
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    setMessage("תודה שנרשמת לניוזלטר שלנו!");
-    setEmail("");
+    setIsSubmitting(true);
+    setSubmitMessage("");
+
+    const serviceId = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+    const templateId = "template_cop0ac9";
+    const publicKey = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
+
+    console.log(templateId);
+    const templateParams = {
+      from_email: email,
+    };
+
+    try {
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      setSubmitMessage("הודעה נשלחה בהצלחה!");
+      setEmail("");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      setSubmitMessage("אירעה שגיאה בשליחת ההודעה. נסה שוב מאוחר יותר.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -52,12 +73,17 @@ export const Footer = () => {
                 <div className="mt-3 rounded-full mx-5 shadow sm:mt-0 sm:ml-3 sm:flex-shrink-0">
                   <button
                     type="submit"
+                    disabled={isSubmitting}
                     className="w-full flex items-center justify-center py-3 px-5 border border-transparent text-base font-medium rounded-full text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-                    צרפו אותי
-                  </button>
+                    {isSubmitting ? "שולח..." : "צרפו אותי"}
+                    </button>
                 </div>
               </form>
-              {message && <p className="mt-3 text-sm text-green-600">{message}</p>}
+              {submitMessage && (
+                <p className={`mt-3 text-sm ${submitMessage.includes("שגיאה") ? "text-red-500" : "text-green-500"}`}>
+                  {submitMessage}
+                </p>
+              )}
             </div>
           </div>
         </div>

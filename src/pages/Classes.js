@@ -4,6 +4,7 @@ import { ClassForm } from "../components/classes/ClassForm";
 import { useAuth } from "../contexts/AuthContext";
 import { ClassCalendar } from "../components/classes/ClassCalendar";
 import { useClasses } from "../contexts/ClassesContext";
+import { ClassCard } from "../components/classes/ClassCard";
 import PageFeedback from '../components/PageFeedback';
 
 export const Classes = () => {
@@ -23,8 +24,6 @@ export const Classes = () => {
     };
     fetchClasses();
   }, []);
-
-  console.log(classList);
 
   const categoryOptions = [
     { value: "all", label: "הכל" },
@@ -52,19 +51,33 @@ export const Classes = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 pt-32 max-w-6xl">
+    <div className="container mx-auto px-4 pt-24 max-w-7xl">
+      <div className="mb-4">
+        <div className="bg-white rounded-lg shadow-lg p-4">
+          <h2 className="text-lg font-semibold mb-2">סנן לפי קטגוריה</h2>
+          <div className="overflow-x-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2">
+              {categoryOptions.map((option) => (
+                <div
+                  key={option.value}
+                  className={`flex items-center p-2 rounded cursor-pointer hover:bg-gray-100 ${
+                    categoryFilter === option.value ? 'bg-gray-200' : ''
+                  }`}
+                  onClick={() => setCategoryFilter(option.value)}
+                >
+                  <span
+                    className={`w-3 h-3 rounded-full mr-2 ${categoryColors[option.value] || 'bg-gray-400'}`}
+                  ></span>
+                  <span className="text-s mr-1 whitespace-nowrap">{option.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="mb-8 flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-center">חוגים</h1>
         <div className="flex items-center">
-          <select
-            className="mr-4 p-2 border rounded"
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-          >
-            {categoryOptions.map((option) => (
-              <option key={option.value} value={option.value}>{option.label}</option>
-            ))}
-          </select>
           {user && (
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white py-2 px-4 rounded"
@@ -76,25 +89,45 @@ export const Classes = () => {
         </div>
       </div>
 
-      < ClassCalendar
-        setDate={setDate}
-        classes={classList}
-        filter={categoryFilter}
-        categoryColors={categoryColors}
-        onSelectClass={setSelectedClass}
-      />
+      <div>
+        <ClassCalendar
+          setDate={setDate}
+          classes={classList}
+          filter={categoryFilter}
+          categoryColors={categoryColors}
+          onSelectClass={setSelectedClass}
+        />
 
-      {selectedClass && (
-        <ClassModal classItem={selectedClass} onClose={() => setSelectedClass(null)} />
-      )}
+        {selectedClass && (
+          <ClassModal classItem={selectedClass} onClose={() => setSelectedClass(null)} />
+        )}
 
-      {showClassForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 shadow-lg max-w-[800px] w-full relative">
-            <ClassForm onClose={() => setShowClassForm(false)} />
+        {showClassForm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 shadow-lg max-w-[800px] w-full relative">
+              <ClassForm onClose={() => setShowClassForm(false)} />
+            </div>
           </div>
+        )}
+      </div>
+
+      {/* Class Cards List */}
+      <div className="mt-12">
+        <h2 className="text-2xl font-bold mb-6">רשימת החוגים</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {classList
+            .filter(classItem => categoryFilter === "all" || classItem.category === categoryFilter)
+            .map(classItem => (
+              <ClassCard 
+                key={classItem.id} 
+                classItem={classItem} 
+                onClick={() => setSelectedClass(classItem)}
+              />
+            ))
+          }
         </div>
-      )}
+      </div>
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         <PageFeedback pageId="classes" />
       </div>

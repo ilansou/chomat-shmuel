@@ -1,10 +1,10 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
 import logo from "../images/logo2.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { AiOutlineMenuUnfold, AiOutlineClose } from "react-icons/ai";
-import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+import { faSignInAlt, faSignOutAlt, faSun, faMoon, faCloud, faCloudRain, faSnowflake } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Navbar = () => {
@@ -24,6 +24,8 @@ export const Navbar = () => {
   const { user, logOut } = useAuth();
   const [menu, setMenu] = useState(false);
   const navigate = useNavigate();
+  const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const handleChangeMenu = () => setMenu(!menu);
   const handleCloseMenu = () => setMenu(false);
@@ -36,6 +38,38 @@ export const Navbar = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      const city = "Jerusalem";
+      const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setWeather(data);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWeather();
+  }, []);
+
+  const getWeatherIcon = () => {
+    if (!weather) return faCloud;
+
+    const weatherId = weather?.weather[0].id;
+    const isNight = weather.dt > weather.sys.sunset || weather.dt < weather.sys.sunrise;
+
+    if (weatherId >= 200 && weatherId < 600) return faCloudRain;
+    if (weatherId >= 600 && weatherId < 700) return faSnowflake;
+    if (weatherId >= 800) return isNight ? faMoon : faSun;
+
+    return faCloud;
   };
 
   return (
@@ -52,29 +86,38 @@ export const Navbar = () => {
             <div className="hidden md:flex items-center justify-center flex-grow mr-[7em]">
               <div className="flex items-baseline">
                 {Links.map((link, index) => (
-                  <Fragment key={index}>
-                    <Link
-                      to={link.link}
-                      className={`text-blue-800 ${link.hoverColor} px-3 py-2 rounded-md text-xl font-bold transition duration-300 ease-in-out`}
-                    >
-                      {link.name}
-                    </Link>
-                  </Fragment>
+                  <Link
+                    key={index}
+                    to={link.link}
+                    className={`text-blue-800 ${link.hoverColor} px-4 py-2 rounded-md text-2xl font-bold transition duration-300 ease-in-out`}
+                  >
+                    {link.name}
+                  </Link>
                 ))}
                 {user && (
-                  <>
-                    <Link
-                      to="/dashboard"
-                      className="text-blue-800 hover:text-pink-400 px-3 py-2 rounded-md text-xl font-bold transition duration-300 ease-in-out"
-                    >
-                      סטטיסטיקות
-                    </Link>
-                  </>
+                  <Link
+                    to="/dashboard"
+                    className="text-blue-800 hover:text-pink-400 px-4 py-2 rounded-md text-2xl font-bold transition duration-300 ease-in-out"
+                  >
+                    סטטיסטיקות
+                  </Link>
                 )}
               </div>
             </div>
 
-            <div className="hidden md:block ml-4">
+            <div className="hidden lg:flex items-center">
+              {!loading && (
+                <div className="mx-4 text-xl text-blue-800">
+                  {weather ? (
+                    <>
+                      <FontAwesomeIcon icon={getWeatherIcon()} className="mr-2 ml-1" />
+                      {`${weather.main.temp.toFixed(1)}°C`}
+                    </>
+                  ) : (
+                    "אין מידע על מזג האוויר"
+                  )}
+                </div>
+              )}
               {user ? (
                 <button
                   onClick={handleLogout}
@@ -108,10 +151,11 @@ export const Navbar = () => {
           </div>
         </div>
 
-        <div className={`md:hidden ${menu ? "block" : "hidden"}`}>
-          <div className="px-2 pt-2 pb-3 sm:px-3">
+        {/* Mobile menu */}
+        <div className={`lg:hidden ${menu ? "block" : "hidden"}`}>
+        <div className="px-2 pt-2 pb-3 sm:px-3">
             {Links.map((link, index) => (
-              <Fragment key={index}>
+            <Fragment key={index}>
                 <Link
                   to={link.link}
                   className={`text-blue-600 ${link.hoverColor} block px-3 py-2 rounded-md my-2 text-xl font-bold text-center`}
