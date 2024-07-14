@@ -9,11 +9,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Navbar = () => {
   const Links = [
+    { name: "קצת עלינו", link: "/aboutus", hoverColor: "hover:text-yellow-500" },
+    { name: "עזרה", link: "/help", hoverColor: "hover:text-green-500" },
+
     { name: "דף בית", link: "/", hoverColor: "hover:text-pink-500" },
     { name: "אירועים", link: "/events", hoverColor: "hover:text-purple-400" },
     { name: "חוגים", link: "/classes", hoverColor: "hover:text-purple-500" },
     { name: "חדשות ועדכונים", link: "/newsAndUpdates", hoverColor: "hover:text-blue-400" },
     { name: "יצירת קשר", link: "/contact", hoverColor: "hover:text-orange-500" },
+    { name: "ארכיון", link: "/archive", hoverColor: "hover:text-rose-500" },
+
   ];
 
   const { user, logOut } = useAuth();
@@ -36,7 +41,7 @@ export const Navbar = () => {
   return (
     <div className="fixed w-full top-0 right-0 z-10 font-heebo">
       <div className="bg-white shadow-md">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="container mx-auto px-1 sm:px-6 lg:px-8 relative">
           <div className="flex items-center justify-end h-20">
             <div className="absolute top-0 right-0 mt-2 mr-4">
               <Link to="/" onClick={handleCloseMenu} className="flex items-center">
@@ -44,8 +49,8 @@ export const Navbar = () => {
               </Link>
             </div>
 
-            <div className="hidden md:flex items-center justify-center flex-grow">
-              <div className="flex items-baseline space-x-4">
+            <div className="hidden md:flex items-center justify-center flex-grow mr-[7em]">
+              <div className="flex items-baseline">
                 {Links.map((link, index) => (
                   <Fragment key={index}>
                     <Link
