@@ -5,7 +5,6 @@ import { FaFacebook, FaYoutube, FaBookOpen, FaWhatsapp } from "react-icons/fa"; 
 const socialItems = [
   { name: "Facebook", icon: FaFacebook, link: "https://www.facebook.com/harhomat" },
   { name: "Youtube", icon: FaYoutube, link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw" },
-  { name: "About Us", icon: FaBookOpen, link: "https://online.fliphtml5.com/qfboh/fyni/?1609945510152#p=1" },
   { name: "WhatsApp", icon: FaWhatsapp, link: "https://wa.me/972524337664" }, // Add the WhatsApp item
 ];
 
