@@ -128,7 +128,7 @@ import { useState, useEffect, useCallback } from "react";
 import { getDocs, deleteDoc, doc, addDoc, updateDoc, collection } from "firebase/firestore";
 import { db } from "../firebase";
 
-const defaultImageUrl = "https://via.placeholder.com/150"; // Default image URL
+const defaultImageUrl = "https://www.mgp.net.au/wp-content/uploads/2023/05/150-1503945_transparent-user-png-default-user-image-png-png.png"; // Default image URL
 
 export function useStaffManagement() {
   const [managerList, setManagerList] = useState([]);
