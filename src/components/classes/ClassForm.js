@@ -106,7 +106,7 @@ export const ClassForm = ({ classItem, onClose, onSubmit: handleUpdate, isEditin
       options: [
         { label: "בחר תחום", value: "" },
         { label: "חוגי הגיל השלישי", value: "חוגי הגיל השלישי" },
-        { label: "התעלמות וספורט", value: "התעלמות וספורט" },
+        { label: "התעמלות וספורט", value: "התעמלות וספורט" },
         { label: "חוגי מחול", value: "חוגי מחול" },
         { label: "חוגי אומנות", value: "חוגי אומנות" },
         { label: "חוגי העשרה", value: "חוגי העשרה" },
@@ -216,7 +216,7 @@ export const ClassForm = ({ classItem, onClose, onSubmit: handleUpdate, isEditin
             type="submit"
             disabled={isSubmitting}
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-            {isSubmitting ? "שולח..." : isEditing ? "שמור שינויים" : "צור שיעור"}
+            {isSubmitting ? "שולח..." : isEditing ? "שמור שינויים" : "צור חוג"}
           </button>
         </div>
       </form>
