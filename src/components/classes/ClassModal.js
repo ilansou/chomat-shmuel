@@ -3,7 +3,19 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useClasses } from "../../contexts/ClassesContext";
 import { ClassForm } from "./ClassForm";
 
-const weekDays = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+const weekDays = {
+  Sunday: "ראשון",
+  Monday: "שני",
+  Tuesday: "שלישי",
+  Wednesday: "רביעי",
+  Thursday: "חמישי",
+  Friday: "שישי",
+  Saturday: "שבת",
+};
+
+const mapWeekDaysToHebrew = (englishDays) => {
+  return englishDays.map(day => weekDays[day] || day);
+};
 
 export const ClassModal = ({ classItem, onClose }) => {
   const { user } = useAuth();
@@ -74,7 +86,7 @@ export const ClassModal = ({ classItem, onClose }) => {
                     <strong>תדירות:</strong> {classItem.frequency}
                   </p>
                   <p>
-                    <strong>ימים בשבוע:</strong> {classItem.weekdays.map((day) => weekDays[day]).join(", ")}
+                  <strong>ימים בשבוע:</strong> {mapWeekDaysToHebrew(classItem.weekdays).join(", ")}
                   </p>
                   <p>
                     <strong>שעת התחלה:</strong> {classItem.startTime}
@@ -84,9 +96,6 @@ export const ClassModal = ({ classItem, onClose }) => {
                   </p>
                   <p>
                     <strong>קטגוריה:</strong> {classItem.category}
-                  </p>
-                  <p>
-                    <strong>קהל יעד:</strong> {classItem.audienceAge}
                   </p>
                   <p>
                     <strong>מיקום:</strong> {classItem.location}
