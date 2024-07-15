@@ -1,12 +1,34 @@
 import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
 import { FaFacebook, FaYoutube, FaBookOpen, FaWhatsapp } from "react-icons/fa"; // Import the WhatsApp icon
+import { IoIosHelpCircleOutline } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 const socialItems = [
-  { name: "Facebook", icon: FaFacebook, link: "https://www.facebook.com/harhomat" },
-  { name: "Youtube", icon: FaYoutube, link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw" },
-  { name: "About Us", icon: FaBookOpen, link: "https://online.fliphtml5.com/qfboh/fyni/?1609945510152#p=1" },
+  {
+    name: "Facebook",
+    icon: FaFacebook,
+    link: "https://www.facebook.com/harhomat",
+  },
+  {
+    name: "Youtube",
+    icon: FaYoutube,
+    link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw",
+  },
+  {
+    name: "About Us",
+    icon: FaBookOpen,
+    link: "https://online.fliphtml5.com/qfboh/fyni/?1609945510152#p=1",
+  },
   { name: "WhatsApp", icon: FaWhatsapp, link: "https://wa.me/972524337664" }, // Add the WhatsApp item
+];
+
+const BottomLinks = [
+  {
+    name: "עזרה",
+    icon: IoIosHelpCircleOutline,
+    link: "/help",
+  },
 ];
 
 export const Footer = () => {
@@ -51,7 +73,8 @@ export const Footer = () => {
                 הישארו מעודכנים
               </h2>
               <p className="mt-3 max-w-3xl text-lg text-gray-500">
-                תהיו הראשונים לדעת על אירועים, חוגים וכל מה שחדש במנהל. אל תדאגו, לא נחפור לכם יותר מדי :)
+                תהיו הראשונים לדעת על אירועים, חוגים וכל מה שחדש במנהל. אל
+                תדאגו, לא נחפור לכם יותר מדי :)
               </p>
             </div>
             <div className="mt-8 lg:mt-0 lg:ml-8">
@@ -74,13 +97,20 @@ export const Footer = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full flex items-center justify-center py-3 px-5 border border-transparent text-base font-medium rounded-full text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                    className="w-full flex items-center justify-center py-3 px-5 border border-transparent text-base font-medium rounded-full text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                  >
                     {isSubmitting ? "שולח..." : "צרפו אותי"}
-                    </button>
+                  </button>
                 </div>
               </form>
               {submitMessage && (
-                <p className={`mt-3 text-sm ${submitMessage.includes("שגיאה") ? "text-red-500" : "text-green-500"}`}>
+                <p
+                  className={`mt-3 text-sm ${
+                    submitMessage.includes("שגיאה")
+                      ? "text-red-500"
+                      : "text-green-500"
+                  }`}
+                >
                   {submitMessage}
                 </p>
               )}
@@ -90,7 +120,18 @@ export const Footer = () => {
 
         {/* Bottom Section */}
         <div className="py-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-base text-gray-500">&copy; 2024</p>
+          <div className="flex items-center gap-2">
+            <p className="text-base text-gray-500">&copy; 2024</p>
+            <div>
+              {BottomLinks.map((link) => {
+                return (
+                  <Link className="font-medium underline" to={link.link} key={link.name}>
+                    {link.name}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
           <div className="flex mt-4 md:mt-0 space-x-6 rtl:space-x-reverse">
             {socialItems.map((item, index) => (
               <a
@@ -98,7 +139,8 @@ export const Footer = () => {
                 href={item.link}
                 className="text-gray-500 hover:text-gray-600 transition-colors duration-300"
                 target="_blank"
-                rel="noopener noreferrer">
+                rel="noopener noreferrer"
+              >
                 <span className="sr-only">{item.name}</span>
                 <item.icon className="h-6 w-6" aria-hidden="true" />
               </a>

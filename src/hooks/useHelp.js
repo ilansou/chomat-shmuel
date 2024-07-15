@@ -17,7 +17,7 @@ export function useHelp() {
 
   const getHelpList = useCallback(async () => {
     try {
-      const helpQuery = query(helpCollectionRef, orderBy("title"));
+      const helpQuery = query(helpCollectionRef);
       const data = await getDocs(helpQuery);
       const filteredHelp = data.docs.map((doc) => ({
         id: doc.id,
@@ -29,16 +29,10 @@ export function useHelp() {
     }
   }, [helpCollectionRef]);
 
-  const addHelpItem = async () => {
+  const addHelpItem = async (data) => {
     try {
-      const newHelpItem = {
-        title: "New Help Item",
-        content: "New content...",
-        isOpen: false,
-      };
-      const docRef = await addDoc(helpCollectionRef, newHelpItem);
-      const helpItem = { id: docRef.id, ...newHelpItem };
-      setHelpList((prevItems) => [...prevItems, helpItem]);
+      const docRef = await addDoc(helpCollectionRef, data);
+      setHelpList((prevItems) => [...prevItems, data]);
     } catch (error) {
       console.error("Error adding help item: ", error);
     }
@@ -51,21 +45,18 @@ export function useHelp() {
         prevItems.filter((item) => item.id !== id)
       );
     } catch (error) {
+      console.log(error)
       console.error("Error deleting help item: ", error);
     }
   };
 
-  const editHelpItem = async (id, newTitle, newContent) => {
+  const editHelpItem = async (id, data) => {
     try {
       const helpItemRef = doc(helpCollectionRef, id);
-      const updatedHelpItem = {
-        title: newTitle,
-        content: newContent,
-      };
-      await updateDoc(helpItemRef, updatedHelpItem);
+      await updateDoc(helpItemRef, data);
       setHelpList((prevItems) =>
         prevItems.map((item) =>
-          item.id === id ? { ...item, ...updatedHelpItem } : item
+          item.id === id ? { ...item, ...data } : item
         )
       );
     } catch (error) {

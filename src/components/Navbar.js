@@ -10,8 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export const Navbar = () => {
   const Links = [
     { name: "קצת עלינו", link: "/aboutus", hoverColor: "hover:text-yellow-500" },
-    { name: "עזרה", link: "/help", hoverColor: "hover:text-green-500" },
-
     { name: "דף בית", link: "/", hoverColor: "hover:text-pink-500" },
     { name: "אירועים", link: "/events", hoverColor: "hover:text-purple-400" },
     { name: "חוגים", link: "/classes", hoverColor: "hover:text-purple-500" },

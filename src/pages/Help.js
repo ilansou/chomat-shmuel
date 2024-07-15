@@ -1,69 +1,109 @@
 import React, { useEffect, useState } from "react";
-import { useHelp } from "../hooks/useHelp";
 import { useAuth } from "../contexts/AuthContext";
-
-const Help = () => {
+import { db } from "../firebase";
+import { addDoc, collection, getDocs, query } from "firebase/firestore";
+import { useHelp } from "../hooks/useHelp";
+export const Help = () => {
   const { user } = useAuth();
-  const { helpList, getHelpList, addHelpItem, removeHelpItem, editHelpItem } =
-    useHelp();
   const [expandedItems, setExpandedItems] = useState({});
+  const [newHelpTitle, setNewHelpTitle] = useState("");
+  const [newHelpContent, setNewHelpContent] = useState("");
+  const { getHelpList, helpList, addHelpItem, removeHelpItem, editHelpItem } =
+    useHelp();
+
+  const toggleExpand = (index) => {
+    setExpandedItems((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
+  const handleAddHelpItem = () => {
+    if (newHelpTitle && newHelpContent) {
+      addHelpItem({ questionName: newHelpTitle, answer: newHelpContent });
+      setNewHelpTitle("");
+      setNewHelpContent("");
+    }
+  };
 
   useEffect(() => {
     getHelpList();
-  }, [getHelpList]);
-
-  const toggleExpand = (id) => {
-    setExpandedItems((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
+  }, []);
 
   return (
     <div className="container mx-auto px-4 pt-32 max-w-6xl">
       <h1 className="text-3xl font-bold text-center mb-8">עזרה</h1>
       {user && (
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
-          onClick={addHelpItem}
-        >
-          Add Help Item
-        </button>
+        <div className="mb-4">
+          <input
+            type="text"
+            className="border rounded p-2 mb-2 w-full"
+            placeholder="כותרת"
+            value={newHelpTitle}
+            onChange={(e) => setNewHelpTitle(e.target.value)}
+          />
+          <textarea
+            className="border rounded p-2 mb-2 w-full"
+            placeholder="תוכן"
+            value={newHelpContent}
+            onChange={(e) => setNewHelpContent(e.target.value)}
+          />
+          <div className="flex justify-end pb-5">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={handleAddHelpItem}
+            >
+              הוסף שאלה / עזרה
+            </button>
+          </div>
+        </div>
       )}
 
-      {helpList.map((helpItem) => (
-        <div key={helpItem.id} className="mb-4">
+      {helpList.map((helpItem, index) => (
+        <div key={index} className="mb-4">
           <div
             className="cursor-pointer flex justify-between items-center"
-            onClick={() => toggleExpand(helpItem.id)}
+            onClick={() => toggleExpand(index)}
           >
-            <h2 className="text-xl font-bold">{helpItem.title}</h2>
-            <span className="ml-2">
-              {expandedItems[helpItem.id] ? "-" : "+"}
-            </span>
+            <h2 className="text-xl font-bold">{helpItem.questionName}</h2>
+            <span className="ml-2">{expandedItems[index] ? "-" : "+"}</span>
           </div>
-          {expandedItems[helpItem.id] && (
+          {expandedItems[index] && (
             <div className="mt-2 bg-gray-100 p-4">
-              <p>{helpItem.content}</p>
+              <p>{helpItem.answer}</p>
               {user && (
-                <div className="mt-2">
+                <div className="mt-2 flex items-center justify-end gap-1 text-sm">
                   <button
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => removeHelpItem(helpItem.id)}
+                    onClick={() => {
+                      removeHelpItem(helpItem.id).then((res) => {
+                        setExpandedItems((prev) => {
+                          const newItems = { ...prev };
+                          delete newItems[index];
+                          return newItems;
+                        });
+                      });
+                    }}
                   >
-                    Delete
+                    מחק
                   </button>
                   <button
                     className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded ml-2"
-                    onClick={() =>
-                      editHelpItem(
-                        helpItem.id,
-                        "Updated Title",
-                        "Updated Content"
-                      )
-                    }
+                    onClick={() => {
+                      const questionName = prompt(
+                        "הכנס כותרת חדשה:",
+                        helpItem.questionName
+                      );
+                      const answer = prompt("הכנס תוכן חדש:", helpItem.answer);
+                      if (questionName && answer) {
+                        helpItem.questionName = questionName;
+                        helpItem.answer = answer;
+                        editHelpItem(helpItem.id, helpItem);
+                        setExpandedItems({ ...expandedItems }); // force re-render
+                      }
+                    }}
                   >
-                    Edit
+                    עריכה
                   </button>
                 </div>
               )}
@@ -74,5 +114,3 @@ const Help = () => {
     </div>
   );
 };
-
-export default Help;
