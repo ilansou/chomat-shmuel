@@ -6,6 +6,7 @@ import { ClassCalendar } from "../components/classes/ClassCalendar";
 import { useClasses } from "../contexts/ClassesContext";
 import { ClassCard } from "../components/classes/ClassCard";
 import PageFeedback from '../components/PageFeedback';
+import { ClipLoader } from "react-spinners"; // Import the spinner
 
 export const Classes = () => {
   const { user } = useAuth();
@@ -45,9 +46,10 @@ export const Classes = () => {
     'אחר': 'bg-gray-200'
   };
 
-  if (loading) {
-    return <div className="container mx-auto px-4 pt-32 max-w-6xl"> טוען נתונים...</div>;
-  }
+  if (loading) return (
+    <div className="flex justify-center items-center h-60">
+      <ClipLoader color={"#000"} loading={loading} size={50} />
+    </div> )
 
   return (
     <div className="container mx-auto px-4 pt-24 max-w-7xl">
