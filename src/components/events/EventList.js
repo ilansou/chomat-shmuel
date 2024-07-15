@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useEvents } from "../../contexts/EventsContext";
 import { EventCard } from "./EventCard";
 import { EventModal } from "./EventModal";
+import { ClipLoader } from "react-spinners"; // Import the spinner
 
 export const EventList = ({ limit = 8 }) => {
   const { eventList, getEventList } = useEvents();
@@ -41,8 +42,11 @@ export const EventList = ({ limit = 8 }) => {
     setSelectedEvent(event);
   };
 
-  if (loading) return <div className="text-center">Loading events...</div>;
-  if (error) return <div className="text-center text-red-500">Error: {error}</div>;
+  if (loading) return (
+    <div className="flex justify-center items-center h-48">
+      <ClipLoader color={"#000"} loading={loading} size={50} />
+    </div>
+  );  if (error) return <div className="text-center text-red-500">Error: {error}</div>;
 
   return (
     <div className="w-full">
