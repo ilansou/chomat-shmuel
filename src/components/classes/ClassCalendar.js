@@ -5,7 +5,14 @@ import { he } from "date-fns/locale";
 const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const hebrewDays = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
 
-export const ClassCalendar = ({ classes, filter, categoryColors, onSelectClass }) => {
+export const ClassCalendar = ({
+  classes,
+  filter,
+  categoryColors,
+  onSelectClass,
+  user,
+  onAddClass,
+}) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const getDays = () => {
@@ -36,6 +43,13 @@ export const ClassCalendar = ({ classes, filter, categoryColors, onSelectClass }
       <div className="bg-purple-500 text-white p-4">
         <div className="flex justify-center items-center">
           <h2 className="text-2xl font-bold">לוח חוגים</h2>
+          {user && (
+            <button
+              className="bg-white text-gray-800 text-sm font-medium py-1 px-3 rounded-full transition-colors duration-200 hover:bg-gray-200 mr-2"
+              onClick={onAddClass}>
+              הוסף חוג
+            </button>
+          )}
         </div>
       </div>
 

@@ -102,7 +102,7 @@ export const EventCalendar = ({
           <div className="flex items-center">
             {user && (
               <button
-                className="bg-white text-gray-800 text-sm font-medium py-1 px-3 rounded-full transition-colors duration-200 hover:bg-gray-200"
+                className="bg-white ml-2 text-gray-800 text-sm font-medium py-1 px-3 rounded-full transition-colors duration-200 hover:bg-gray-200"
                 onClick={onAddEvent}>
                 הוסף אירוע
               </button>

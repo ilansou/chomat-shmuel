@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useNews } from '../contexts/NewsContext';
-import { format } from 'date-fns';
-import { useAuth } from '../contexts/AuthContext';
-import whatsappBackground from '../images/WhatsApp.png';
-import { NewsForm } from './news/NewsForm';
-import { NewsModal } from './news/NewsModal';
+import React, { useEffect, useState, useRef } from "react";
+import { useNews } from "../contexts/NewsContext";
+import { format } from "date-fns";
+import { useAuth } from "../contexts/AuthContext";
+import whatsappBackground from "../images/WhatsApp.png";
+import { NewsForm } from "./news/NewsForm";
+import { NewsModal } from "./news/NewsModal";
 
 export const Chat = () => {
   const scrollContainerRef = useRef();
@@ -35,9 +35,9 @@ export const Chat = () => {
     if (!imageUrl) return null;
 
     const getFileType = (dataUrl) => {
-      if (dataUrl.startsWith('data:image/')) return 'image';
-      if (dataUrl.startsWith('data:application/pdf')) return 'pdf';
-      return 'other';
+      if (dataUrl.startsWith("data:image/")) return "image";
+      if (dataUrl.startsWith("data:application/pdf")) return "pdf";
+      return "other";
     };
 
     const fileType = getFileType(imageUrl);
@@ -45,7 +45,7 @@ export const Chat = () => {
     return (
       <div className="mb-2 border rounded-lg overflow-hidden">
         <div className="p-2 bg-gray-100">
-          {fileType === 'image' && (
+          {fileType === "image" && (
             <img
               src={imageUrl}
               alt={title || "News attachment"}
@@ -57,7 +57,7 @@ export const Chat = () => {
               }}
             />
           )}
-          {fileType === 'pdf' && (
+          {fileType === "pdf" && (
             <embed
               src={imageUrl}
               type="application/pdf"
@@ -66,15 +66,14 @@ export const Chat = () => {
               className="rounded-lg"
             />
           )}
-          {fileType === 'other' && (
+          {fileType === "other" && (
             <div className="flex flex-col items-center justify-center h-40 bg-gray-200 rounded-lg">
               <svg
                 className="w-16 h-16 text-gray-400 mb-2"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+                xmlns="http://www.w3.org/2000/svg">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -82,9 +81,7 @@ export const Chat = () => {
                   d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
                 />
               </svg>
-              <p className="text-sm text-gray-600">
-                לחץ על 'הורד' לצפייה בקובץ
-              </p>
+              <p className="text-sm text-gray-600">לחץ על 'הורד' לצפייה בקובץ</p>
             </div>
           )}
         </div>
@@ -93,15 +90,14 @@ export const Chat = () => {
   };
 
   return (
-    <div className="w-full lg:w-[calc(100%-16px)] xl:w-[calc(100%-16px)] shadow-lg">
+    <div className="w-full lg:w-[calc(100%)] xl:w-[calc(100%)] shadow-lg">
       {/* WhatsApp-like header */}
       <div className="bg-[#075e54] text-white p-3 flex justify-between items-center rounded-t-lg">
         <h1 className="text-lg font-bold">חדשות ועדכונים</h1>
         {user && (
           <button
             onClick={() => setShowNewsForm(true)}
-            className="bg-[#128c7e] hover:bg-[#075e54] text-white font-bold py-1 px-2 rounded text-sm transition duration-300"
-          >
+            className="bg-[#128c7e] hover:bg-[#075e54] text-white font-bold py-1 px-2 rounded text-sm transition duration-300">
             הוסף חדשות
           </button>
         )}
@@ -110,8 +106,7 @@ export const Chat = () => {
       <div
         ref={scrollContainerRef}
         className="flex-1 overflow-y-auto p-3 h-[60vh] lg:h-[calc(100vh-300px)] flex flex-col-reverse"
-        style={{ backgroundImage: `url(${whatsappBackground})`, backgroundSize: '210px' }}
-      >
+        style={{ backgroundImage: `url(${whatsappBackground})`, backgroundSize: "210px" }}>
         <div className="flex flex-col">
           {newsList
             .filter((news) => {
@@ -122,23 +117,19 @@ export const Chat = () => {
             .slice()
             .reverse()
             .map((news) => (
-            <div
-              key={news.id}
-              className="flex justify-start mb-3"
-            >
-              <div
-                className="max-w-[80%] p-2 rounded-lg shadow cursor-pointer bg-white text-gray-800 rounded-tr-none"
-                onClick={() => handleSelectNews(news)}
-              >
-                <h3 className="font-bold text-base mb-1">{news.title}</h3>
-                <p className="text-sm mb-1">{news.description}</p>
-                {news.imageUrl && renderAttachment(news.imageUrl, news.title)}
-                <p className="text-xs text-gray-500 text-left">
-                  {format(new Date(news.updateDate), "dd/MM/yyyy HH:mm")}
-                </p>
+              <div key={news.id} className="flex justify-start mb-3">
+                <div
+                  className="max-w-[80%] p-2 rounded-lg shadow cursor-pointer bg-white text-gray-800 rounded-tr-none"
+                  onClick={() => handleSelectNews(news)}>
+                  <h3 className="font-bold text-base mb-1">{news.title}</h3>
+                  <p className="text-sm mb-1">{news.description}</p>
+                  {news.imageUrl && renderAttachment(news.imageUrl, news.title)}
+                  <p className="text-xs text-gray-500 text-left">
+                    {format(new Date(news.updateDate), "dd/MM/yyyy HH:mm")}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
 
@@ -151,15 +142,22 @@ export const Chat = () => {
           disabled
         />
         <button className="bg-[#128c7e] text-white rounded-full p-1" disabled>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round">
             <line x1="22" y1="2" x2="11" y2="13"></line>
             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
           </svg>
         </button>
       </div>
-      {selectedNews && (
-        <NewsModal news={selectedNews} onClose={handleCloseModal} />
-      )}
+      {selectedNews && <NewsModal news={selectedNews} onClose={handleCloseModal} />}
 
       {showNewsForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

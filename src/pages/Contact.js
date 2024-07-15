@@ -3,7 +3,7 @@ import emailjs from "@emailjs/browser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faFax, faEnvelope, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import PageFeedback from '../components/PageFeedback'; // Adjust the import path as needed
+import PageFeedback from "../components/PageFeedback"; // Adjust the import path as needed
 
 export const Contact = () => {
   const [name, setName] = useState("");
@@ -11,8 +11,6 @@ export const Contact = () => {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
-
- 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,10 +42,9 @@ export const Contact = () => {
   };
 
   return (
-    <div className="pt-20 bg-gray-100 min-h-screen">
+    <div className="pt-24 bg-gray-50 min-h-screen">
       <main className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
           {/* Contact Form Section */}
           <div className="bg-white rounded-3xl shadow-md p-6">
             <h2 className="text-2xl font-semibold mb-4 text-gray-700">שלחו לנו הודעה</h2>
@@ -129,11 +126,10 @@ export const Contact = () => {
                 allowFullScreen=""
                 aria-hidden="false"
                 tabIndex="0"
-                title="Map"
-              ></iframe>
+                title="Map"></iframe>
             </div>
           </div>
-       
+
           {/* Contact Info Section */}
           <div className="bg-white rounded-3xl shadow-md p-6 md:col-span-2">
             <h2 className="text-2xl font-semibold mb-4 text-gray-700">פרטי תקשורת</h2>
@@ -150,8 +146,7 @@ export const Contact = () => {
                   icon: faMapMarkerAlt,
                   text: "מינהל קהילתי מרכזי - רח' אסתר רזיאל נאור 8, שכונת חומת שמואל, ירושלים",
                   href: "https://maps.app.goo.gl/f8jXb2S4vdo8WWbT9",
-                }
-                ,
+                },
                 {
                   icon: faMapMarkerAlt,
                   text: "שלוחת המינהל הקהילתי - רח' שאול אביגור 7, שכונת חומת שמואל, ירושלים",
@@ -178,7 +173,7 @@ export const Contact = () => {
           </div>
         </div>
       </main>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-2 lg:px-2 mt-2">
         <PageFeedback pageId="contact" />
       </div>
     </div>

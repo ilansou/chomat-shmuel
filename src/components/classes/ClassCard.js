@@ -7,7 +7,6 @@ import {
   CurrencyDollarIcon,
 } from "@heroicons/react/solid";
 
-
 const weekDays = {
   Sunday: "ראשון",
   Monday: "שני",
@@ -19,13 +18,14 @@ const weekDays = {
 };
 
 const mapWeekDaysToHebrew = (englishDays) => {
-  return englishDays.map(day => weekDays[day] || day);
+  return englishDays.map((day) => weekDays[day] || day);
 };
 
-
-export const ClassCard = ({ classItem }) => {
+export const ClassCard = ({ classItem, onClick }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col transform transition-all duration-300 hover:scale-105 w-64 cursor-pointer">
+    <div
+      onClick={() => onClick(classItem)}
+      className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col transform transition-all duration-300 hover:scale-105 w-64 cursor-pointer">
       {classItem.imageUrl && (
         <div className="relative h-40">
           <img
@@ -51,10 +51,8 @@ export const ClassCard = ({ classItem }) => {
           </div>
           <div className="flex items-center text-sm text-gray-600 mb-2">
             <CalendarIcon className="w-4 h-4 mr-1" />
-            <span>
-              {mapWeekDaysToHebrew(classItem.weekdays).join(", ")}
-            </span>
-                      </div>
+            <span>{mapWeekDaysToHebrew(classItem.weekdays).join(", ")}</span>
+          </div>
           {classItem.location && (
             <div className="flex items-center text-sm text-gray-600 mb-2">
               <LocationMarkerIcon className="w-4 h-4 mr-1" />
