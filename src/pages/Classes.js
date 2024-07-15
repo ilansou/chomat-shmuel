@@ -9,7 +9,6 @@ import PageFeedback from '../components/PageFeedback';
 
 export const Classes = () => {
   const { user } = useAuth();
-  const [date, setDate] = useState(new Date());
   const [selectedClass, setSelectedClass] = useState(null);
   const [showClassForm, setShowClassForm] = useState(false);
   const { getClassList, classList } = useClasses();
@@ -91,7 +90,6 @@ export const Classes = () => {
 
       <div>
         <ClassCalendar
-          setDate={setDate}
           classes={classList}
           filter={categoryFilter}
           categoryColors={categoryColors}

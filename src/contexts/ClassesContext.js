@@ -7,7 +7,6 @@ import {
   updateDoc,
   query,
   orderBy,
-  limit,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { collection } from "firebase/firestore";
@@ -28,8 +27,6 @@ export const ClassesContextProvider = ({ children }) => {
       const filteredClasses = data.docs.map((doc) => ({
         id: doc.id,
       ...doc.data(),
-      classDate: doc.data().classDate.toDate(),
-      expireDate: doc.data().expireDate.toDate(),
       }));
       setClassList(filteredClasses);
     } catch (error) {

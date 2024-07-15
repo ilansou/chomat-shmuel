@@ -44,10 +44,8 @@ export const Contact = () => {
   };
 
   return (
-    <div className="pt-16 bg-gray-100 min-h-screen">
+    <div className="pt-20 bg-gray-100 min-h-screen">
       <main className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center mb-6 text-gray-800">צרו עמנו קשר</h1>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
           {/* Contact Form Section */}
