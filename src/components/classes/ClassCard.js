@@ -7,7 +7,21 @@ import {
   CurrencyDollarIcon,
 } from "@heroicons/react/solid";
 
-const weekDays = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+
+const weekDays = {
+  Sunday: "ראשון",
+  Monday: "שני",
+  Tuesday: "שלישי",
+  Wednesday: "רביעי",
+  Thursday: "חמישי",
+  Friday: "שישי",
+  Saturday: "שבת",
+};
+
+const mapWeekDaysToHebrew = (englishDays) => {
+  return englishDays.map(day => weekDays[day] || day);
+};
+
 
 export const ClassCard = ({ classItem }) => {
   return (
@@ -37,8 +51,10 @@ export const ClassCard = ({ classItem }) => {
           </div>
           <div className="flex items-center text-sm text-gray-600 mb-2">
             <CalendarIcon className="w-4 h-4 mr-1" />
-            <span>{classItem.weekdays.map((day) => weekDays[day]).join(", ")}</span>
-          </div>
+            <span>
+              {mapWeekDaysToHebrew(classItem.weekdays).join(", ")}
+            </span>
+                      </div>
           {classItem.location && (
             <div className="flex items-center text-sm text-gray-600 mb-2">
               <LocationMarkerIcon className="w-4 h-4 mr-1" />
