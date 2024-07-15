@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { EventCalendar } from "../components/events/EventCalendar";
 import { useEvents } from "../contexts/EventsContext";
 import PageFeedback from '../components/PageFeedback'; // Adjust the import path as needed
+import { ClipLoader } from "react-spinners"; // Import the spinner
 
 export const Events = () => {
   const { user } = useAuth();
@@ -57,9 +58,10 @@ export const Events = () => {
     // 'אחר': 'bg-gray-800'
   };
 
-  if (loading) {
-    return <div className="container mx-auto px-4 pt-32 max-w-6xl"> טוען נתונים...</div>;
-  }
+  if (loading) return (
+    <div className="flex justify-center items-center h-60">
+      <ClipLoader color={"#000"} loading={loading} size={50} />
+    </div> )
 
   return (
     <div className="container mx-auto px-4 pt-24 max-w-7xl">
