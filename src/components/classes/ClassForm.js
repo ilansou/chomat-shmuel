@@ -6,7 +6,7 @@ import { useClasses } from "../../contexts/ClassesContext";
 import Select from "react-select";
 
 const schema = yup.object().shape({
-  title: yup.string().required("כותרת נדרשת"),
+  title: yup.string().required("שם חוג נדרש"),
   description: yup.string().required("תיאור נדרש"),
   frequency: yup.string().required("תדירות נדרשת"),
   category: yup.string().required("קטגוריה נדרשת"),
@@ -95,10 +95,10 @@ export const ClassForm = ({ classItem, onClose, onSubmit: handleUpdate, isEditin
   ];
 
   const fields = [
-    { label: "כותרת", name: "title", type: "text", required: true },
+    { label: "שם החוג", name: "title", type: "text", required: true },
     { label: "קובץ", name: "imageUrl", type: "file", accept: "image/*,.pdf" },
     { label: "תיאור", name: "description", type: "textarea", required: true },
-    { label: "קישור", name: "URL", type: "url" },
+    { label: "קישור להרשמה", name: "URL", type: "url" },
     {
       label: "תחום",
       name: "category",
@@ -115,28 +115,6 @@ export const ClassForm = ({ classItem, onClose, onSubmit: handleUpdate, isEditin
       ],
       required: true,
       onChange: handleCategoryChange,
-    },
-    {
-      label: "קהל היעד",
-      name: "audienceAge",
-      type: "select",
-      options: [
-        { label: "בחר קהל יעד", value: "" },
-        { label: "שכונה צעירה", value: "שכונה צעירה" },
-        { label: "נוער", value: "נוער" },
-        { label: "לכל המשפחה", value: "לכל המשפחה" },
-        { label: "הגיל הרך", value: "הגיל הרך" },
-        { label: "תרבות", value: "תרבות" },
-        { label: "הגיל השלישי", value: "הגיל השלישי" },
-        { label: "טבע עירוני", value: "טבע עירוני" },
-        { label: "עמיתים", value: "עמיתים" },
-        { label: "ספורט", value: "ספורט" },
-        { label: "לכל הקהילה", value: "לכל הקהילה" },
-        { label: "צמי'ד", value: "צמי'ד" },
-        { label: "חרדי-תורני", value: "חרדי-תורני" },
-        { label: "אחר", value: "אחר" },
-      ],
-      required: true,
     },
     {
       label: "תדירות",
