@@ -94,7 +94,7 @@ export const NewsForm = ({ news, onClose, onSubmit: handleUpdate, isEditing }) =
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md overflow-y-auto max-h-[90vh]">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
-          {isEditing ? "עריכת חדשות" : "יצירת חדשות חדשות"}
+          {isEditing ? "עריכת חדשות" : "יצירת חדשות"}
         </h1>
         <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
           &#x2716;
