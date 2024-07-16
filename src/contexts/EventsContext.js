@@ -1,16 +1,5 @@
 import React, { createContext, useState, useContext, useCallback } from "react";
-import {
-  getDocs,
-  deleteDoc,
-  doc,
-  addDoc,
-  updateDoc,
-  query,
-  orderBy,
-  limit,
-  where,
-  Timestamp,
-} from "firebase/firestore";
+import { getDocs, deleteDoc, doc, addDoc, updateDoc, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 import { collection } from "firebase/firestore";
 
@@ -22,11 +11,7 @@ export const EventsContextProvider = ({ children }) => {
 
   const getEventList = useCallback(async () => {
     try {
-      const eventQuery = query(
-        eventsCollectionRef,
-        orderBy("eventDate"),
-        limit(30)
-      );
+      const eventQuery = query(eventsCollectionRef, orderBy("eventDate"));
       const data = await getDocs(eventQuery);
       const filteredEvents = data.docs.map((doc) => ({
         id: doc.id,
@@ -87,9 +72,7 @@ export const EventsContextProvider = ({ children }) => {
   };
 
   return (
-    <EventsContext.Provider
-      value={{ eventList, getEventList, deleteEvent, addEvent, editEvent }}
-    >
+    <EventsContext.Provider value={{ eventList, getEventList, deleteEvent, addEvent, editEvent }}>
       {children}
     </EventsContext.Provider>
   );

@@ -4,18 +4,47 @@ import { format } from "date-fns";
 import { useAuth } from "../contexts/AuthContext";
 import whatsappBackground from "../images/WhatsApp.png";
 import { NewsForm } from "./news/NewsForm";
+import { ClipLoader } from "react-spinners";
 import { NewsModal } from "./news/NewsModal";
+import { getDocs, query, Timestamp, writeBatch, collection, where } from "firebase/firestore";
+import { db } from "../firebase";
 
 export const Chat = () => {
   const scrollContainerRef = useRef();
   const { newsList, getNewsList } = useNews();
   const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [selectedNews, setSelectedNews] = useState(null);
   const [showNewsForm, setShowNewsForm] = useState(false);
 
   useEffect(() => {
-    getNewsList();
+    const fetchNews = async () => {
+      setLoading(true);
+      await getNewsList();
+      await cleanupExpiredNews();
+      setLoading(false);
+    };
+    fetchNews();
   }, []);
+
+  const cleanupExpiredNews = async () => {
+    const twoMonthsAgo = new Date();
+    twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
+
+    const newsRef = collection(db, "news and updates");
+    const q = query(newsRef, where("expireDate", "<", Timestamp.fromDate(twoMonthsAgo)));
+    const snapshot = await getDocs(q);
+
+    const batch = writeBatch(db);
+    snapshot.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    if (!snapshot.empty) {
+      await batch.commit();
+      console.log(`${snapshot.size} expired news items deleted`);
+    }
+  };
 
   const handleSelectNews = (news) => {
     setSelectedNews(news);
@@ -42,6 +71,12 @@ export const Chat = () => {
 
     const fileType = getFileType(imageUrl);
 
+    if (loading)
+      return (
+        <div className="flex justify-center items-center h-60">
+          <ClipLoader color={"#000"} loading={loading} size={50} />
+        </div>
+      );
     return (
       <div className="mb-2 border rounded-lg overflow-hidden">
         <div className="p-2 bg-gray-100">

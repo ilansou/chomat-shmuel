@@ -8,7 +8,6 @@ import {
   query,
   orderBy,
   collection,
-  limit,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -20,11 +19,7 @@ export const NewsContextProvider = ({ children }) => {
 
   const getNewsList = useCallback(async () => {
     try {
-      const newsQuery = query(
-        newsCollectionRef,
-        orderBy("updateDate", "desc"),
-        limit(20)
-      );
+      const newsQuery = query(newsCollectionRef, orderBy("updateDate", "desc"));
       const data = await getDocs(newsQuery);
       const filteredNews = data.docs.map((doc) => ({
         id: doc.id,
@@ -72,9 +67,7 @@ export const NewsContextProvider = ({ children }) => {
       };
       await updateDoc(newsRef, newsData);
       setNewsList((prevList) =>
-        prevList.map((item) =>
-          item.id === id ? { ...item, ...newsData } : item
-        )
+        prevList.map((item) => (item.id === id ? { ...item, ...newsData } : item))
       );
     } catch (error) {
       console.error("Error updating news: ", error);
@@ -83,9 +76,7 @@ export const NewsContextProvider = ({ children }) => {
   };
 
   return (
-    <NewsContext.Provider
-      value={{ newsList, getNewsList, deleteNews, addNews, editNews }}
-    >
+    <NewsContext.Provider value={{ newsList, getNewsList, deleteNews, addNews, editNews }}>
       {children}
     </NewsContext.Provider>
   );

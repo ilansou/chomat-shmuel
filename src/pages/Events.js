@@ -4,8 +4,10 @@ import { EventForm } from "../components/events/EventForm";
 import { useAuth } from "../contexts/AuthContext";
 import { EventCalendar } from "../components/events/EventCalendar";
 import { useEvents } from "../contexts/EventsContext";
-import PageFeedback from "../components/PageFeedback"; 
-import { ClipLoader } from "react-spinners"; // Import the spinner
+import PageFeedback from "../components/PageFeedback";
+import { ClipLoader } from "react-spinners";
+import { db } from "../firebase";
+import { collection, getDocs, query, where, writeBatch, Timestamp } from "firebase/firestore";
 
 export const Events = () => {
   const { user } = useAuth();
@@ -20,10 +22,30 @@ export const Events = () => {
     const fetchClasses = async () => {
       setLoading(true);
       await getEventList();
+      await cleanupOldEvents();
       setLoading(false);
     };
     fetchClasses();
   }, []);
+
+  const cleanupOldEvents = async () => {
+    const thirteenMonthsAgo = new Date();
+    thirteenMonthsAgo.setMonth(thirteenMonthsAgo.getMonth() - 13);
+
+    const eventsRef = collection(db, "events");
+    const q = query(eventsRef, where("eventDate", "<", Timestamp.fromDate(thirteenMonthsAgo)));
+    const snapshot = await getDocs(q);
+
+    const batch = writeBatch(db);
+    snapshot.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    if (!snapshot.empty) {
+      await batch.commit();
+      console.log("Old events deleted");
+    }
+  };
 
   const audienceOptions = [
     { value: "all", label: "הכל" },
@@ -58,11 +80,12 @@ export const Events = () => {
     אחר: "bg-gray-400",
   };
 
-  if (loading) return (
-    <div className="flex justify-center items-center h-60">
-      <ClipLoader color={"#000"} loading={loading} size={50} />
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-60">
+        <ClipLoader color={"#000"} loading={loading} size={50} />
+      </div>
+    );
 
   const handleAddEvent = () => {
     setShowEventForm(true);
