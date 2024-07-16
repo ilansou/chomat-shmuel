@@ -17,6 +17,7 @@ export function useHelp() {
   const [helpList, setHelpList] = useState([]);
 
   const getHelpList = useCallback(async () => {
+    console.log("8888");
     try {
       const helpQuery = query(helpCollectionRef);
       const data = await getDocs(helpQuery);

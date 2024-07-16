@@ -53,7 +53,7 @@ export const Help = () => {
     <div className="container mx-auto px-4 pt-32 max-w-6xl">
       <h1 className="text-3xl font-bold text-center mb-8">עזרה</h1>
       {user && (
-        <div className="mb-4 border border-[#e9e9e9] p-4 mb-8">
+        <div className="mb-4 shadow-sm border border-[#e9e9e9] p-4 mb-8">
           <h4 className="font-bold mb-4">הוספת עזרה/שאלה חדשה</h4>
           <input
             type="text"

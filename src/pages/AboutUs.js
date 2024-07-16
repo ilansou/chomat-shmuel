@@ -1,5 +1,3 @@
-// src/pages/AboutUs.js
-
 import React, { useEffect } from "react";
 import { useAbout } from "../hooks/useAbout";
 import { Section } from "../components/about/Section";
@@ -8,7 +6,16 @@ import StaffManagement from "../components/about/StaffManagement";
 
 const AboutUs = () => {
   const { user } = useAuth();
-  const { sectionList, getSectionList, addSection, removeSection, editSection, addSubheader, removeSubheader, editSubheader} = useAbout();
+  const {
+    sectionList,
+    getSectionList,
+    addSection,
+    removeSection,
+    editSection,
+    addSubheader,
+    removeSubheader,
+    editSubheader,
+  } = useAbout();
 
   useEffect(() => {
     getSectionList();
@@ -35,13 +42,15 @@ const AboutUs = () => {
       ))}
 
       {user && (
-        <button
-          onClick={handleAddSection}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          Add Section
-        </button>
-      )}    
+        <div className="flex justify-end">
+          <button
+            onClick={handleAddSection}
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            הוסף כרטיס אודות
+          </button>
+        </div>
+      )}
       <h1 className="text-3xl font-bold text-center mb-8">הנהלה וצוות המנהל</h1>
       <StaffManagement type="managers" />
       <StaffManagement type="team" />

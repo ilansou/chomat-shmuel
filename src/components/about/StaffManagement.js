@@ -1,5 +1,3 @@
-// src/components/StaffManagement.js
-
 import React, { useEffect, useState } from "react";
 import { useStaffManagement } from "../../hooks/useStaffManagement";
 import { Card } from "./Card";
@@ -47,7 +45,7 @@ const StaffManagement = ({ type }) => {
   };
 
   if (!managerList && !teamList) {
-    return <div>Loading...</div>; // Handle loading state
+    return <div>טוען...</div>;
   }
 
   return (

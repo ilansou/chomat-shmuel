@@ -147,7 +147,7 @@ export const Navbar = () => {
         </div>
 
         {/* Mobile menu */}
-        <div className={`lg:hidden ${menu ? "block" : "hidden"}`}>
+        <div className={`lg:hidden ${menu ? "block" : "hidden"} bg-white`}>
         <div className="px-2 pt-2 pb-3 sm:px-3">
             {Links.map((link, index) => (
             <Fragment key={index}>

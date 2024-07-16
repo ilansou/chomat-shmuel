@@ -18,6 +18,7 @@ export function useAbout() {
   const [sectionList, setSectionList] = useState([]);
 
   const getSectionList = useCallback(async () => {
+    console.log("ooooo");
     try {
       const sectionQuery = query(sectionsCollectionRef, orderBy("header"));
       const data = await getDocs(sectionQuery);
