@@ -31,7 +31,7 @@ export const ClassCard = ({ classItem, onClick }) => {
           <img
             src={classItem.imageUrl}
             alt={classItem.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-fill"
           />
           <div className="absolute top-0 right-0 bg-indigo-500 text-white px-2 py-1 rounded-bl-lg text-center">
             <div className="text-xl font-bold">{classItem.category}</div>
