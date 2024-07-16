@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { RiDeleteBin6Line, RiEdit2Line } from "react-icons/ri"; // Example icons
 import { FaPhone } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 const defaultImageUrl = "https://via.placeholder.com/150"; // Default image URL
 
@@ -18,7 +18,6 @@ export const Card = ({ staff, onDelete, onEdit }) => {
     phone: staff.phone || "",
     email: staff.email || "",
   });
-  const [fileInput, setFileInput] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -138,7 +137,6 @@ export const Card = ({ staff, onDelete, onEdit }) => {
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              ref={(fileInput) => setFileInput(fileInput)}
               className="border border-gray-300 rounded-md w-full p-2 mb-2"
             />
             <div className="mt-2 mb-4">
@@ -155,13 +153,13 @@ export const Card = ({ staff, onDelete, onEdit }) => {
                 onClick={handleSaveClick}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
               >
-                Save
+                ערוך
               </button>
               <button
                 onClick={() => setIsEditing(false)}
                 className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
               >
-                Cancel
+                בטל
               </button>
             </div>}
 

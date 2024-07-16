@@ -1,9 +1,9 @@
 // src/components/StaffManagement.js
 
 import React, { useEffect, useState } from "react";
-import { useStaffManagement } from "../hooks/useStaffManagement";
+import { useStaffManagement } from "../../hooks/useStaffManagement";
 import { Card } from "./Card";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 const StaffManagement = ({ type }) => {
   const { user } = useAuth();

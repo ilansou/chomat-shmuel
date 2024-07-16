@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import { SubheadeAbout } from "./SubheadeAbout";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const Section = ({
     section,

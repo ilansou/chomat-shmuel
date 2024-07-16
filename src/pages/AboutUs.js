@@ -1,10 +1,10 @@
 // src/pages/AboutUs.js
 
 import React, { useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import { useAbout } from "../hooks/useAbout";
-import StaffManagement from "../components/StaffManagement";
-import { Section } from "../components/Section";
+import { Section } from "../components/about/Section";
+import { useAuth } from "../contexts/AuthContext";
+import StaffManagement from "../components/about/StaffManagement";
 
 const AboutUs = () => {
   const { user } = useAuth();
