@@ -9,11 +9,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Navbar = () => {
   const Links = [
-    { name: "קצת עלינו", link: "/aboutus", hoverColor: "hover:text-yellow-500" },
-    { name: "דף בית", link: "/", hoverColor: "hover:text-pink-500" },
     { name: "אירועים", link: "/events", hoverColor: "hover:text-purple-400" },
     { name: "חוגים", link: "/classes", hoverColor: "hover:text-purple-500" },
     { name: "חדשות ועדכונים", link: "/newsAndUpdates", hoverColor: "hover:text-blue-400" },
+    { name: "קצת עלינו", link: "/aboutus", hoverColor: "hover:text-yellow-500" },
     { name: "יצירת קשר", link: "/contact", hoverColor: "hover:text-orange-500" },
 
   ];
@@ -86,7 +85,7 @@ export const Navbar = () => {
                   <Link
                     key={index}
                     to={link.link}
-                    className={`text-blue-800 ${link.hoverColor} pr-6 py-2 rounded-md text-2xl font-bold transition duration-300 ease-in-out`}
+                    className={`text-blue-800 ${link.hoverColor} pr-6 py-2 rounded-md text-xl font-bold transition duration-300 ease-in-out`}
                   >
                     {link.name}
                   </Link>
@@ -94,7 +93,7 @@ export const Navbar = () => {
                 {user && (
                   <Link
                     to="/dashboard"
-                    className="text-blue-800 hover:text-pink-400 pr-6 py-2 rounded-md text-2xl font-bold transition duration-300 ease-in-out"
+                    className="text-blue-800 hover:text-pink-400 pr-6 py-2 rounded-md text-xl font-bold transition duration-300 ease-in-out"
                   >
                     סטטיסטיקות
                   </Link>
