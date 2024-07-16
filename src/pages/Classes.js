@@ -28,7 +28,7 @@ export const Classes = () => {
   const categoryOptions = [
     { value: "all", label: "הכל" },
     { value: "חוגי הגיל השלישי", label: "חוגי הגיל השלישי" },
-    { value: "התעלמות וספורט", label: "התעלמות וספורט" },
+    { value: "התעמלות וספורט", label: "התעמלות וספורט" },
     { value: "חוגי מחול", label: "חוגי מחול" },
     { value: "חוגי אומנות", label: "חוגי אומנות" },
     { value: "חוגי העשרה", label: "חוגי העשרה" },
@@ -38,7 +38,7 @@ export const Classes = () => {
 
   const categoryColors = {
     "חוגי הגיל השלישי": "bg-red-200",
-    "התעלמות וספורט": "bg-blue-200",
+    "התעמלות וספורט": "bg-blue-200",
     "חוגי מחול": "bg-green-200",
     "חוגי אומנות": "bg-yellow-200",
     "חוגי העשרה": "bg-purple-200",

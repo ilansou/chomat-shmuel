@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { auth } from "../firebase";
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "firebase/auth";
 
 const AuthContext = createContext();
 
@@ -97,6 +97,15 @@ export function AuthContextProvider({ children }) {
     };
   }, [user, logOut]);
 
+  // Add this new function for password reset
+  const resetPassword = async (email) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
   // Listen for auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -108,7 +117,7 @@ export function AuthContextProvider({ children }) {
 
   // Provide auth context to children components
   return (
-    <AuthContext.Provider value={{ logIn, logOut, user, loading }}>
+    <AuthContext.Provider value={{ logIn, logOut, user, loading, resetPassword }}>
       {!loading && children}
     </AuthContext.Provider>
   );
