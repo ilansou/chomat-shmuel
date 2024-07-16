@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { db } from "../firebase";
-import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import { useHelp } from "../hooks/useHelp";
 export const Help = () => {
   const { user } = useAuth();
   const [expandedItems, setExpandedItems] = useState({});
   const [newHelpTitle, setNewHelpTitle] = useState("");
   const [newHelpContent, setNewHelpContent] = useState("");
-  const { getHelpList, helpList, addHelpItem, removeHelpItem, editHelpItem } =
-    useHelp();
+  const { getHelpList, helpList, addHelpItem, removeHelpItem, editHelpItem } = useHelp();
 
   const toggleExpand = (index) => {
     setExpandedItems((prev) => ({
@@ -28,7 +25,7 @@ export const Help = () => {
 
   useEffect(() => {
     getHelpList();
-  }, []);
+  }, [getHelpList]);
 
   return (
     <div className="container mx-auto px-4 pt-32 max-w-6xl">

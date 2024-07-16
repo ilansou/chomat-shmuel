@@ -7,13 +7,14 @@ import {
   updateDoc,
   collection,
   query,
-  orderBy,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
+const helpCollectionRef = collection(db, "help");
+
+
 export function useHelp() {
   const [helpList, setHelpList] = useState([]);
-  const helpCollectionRef = collection(db, "help");
 
   const getHelpList = useCallback(async () => {
     try {
@@ -27,11 +28,11 @@ export function useHelp() {
     } catch (error) {
       console.error("Error getting help items: ", error);
     }
-  }, [helpCollectionRef]);
+  }, []);
 
   const addHelpItem = async (data) => {
     try {
-      const docRef = await addDoc(helpCollectionRef, data);
+      await addDoc(helpCollectionRef, data);
       setHelpList((prevItems) => [...prevItems, data]);
     } catch (error) {
       console.error("Error adding help item: ", error);

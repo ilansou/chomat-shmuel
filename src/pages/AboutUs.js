@@ -8,16 +8,7 @@ import { Section } from "../components/Section";
 
 const AboutUs = () => {
   const { user } = useAuth();
-  const {
-    sectionList,
-    getSectionList,
-    addSection,
-    removeSection,
-    editSection,
-    addSubheader,
-    removeSubheader,
-    editSubheader,
-  } = useAbout();
+  const { sectionList, getSectionList, addSection, removeSection, editSection, addSubheader, removeSubheader, editSubheader} = useAbout();
 
   useEffect(() => {
     getSectionList();

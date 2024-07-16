@@ -16,7 +16,6 @@ import {  EventsContextProvider } from "./contexts/EventsContext";
 import { NewsContextProvider } from "./contexts/NewsContext";
 import { ClassesContextProvider } from "./contexts/ClassesContext";
 import AboutUs from "./pages/AboutUs";
-import { Archive } from "./pages/Archive";
 import { Help } from "./pages/Help";
 
 
@@ -37,7 +36,6 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/aboutus" element={<AboutUs />} />
-              <Route path="/archive" element={<Archive />} />
               <Route path="/help" element={<Help />} />
 
               <Route

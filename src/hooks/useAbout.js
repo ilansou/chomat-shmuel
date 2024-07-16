@@ -11,9 +11,11 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 
+const sectionsCollectionRef = collection(db, "about");
+
+
 export function useAbout() {
   const [sectionList, setSectionList] = useState([]);
-  const sectionsCollectionRef = collection(db, "about");
 
   const getSectionList = useCallback(async () => {
     try {
@@ -27,7 +29,7 @@ export function useAbout() {
     } catch (error) {
       console.error("Error getting sections: ", error);
     }
-  }, [sectionsCollectionRef]);
+  }, []);
 
   const addSection = async () => {
     try {

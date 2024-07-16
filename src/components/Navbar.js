@@ -15,7 +15,6 @@ export const Navbar = () => {
     { name: "חוגים", link: "/classes", hoverColor: "hover:text-purple-500" },
     { name: "חדשות ועדכונים", link: "/newsAndUpdates", hoverColor: "hover:text-blue-400" },
     { name: "יצירת קשר", link: "/contact", hoverColor: "hover:text-orange-500" },
-    { name: "ארכיון", link: "/archive", hoverColor: "hover:text-rose-500" },
 
   ];
 
@@ -75,7 +74,7 @@ export const Navbar = () => {
       <div className="bg-white shadow-md">
         <div className="container mx-auto px-1 sm:px-6 lg:px-8 relative">
           <div className="flex items-center justify-end h-20">
-            <div className="absolute top-0 right-0 mt-2 mr-4">
+            <div className="absolute top-0 right-0 mt-2">
               <Link to="/" onClick={handleCloseMenu} className="flex items-center">
                 <img className="h-16 w-auto" src={logo} alt="logo" style={{ margin: 0 }} />
               </Link>
@@ -87,7 +86,7 @@ export const Navbar = () => {
                   <Link
                     key={index}
                     to={link.link}
-                    className={`text-blue-800 ${link.hoverColor} px-4 py-2 rounded-md text-2xl font-bold transition duration-300 ease-in-out`}
+                    className={`text-blue-800 ${link.hoverColor} pr-6 py-2 rounded-md text-2xl font-bold transition duration-300 ease-in-out`}
                   >
                     {link.name}
                   </Link>
@@ -95,7 +94,7 @@ export const Navbar = () => {
                 {user && (
                   <Link
                     to="/dashboard"
-                    className="text-blue-800 hover:text-pink-400 px-4 py-2 rounded-md text-2xl font-bold transition duration-300 ease-in-out"
+                    className="text-blue-800 hover:text-pink-400 pr-6 py-2 rounded-md text-2xl font-bold transition duration-300 ease-in-out"
                   >
                     סטטיסטיקות
                   </Link>
@@ -119,16 +118,14 @@ export const Navbar = () => {
               {user ? (
                 <button
                   onClick={handleLogout}
-                  className="text-blue-800 hover:text-gray-800 text-lg font-medium py-1.5 px-4 transition duration-300 ease-in-out"
+                  className="text-blue-800 hover:text-gray-800 text-lg font-medium py-1.5 pr-6 transition duration-300 ease-in-out"
                 >
-                  <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
-                  התנתק
+                  <FontAwesomeIcon icon={faSignOutAlt} className="mr-2 text-red-500" />
                 </button>
               ) : (
                 <Link to="/login">
-                  <button className="text-blue-800 hover:text-gray-800 text-lg font-medium py-1.5 px-4 transition duration-300 ease-in-out">
+                  <button className="text-blue-800 hover:text-gray-800 text-lg font-medium py-1.5 pr-6 transition duration-300 ease-in-out">
                     <FontAwesomeIcon icon={faSignInAlt} className="mr-2" />
-                    התחבר
                   </button>
                 </Link>
               )}
@@ -184,14 +181,14 @@ export const Navbar = () => {
                     handleLogout();
                     handleCloseMenu();
                   }}
-                  className="w-full text-gray-600 hover:text-gray-800 text-lg font-medium py-1.5 px-4 transition duration-300 ease-in-out"
+                  className="w-full text-gray-600 hover:text-gray-800 text-lg font-medium py-1.5 pr-6 transition duration-300 ease-in-out"
                 >
                   <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
                   התנתק
                 </button>
               ) : (
                 <Link to="/login" onClick={handleCloseMenu} className="w-full">
-                  <button className="w-full text-gray-600 hover:text-gray-800 text-lg font-medium py-1.5 px-4 transition duration-300 ease-in-out">
+                  <button className="w-full text-gray-600 hover:text-gray-800 text-lg font-medium py-1.5 pr-6 transition duration-300 ease-in-out">
                     <FontAwesomeIcon icon={faSignInAlt} className="mr-2" />
                     התחבר
                   </button>
