@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { auth } from "../firebase";
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "firebase/auth";
 
 const AuthContext = createContext();
 
@@ -22,7 +22,6 @@ export function AuthContextProvider({ children }) {
     }
   };
 
-  // Function to handle logout
   const logOut = useCallback(async () => {
     try {
       await signOut(auth);
@@ -31,29 +30,81 @@ export function AuthContextProvider({ children }) {
     }
   }, []);
 
-  // Auto-logout after one hour of inactivity
   useEffect(() => {
     let inactivityTimer;
+    let sessionTimer;
 
     const resetInactivityTimer = () => {
       if (inactivityTimer) clearTimeout(inactivityTimer);
-      inactivityTimer = setTimeout(logOut, 60 * 60 * 1000); // 1 hour
+      inactivityTimer = setTimeout(logOut, 60 * 60 * 1000); // 1 hour of inactivity
+    };
+
+    const setupSessionTimeout = () => {
+      sessionTimer = setTimeout(logOut, 8 * 60 * 60 * 1000); // 8 hours max session time
+    };
+
+    // Check for multiple tabs
+    const checkMultipleTabs = () => {
+      const tabCount = parseInt(localStorage.getItem("tabCount") || "0");
+      if (tabCount > 1) {
+        logOut();
+      }
+    };
+
+    // Check for network status
+    const checkNetworkStatus = () => {
+      if (!navigator.onLine) {
+        logOut();
+      }
     };
 
     if (user) {
       // Set up event listeners for user activity
       window.addEventListener("mousemove", resetInactivityTimer);
       window.addEventListener("keypress", resetInactivityTimer);
+      window.addEventListener("scroll", resetInactivityTimer);
+      window.addEventListener("click", resetInactivityTimer);
+
+      // Set up session timeout
+      setupSessionTimeout();
+
+      localStorage.setItem(
+        "tabCount",
+        (parseInt(localStorage.getItem("tabCount") || "0") + 1).toString()
+      );
+      window.addEventListener("storage", checkMultipleTabs);
+
+      window.addEventListener("offline", checkNetworkStatus);
+
       resetInactivityTimer();
     }
 
     return () => {
-      // Clean up event listeners and timer
       window.removeEventListener("mousemove", resetInactivityTimer);
       window.removeEventListener("keypress", resetInactivityTimer);
+      window.removeEventListener("scroll", resetInactivityTimer);
+      window.removeEventListener("click", resetInactivityTimer);
+      window.removeEventListener("storage", checkMultipleTabs);
+      window.removeEventListener("offline", checkNetworkStatus);
+
       if (inactivityTimer) clearTimeout(inactivityTimer);
+      if (sessionTimer) clearTimeout(sessionTimer);
+
+      if (user) {
+        const tabCount = parseInt(localStorage.getItem("tabCount") || "0");
+        localStorage.setItem("tabCount", (tabCount - 1).toString());
+      }
     };
   }, [user, logOut]);
+
+  // Add this new function for password reset
+  const resetPassword = async (email) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
 
   // Listen for auth state changes
   useEffect(() => {
@@ -66,7 +117,7 @@ export function AuthContextProvider({ children }) {
 
   // Provide auth context to children components
   return (
-    <AuthContext.Provider value={{ logIn, logOut, user, loading }}>
+    <AuthContext.Provider value={{ logIn, logOut, user, loading, resetPassword }}>
       {!loading && children}
     </AuthContext.Provider>
   );

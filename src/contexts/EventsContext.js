@@ -32,7 +32,6 @@ export const EventsContextProvider = ({ children }) => {
         id: doc.id,
         ...doc.data(),
         eventDate: doc.data().eventDate.toDate(),
-        expireDate: doc.data().expireDate.toDate(),
       }));
       setEventList(filteredEvents);
     } catch (error) {

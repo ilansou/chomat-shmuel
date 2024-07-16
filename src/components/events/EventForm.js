@@ -4,7 +4,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { format } from "date-fns";
 import { useEvents } from "../../contexts/EventsContext";
-import { Timestamp } from "firebase/firestore";
 
 const schema = yup.object().shape({
   title: yup.string().required("כותרת נדרשת"),
@@ -16,19 +15,12 @@ const schema = yup.object().shape({
     .required("תאריך אירוע נדרש")
     .min(new Date(), "תאריך האירוע חייב להיות תאריך עתידי"),
   audienceAge: yup.string().required("קהל יעד נדרש"),
-  expireDate: yup
-    .date()
-    .nullable()
-    .typeError("תאריך תפוגה נדרש")
-    .required("תאריך תפוגה נדרש")
-    .min(yup.ref("eventDate"), "תאריך תפוגה חייב להיות אחרי תאריך האירוע"),
   URL: yup.string().url("נא להזין כתובת אתר תקינה"),
 });
 
 export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileBase64, setFileBase64] = useState(null);
-  const [showOtherTextInput, setShowOtherTextInput] = useState(false);
   const { addEvent, editEvent } = useEvents();
   const {
     register,
@@ -45,10 +37,8 @@ export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing })
       reset({
         ...event,
         eventDate: event.eventDate ? format(event.eventDate, "yyyy-MM-dd'T'HH:mm") : '',
-        expireDate: event.expireDate ? format(event.expireDate, "yyyy-MM-dd") : '',
       });
       setFileBase64(event.imageUrl || null);
-      setShowOtherTextInput(event.audienceAge === "אחר");
     }
   }, [isEditing, event, reset]);
 
@@ -91,9 +81,7 @@ export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing })
     }
   };
 
-  const handleAudienceChange = (e) => {
-    setShowOtherTextInput(e.target.value === "אחר");
-  };
+
 
   const fields = [
     { label: "כותרת", name: "title", type: "text", required: true },
@@ -101,7 +89,6 @@ export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing })
     { label: "תיאור", name: "description", type: "textarea", required: true },
     { label: "קישור", name: "URL", type: "url" },
     { label: "תאריך ושעת האירוע", name: "eventDate", type: "datetime-local", required: true },
-    { label: "תאריך תפוגה", name: "expireDate", type: "date", required: true },
     {
       label: "קהל היעד",
       name: "audienceAge",
@@ -123,14 +110,6 @@ export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing })
         { label: "אחר", value: "אחר" },
       ],
       required: true,
-      onChange: handleAudienceChange,
-    },
-    {
-      label: "אחר",
-      name: "otherAudience",
-      type: "text",
-      show: showOtherTextInput,
-      required: showOtherTextInput,
     },
     { label: "מיקום", name: "location", type: "text", required: true },
     { label: "מחיר", name: "price", type: "number", step: "0.1" },

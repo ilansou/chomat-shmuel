@@ -1,26 +1,17 @@
 import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
-import { FaFacebook, FaYoutube, FaBookOpen, FaWhatsapp } from "react-icons/fa"; // Import the WhatsApp icon
-import { IoIosHelpCircleOutline } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { FaFacebook, FaYoutube, FaBookOpen, FaWhatsapp, FaInstagram } from "react-icons/fa"; // Import the Instagram icon
 
 const socialItems = [
-  {
-    name: "Facebook",
-    icon: FaFacebook,
-    link: "https://www.facebook.com/harhomat",
-  },
-  {
-    name: "Youtube",
-    icon: FaYoutube,
-    link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw",
-  },
+  { name: "Facebook", icon: FaFacebook, link: "https://www.facebook.com/harhomat" },
+  { name: "Youtube", icon: FaYoutube, link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw" },
+  { name: "WhatsApp", icon: FaWhatsapp, link: "https://wa.me/972524337664" }, // Add the WhatsApp item
   {
     name: "About Us",
     icon: FaBookOpen,
     link: "https://online.fliphtml5.com/qfboh/fyni/?1609945510152#p=1",
   },
-  { name: "WhatsApp", icon: FaWhatsapp, link: "https://wa.me/972524337664" }, // Add the WhatsApp item
+  { name: "Instagram", icon: FaInstagram, link: "https://www.instagram.com/homat.shmuel/?igsh=NWhhdTRnNmVteDg0" }, // Add the Instagram item
 ];
 
 const BottomLinks = [

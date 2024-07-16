@@ -14,11 +14,7 @@ import {
 } from "chart.js";
 
 import { Doughnut, Bar } from "react-chartjs-2";
-import {
-  getDocs,
-  query,
-  collection,
-} from "firebase/firestore";
+import { getDocs, query, collection } from "firebase/firestore";
 import * as XLSX from "xlsx";
 import moment from "moment";
 
@@ -72,7 +68,7 @@ export const Dashboard = () => {
       }, {});
 
       const monthlyStats = eventsData.reduce((acc, event) => {
-        const month = moment(event.eventDate.toDate()).format('MMMM');
+        const month = moment(event.eventDate.toDate()).format("MMMM");
         acc[month] = (acc[month] || 0) + 1;
         return acc;
       }, {});
@@ -108,13 +104,9 @@ export const Dashboard = () => {
 
       const now = new Date();
       const total = newsData.length;
-      const recentViews = newsData.reduce(
-        (sum, news) => sum + (news.views || 0),
-        0
-      );
+      const recentViews = newsData.reduce((sum, news) => sum + (news.views || 0), 0);
       const notExpired = newsData.filter(
-        (news) =>
-          !news.expireDate || new Date(news.expireDate.seconds * 1000) > now
+        (news) => !news.expireDate || new Date(news.expireDate.seconds * 1000) > now
       ).length;
 
       setNewsStats({ total, recentViews, notExpired });
@@ -150,12 +142,8 @@ export const Dashboard = () => {
       const data = doc.data();
       return {
         title: truncateText(data.title),
-        expireDate: data.expireDate
-          ? data.expireDate.toDate().toISOString()
-          : null, // Convert Firestore timestamp to ISO string if exists
-          eventDate: data.expireDate
-          ? data.expireDate.toDate().toISOString()
-          : null,
+        expireDate: data.expireDate ? data.expireDate.toDate().toISOString() : null, // Convert Firestore timestamp to ISO string if exists
+        eventDate: data.expireDate ? data.expireDate.toDate().toISOString() : null,
         imageUrl: truncateText(data.imageUrl),
         location: truncateText(data.location),
         participant: truncateText(data.participant),
@@ -163,7 +151,7 @@ export const Dashboard = () => {
         price: truncateText(data.price),
         eventDuration: data.eventDuration,
         description: truncateText(data.description),
-        id: truncateText(data.id ?? ''), // TODO remove optional
+        id: truncateText(data.id ?? ""), // TODO remove optional
         audienceAge: data.audienceAge,
         URL: truncateText(data.URL),
       };
@@ -241,8 +229,8 @@ export const Dashboard = () => {
     datasets: [
       {
         data: Object.values(eventStats.monthlyStats),
-        backgroundColor: 'gray',
-        borderColor: 'gray',
+        backgroundColor: "gray",
+        borderColor: "gray",
         borderWidth: 1,
       },
     ],
@@ -264,7 +252,7 @@ export const Dashboard = () => {
         beginAtZero: true,
         title: {
           display: true,
-          text: 'מספר אירועים',
+          text: "מספר אירועים",
         },
       },
       x: {
@@ -305,8 +293,7 @@ export const Dashboard = () => {
         beginAtZero: true,
         title: {
           display: true, // Hide the y-axis title
-          text: 'מספר חוגים ',
-
+          text: "מספר חוגים ",
         },
       },
     },
@@ -404,100 +391,89 @@ export const Dashboard = () => {
     };
 
     return (
-      <div
-        key={index}
-        className="bg-white p-2 rounded-lg shadow-md text-center flex-1 min-w-0"
-      >
+      <div key={index} className="bg-white p-2 rounded-lg shadow-md text-center flex-1 min-w-0">
         <h2 className="text-sm font-semibold mb-2">{`פידבק - ${feedback.type}`}</h2>
         <div className="h-32 flex justify-center items-center">
-          <Doughnut data={data} options={{
-            ...pieChartOptions,
-            plugins: {
-              ...pieChartOptions.plugins,
-              legend: {
-                display: true,
+          <Doughnut
+            data={data}
+            options={{
+              ...pieChartOptions,
+              plugins: {
+                ...pieChartOptions.plugins,
+                legend: {
+                  display: true,
+                },
               },
-            },
-          }} />
+            }}
+          />
         </div>
       </div>
     );
   });
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-gray-50 min-h-screen">
-      <h1 className="text-4xl font-bold mb-8 text-gray-800 text-center">
-        Admin Dashboard
-      </h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <h2 className="text-xl font-semibold mb-2">סך כל האירועים</h2>
-          <p className="text-3xl font-bold text-blue-600">{eventStats.total}</p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <h2 className="text-xl font-semibold mb-2">אירועים עתידיים</h2>
-          <p className="text-3xl font-bold text-green-600">
-            {eventStats.upcoming}
-          </p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <h2 className="text-xl font-semibold mb-2">סך כל החוגים</h2>
-          <p className="text-3xl font-bold text-purple-600">
-            {classStats.total}
-          </p>
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <h2 className="text-xl font-semibold mb-2">חדשות באתר</h2>
-          <p className="text-3xl font-bold text-red-600">{newsStats.total}</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg gap-8 mb-8 text-center">
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <h2 className="text-xl font-semibold mb-4">חוגים לפי קטגוריות</h2>
-          <div className="h-[300px]">
-            <Bar data={classData} options={chartOptions1} />
+    <div className="bg-gray-50 pt-24 ">
+      <div className="container mx-auto px-4 py-8  min-h-screen">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white p-6 rounded-lg shadow-md text-center">
+            <h2 className="text-xl font-semibold mb-2">סך כל האירועים</h2>
+            <p className="text-3xl font-bold text-blue-600">{eventStats.total}</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-md text-center">
+            <h2 className="text-xl font-semibold mb-2">אירועים עתידיים</h2>
+            <p className="text-3xl font-bold text-green-600">{eventStats.upcoming}</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-md text-center">
+            <h2 className="text-xl font-semibold mb-2">סך כל החוגים</h2>
+            <p className="text-3xl font-bold text-purple-600">{classStats.total}</p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-md text-center">
+            <h2 className="text-xl font-semibold mb-2">חדשות באתר</h2>
+            <p className="text-3xl font-bold text-red-600">{newsStats.total}</p>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow-md text-center">
-          <h2 className="text-xl font-semibold mb-4">אירועים לפי קהל יעד</h2>
-          <div className="h-[300px]">
-            <Doughnut data={eventsByAudienceAgeData} options={chartOptions} />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg gap-8 mb-8 text-center">
+          <div className="bg-white p-6 rounded-lg shadow-md text-center">
+            <h2 className="text-xl font-semibold mb-4">חוגים לפי קטגוריות</h2>
+            <div className="h-[300px]">
+              <Bar data={classData} options={chartOptions1} />
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-md text-center">
+            <h2 className="text-xl font-semibold mb-4">אירועים לפי קהל יעד</h2>
+            <div className="h-[300px]">
+              <Doughnut data={eventsByAudienceAgeData} options={chartOptions} />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-center">אירועים לפי חודשים</h2>
-        <div className="h-[300px]">
-          <Bar data={monthlyEventData} options={monthlyEventOptions} />
+        <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+          <h2 className="text-xl font-semibold mb-4 text-center">אירועים לפי חודשים</h2>
+          <div className="h-[300px]">
+            <Bar data={monthlyEventData} options={monthlyEventOptions} />
+          </div>
         </div>
-      </div>
-      
-      <div className="flex flex-nowrap overflow-x-auto gap-2 mb-8 pb-4">
-        {feedbackCharts}
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <button
-          onClick={exportEventsToExcel}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          ייצוא לאקסל אירועים
-        </button>
-        <button
-          onClick={exportClassesToExcel}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          ייצוא לאקסל חוגים
-        </button>
-        <button
-          onClick={exportNewsToExcel}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          ייצוא לאקסל חדשות ועדכונים
-        </button>
+        <div className="flex flex-nowrap overflow-x-auto gap-2 mb-8 pb-4">{feedbackCharts}</div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <button
+            onClick={exportEventsToExcel}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            ייצוא לאקסל אירועים
+          </button>
+          <button
+            onClick={exportClassesToExcel}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            ייצוא לאקסל חוגים
+          </button>
+          <button
+            onClick={exportNewsToExcel}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            ייצוא לאקסל חדשות ועדכונים
+          </button>
+        </div>
       </div>
     </div>
   );
