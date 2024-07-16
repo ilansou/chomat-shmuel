@@ -6,7 +6,8 @@ import { ClassCalendar } from "../components/classes/ClassCalendar";
 import { useClasses } from "../contexts/ClassesContext";
 import { ClassCard } from "../components/classes/ClassCard";
 import PageFeedback from "../components/PageFeedback";
-import { ClipLoader } from "react-spinners"; // Import the spinner
+import { ClipLoader } from "react-spinners";
+
 
 export const Classes = () => {
   const { user } = useAuth();
@@ -25,6 +26,7 @@ export const Classes = () => {
     fetchClasses();
   }, []);
 
+  
   const categoryOptions = [
     { value: "all", label: "הכל" },
     { value: "חוגי הגיל השלישי", label: "חוגי הגיל השלישי" },
@@ -53,6 +55,14 @@ export const Classes = () => {
       </div>
     );
 
+  // Filter and sort classes by category
+  const filteredAndSortedClassList = classList
+    .filter((classItem) => categoryFilter === "all" || classItem.category === categoryFilter)
+    .sort((a, b) => {
+      const categoryOrder = categoryOptions.map(option => option.value);
+      return categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category);
+    });
+
   return (
     <div className="bg-gray-50">
       <div className="container mx-auto px-4 pt-24 max-w-7xl">
@@ -80,7 +90,6 @@ export const Classes = () => {
           </div>
         </div>
 
-        {/* Rest of your component */}
         <div>
           <ClassCalendar
             classes={classList}
@@ -104,17 +113,13 @@ export const Classes = () => {
         <div className="mt-12">
           <h2 className="text-2xl font-bold mb-6">רשימת החוגים</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {classList
-              .filter(
-                (classItem) => categoryFilter === "all" || classItem.category === categoryFilter
-              )
-              .map((classItem) => (
-                <ClassCard
-                  key={classItem.id}
-                  classItem={classItem}
-                  onClick={() => setSelectedClass(classItem)}
-                />
-              ))}
+            {filteredAndSortedClassList.map((classItem) => (
+              <ClassCard
+                key={classItem.id}
+                classItem={classItem}
+                onClick={() => setSelectedClass(classItem)}
+              />
+            ))}
           </div>
         </div>
 
