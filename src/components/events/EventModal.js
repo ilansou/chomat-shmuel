@@ -71,9 +71,21 @@ export const EventModal = ({ event, onClose }) => {
 
               <div className="space-y-4">
                 <div className="bg-gray-100 p-4 rounded-lg">
-                  <p><strong>תאריך:</strong> {format((event.eventDate), "dd/MM/yyyy HH:mm")}</p>
-                  <p><strong>מיקום:</strong> {event.location}</p>
-                  <p><strong>מחיר:</strong> {event.price} ₪</p>
+                {event.eventDate && (
+                  <p>
+                    <strong>תאריך:</strong> {format(event.eventDate, "dd/MM/yyyy HH:mm")}
+                  </p>
+                )}
+                {event.location && (
+                  <p>
+                    <strong>מיקום:</strong> {event.location}
+                  </p>
+                )}
+                {event.price && (
+                  <p>
+                    <strong>מחיר:</strong> {event.price} ₪
+                  </p>
+                )}
                   {event.URL && (
                     <p>
                       <strong>קישור:</strong>{" "}
@@ -111,7 +123,7 @@ export const EventModal = ({ event, onClose }) => {
           <div className="max-w-3xl max-h-[90vh]">
             <div className="bg-white rounded-lg shadow-xl p-4 relative">
               <button
-                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors"
+                className="absolute top-2 left-2 text-gray-500 hover:text-gray-700 transition-colors"
                 onClick={closeImageModal}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
