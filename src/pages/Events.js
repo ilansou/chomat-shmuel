@@ -11,6 +11,7 @@ import { collection, getDocs, query, where, writeBatch, Timestamp } from "fireba
 
 export const Events = () => {
   const { user } = useAuth();
+  // eslint-disable-next-line no-unused-vars
   const [date, setDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showEventForm, setShowEventForm] = useState(false);
@@ -22,10 +23,10 @@ export const Events = () => {
     const fetchClasses = async () => {
       setLoading(true);
       await getEventList();
-      await cleanupOldEvents();
       setLoading(false);
     };
     fetchClasses();
+    cleanupOldEvents();
   }, []);
 
   const cleanupOldEvents = async () => {
@@ -46,6 +47,8 @@ export const Events = () => {
       console.log("Old events deleted");
     }
   };
+
+  console.log(eventList);
 
   const audienceOptions = [
     { value: "all", label: "הכל" },

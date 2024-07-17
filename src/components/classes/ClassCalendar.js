@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { format, startOfWeek, endOfWeek, eachDayOfInterval, parseISO } from "date-fns";
-import { he } from "date-fns/locale";
-
+import { startOfWeek, endOfWeek, eachDayOfInterval, parseISO } from "date-fns";
 const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const hebrewDays = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
 
@@ -16,8 +14,8 @@ export const ClassCalendar = ({
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const getDays = () => {
-    const weekStart = startOfWeek(selectedDate, { weekStartsOn: 0 });
-    const weekEnd = endOfWeek(selectedDate, { weekStartsOn: 0 });
+    const weekStart = startOfWeek(setSelectedDate(selectedDate), { weekStartsOn: 0 });
+    const weekEnd = endOfWeek(setSelectedDate(selectedDate), { weekStartsOn: 0 });
     return eachDayOfInterval({ start: weekStart, end: weekEnd });
   };
 

@@ -21,10 +21,10 @@ export const Chat = () => {
     const fetchNews = async () => {
       setLoading(true);
       await getNewsList();
-      await cleanupExpiredNews();
       setLoading(false);
     };
     fetchNews();
+    cleanupExpiredNews();
   }, []);
 
   const cleanupExpiredNews = async () => {

@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
-import { FaFacebook, FaYoutube, FaBookOpen, FaWhatsapp, FaInstagram } from "react-icons/fa"; // Import the Instagram icon
+import { FaFacebook, FaYoutube, FaWhatsapp, FaInstagram } from "react-icons/fa"; // Import the Instagram icon
 
 const socialItems = [
   { name: "Facebook", icon: FaFacebook, link: "https://www.facebook.com/harhomat" },
-  { name: "Youtube", icon: FaYoutube, link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw" },
-  { name: "WhatsApp", icon: FaWhatsapp, link: "https://wa.me/972524337664" }, // Add the WhatsApp item
-  { name: "Instagram", icon: FaInstagram, link: "https://www.instagram.com/homat.shmuel/?igsh=NWhhdTRnNmVteDg0" }, // Add the Instagram item
+  {
+    name: "Youtube",
+    icon: FaYoutube,
+    link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw",
+  },
+  { name: "WhatsApp", icon: FaWhatsapp, link: "https://wa.me/972524337664" }, 
+  {
+    name: "Instagram",
+    icon: FaInstagram,
+    link: "https://www.instagram.com/homat.shmuel/?igsh=NWhhdTRnNmVteDg0",
+  }, 
 ];
 
 export const Footer = () => {
@@ -51,7 +59,8 @@ export const Footer = () => {
                 הישארו מעודכנים
               </h2>
               <p className="mt-3 max-w-3xl text-lg text-gray-500">
-                תהיו הראשונים לדעת על אירועים, חוגים וכל מה שחדש במנהל. אל תדאגו, לא נחפור לכם יותר מדי :)
+                תהיו הראשונים לדעת על אירועים, חוגים וכל מה שחדש במנהל. אל תדאגו, לא נחפור לכם יותר
+                מדי :)
               </p>
             </div>
             <div className="mt-8 lg:mt-0 lg:ml-8">
@@ -76,11 +85,14 @@ export const Footer = () => {
                     disabled={isSubmitting}
                     className="w-full flex items-center justify-center py-3 px-5 border border-transparent text-base font-medium rounded-full text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
                     {isSubmitting ? "שולח..." : "צרפו אותי"}
-                    </button>
+                  </button>
                 </div>
               </form>
               {submitMessage && (
-                <p className={`mt-3 text-sm ${submitMessage.includes("שגיאה") ? "text-red-500" : "text-green-500"}`}>
+                <p
+                  className={`mt-3 text-sm ${
+                    submitMessage.includes("שגיאה") ? "text-red-500" : "text-green-500"
+                  }`}>
                   {submitMessage}
                 </p>
               )}

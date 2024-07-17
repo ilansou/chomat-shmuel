@@ -4,7 +4,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { format } from "date-fns";
 import { useNews } from "../../contexts/NewsContext";
-import { Timestamp } from "firebase/firestore";
 
 const schema = yup.object().shape({
   title: yup.string().required("כותרת נדרשת"),

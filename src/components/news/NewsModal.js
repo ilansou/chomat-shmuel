@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNews } from "../../contexts/NewsContext";
 import { NewsForm } from "./NewsForm";
-import { format } from "date-fns";
 
 export const NewsModal = ({ news, onClose }) => {
   const { user } = useAuth();
-  const { deleteNews, editNews } = useNews();
+  const { deleteNews } = useNews();
   const [isEditing, setIsEditing] = useState(false);
 
   const handleDelete = async () => {

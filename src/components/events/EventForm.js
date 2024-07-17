@@ -26,7 +26,6 @@ export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing })
     register,
     handleSubmit,
     formState: { errors },
-    setError,
     reset,
   } = useForm({
     resolver: yupResolver(schema),
