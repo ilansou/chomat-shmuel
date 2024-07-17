@@ -1,5 +1,16 @@
-import React, { createContext, useState, useContext, useCallback } from "react";
-import { getDocs, deleteDoc, doc, addDoc, updateDoc, query, orderBy } from "firebase/firestore";
+import React, { createContext, useState, useContext, useCallback, useEffect } from "react";
+import {
+  getDocs,
+  deleteDoc,
+  doc,
+  addDoc,
+  updateDoc,
+  query,
+  orderBy,
+  where,
+  writeBatch,
+  Timestamp,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { collection } from "firebase/firestore";
 
@@ -7,6 +18,7 @@ export const EventsContext = createContext();
 
 export const EventsContextProvider = ({ children }) => {
   const [eventList, setEventList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const eventsCollectionRef = collection(db, "events");
 
   const getEventList = useCallback(async () => {
@@ -23,6 +35,39 @@ export const EventsContextProvider = ({ children }) => {
       console.error("Error getting events: ", error);
     }
   }, [eventsCollectionRef]);
+
+  const cleanupOldEvents = async () => {
+    const thirteenMonthsAgo = new Date();
+    thirteenMonthsAgo.setMonth(thirteenMonthsAgo.getMonth() - 13);
+
+    const q = query(
+      eventsCollectionRef,
+      where("eventDate", "<", Timestamp.fromDate(thirteenMonthsAgo))
+    );
+    const snapshot = await getDocs(q);
+
+    const batch = writeBatch(db);
+    snapshot.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    if (!snapshot.empty) {
+      await batch.commit();
+      console.log("Old events deleted");
+    }
+  };
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setLoading(true);
+      await getEventList();
+      setLoading(false);
+    };
+    fetchEvents();
+    cleanupOldEvents();
+  }, []);
+
+  console.log(eventList);
 
   const deleteEvent = async (id) => {
     try {
@@ -72,7 +117,8 @@ export const EventsContextProvider = ({ children }) => {
   };
 
   return (
-    <EventsContext.Provider value={{ eventList, getEventList, deleteEvent, addEvent, editEvent }}>
+    <EventsContext.Provider
+      value={{ eventList, loading, getEventList, deleteEvent, addEvent, editEvent }}>
       {children}
     </EventsContext.Provider>
   );

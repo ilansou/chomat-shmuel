@@ -21,7 +21,7 @@ const schema = yup.object().shape({
 export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileBase64, setFileBase64] = useState(null);
-  const { addEvent, editEvent } = useEvents();
+  const { addEvent, editEvent, getEventList } = useEvents();
   const {
     register,
     handleSubmit,
@@ -35,7 +35,7 @@ export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing })
     if (isEditing && event) {
       reset({
         ...event,
-        eventDate: event.eventDate ? format(event.eventDate, "yyyy-MM-dd'T'HH:mm") : '',
+        eventDate: event.eventDate ? format(event.eventDate, "yyyy-MM-dd'T'HH:mm") : "",
       });
       setFileBase64(event.imageUrl || null);
     }
@@ -62,6 +62,7 @@ export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing })
         await addEvent(eventData, fileBase64);
       }
       setIsSubmitting(false);
+      await getEventList();
       onClose();
     } catch (error) {
       setIsSubmitting(false);
@@ -79,8 +80,6 @@ export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing })
       reader.readAsDataURL(file);
     }
   };
-
-
 
   const fields = [
     { label: "כותרת", name: "title", type: "text", required: true },
@@ -119,7 +118,9 @@ export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing })
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-6 bg-white rounded-lg shadow-md overflow-y-auto max-h-[90vh]">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">{isEditing ? "ערוך אירוע" : "יצירת אירוע חדש"}</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+          {isEditing ? "ערוך אירוע" : "יצירת אירוע חדש"}
+        </h1>
         <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
           &#x2716;
         </button>
@@ -149,8 +150,7 @@ export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing })
                 <select
                   {...register(field.name)}
                   className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                  onChange={field.onChange}
-                >
+                  onChange={field.onChange}>
                   {field.options.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
@@ -181,8 +181,7 @@ export const EventForm = ({ event, onClose, onSubmit: handleUpdate, isEditing })
           <button
             type="submit"
             className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-300 disabled:opacity-70 disabled:cursor-not-allowed transition duration-150 ease-in-out"
-            disabled={isSubmitting}
-          >
+            disabled={isSubmitting}>
             {isSubmitting ? "שולח..." : "שלח"}
           </button>
         </div>

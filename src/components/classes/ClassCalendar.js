@@ -14,8 +14,8 @@ export const ClassCalendar = ({
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const getDays = () => {
-    const weekStart = startOfWeek(setSelectedDate(selectedDate), { weekStartsOn: 0 });
-    const weekEnd = endOfWeek(setSelectedDate(selectedDate), { weekStartsOn: 0 });
+    const weekStart = startOfWeek(selectedDate, { weekStartsOn: 0 });
+    const weekEnd = endOfWeek(selectedDate, { weekStartsOn: 0 });
     return eachDayOfInterval({ start: weekStart, end: weekEnd });
   };
 

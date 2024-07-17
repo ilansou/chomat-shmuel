@@ -142,18 +142,16 @@ export const Dashboard = () => {
       const data = doc.data();
       return {
         title: truncateText(data.title),
-        expireDate: data.expireDate ? data.expireDate.toDate().toISOString() : null, // Convert Firestore timestamp to ISO string if exists
-        eventDate: data.expireDate ? data.expireDate.toDate().toISOString() : null,
+        description: truncateText(data.description),
         imageUrl: truncateText(data.imageUrl),
+        URL: truncateText(data.URL),
+        eventDate: data.eventDate ? data.eventDate.toDate().toISOString() : null,
+        audienceAge: data.audienceAge,
         location: truncateText(data.location),
         participant: truncateText(data.participant),
-        otherAudience: truncateText(data.otherAudience),
         price: truncateText(data.price),
         eventDuration: data.eventDuration,
-        description: truncateText(data.description),
         id: truncateText(data.id ?? ""), // TODO remove optional
-        audienceAge: data.audienceAge,
-        URL: truncateText(data.URL),
       };
     });
 
@@ -168,29 +166,23 @@ export const Dashboard = () => {
 
     const classesData = classesSnapshot.docs.map((doc) => {
       const data = doc.data();
+      console.log(data.weekdays);
       return {
         title: data.title,
-        expireDate: data.expireDate
-          ? moment(data.expireDate.toDate()).format("YYYY-MM-DD HH:mm:ss")
-          : null, // Format date with moment
+        description: data.description,
+        imageUrl: truncateText(data.imageUrl),
+        URL: data.URL,
+        category: data.category,
         frequency: data.frequency,
-        imageUrl: data.imageUrl,
+        startTime: data.startTime,
+        duration: data.duration,
         location: data.location,
         participant: data.participant,
         price: data.price,
-        teacherEmail: data.teacherEmail,
         teacherName: data.teacherName,
+        teacherEmail: data.teacherEmail,
         teacherPhone: data.teacherPhone,
-        weekday: data.weekday,
-        classDuration: data.classDuration,
-        duration: data.duration,
-        audienceAge: data.audienceAge,
-        classDate: data.classDate
-          ? moment(data.classDate.toDate()).format("YYYY-MM-DD HH:mm:ss")
-          : null, // Format date with moment
-        description: data.description,
-        category: data.category,
-        URL: data.URL,
+        weekdays: data.weekdays.join(", "), // Convert array to comma-separated string
       };
     });
 
@@ -208,9 +200,9 @@ export const Dashboard = () => {
       return {
         title: data.title,
         description: data.description,
-        imageUrl: data.imageUrl,
-        expireDate: data.expireDate.toDate().toISOString(), // Convert Firestore timestamp to ISO string
-        updateDate: data.updateDate.toDate().toISOString(), // Convert Firestore timestamp to ISO string
+        imageUrl: truncateText(data.imageUrl),
+        updateDate: data.updateDate ? data.updateDate.toDate().toISOString() : null, // Convert Firestore timestamp to ISO string
+        expireDate: data.expireDate ? data.expireDate.toDate().toISOString() : null, // Convert Firestore timestamp to ISO string
       };
     });
 

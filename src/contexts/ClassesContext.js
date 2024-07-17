@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useCallback } from "react";
+import React, { useEffect, createContext, useState, useContext, useCallback } from "react";
 import { getDocs, deleteDoc, doc, addDoc, updateDoc, query } from "firebase/firestore";
 import { db } from "../firebase";
 import { collection } from "firebase/firestore";
@@ -7,6 +7,7 @@ export const ClassesContext = createContext();
 
 export const ClassesContextProvider = ({ children }) => {
   const [classList, setClassList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const classesCollectionRef = collection(db, "classes");
 
   const getClassList = useCallback(async () => {
@@ -22,6 +23,17 @@ export const ClassesContextProvider = ({ children }) => {
       console.error("Error getting classes: ", error);
     }
   }, [classesCollectionRef]);
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      setLoading(true);
+      await getClassList();
+      setLoading(false);
+    };
+    fetchClasses();
+  }, []);
+
+  console.log(classList);
 
   const deleteClass = async (id) => {
     try {
@@ -67,7 +79,8 @@ export const ClassesContextProvider = ({ children }) => {
   };
 
   return (
-    <ClassesContext.Provider value={{ classList, getClassList, deleteClass, addClass, editClass }}>
+    <ClassesContext.Provider
+      value={{ classList, loading, getClassList, deleteClass, addClass, editClass }}>
       {children}
     </ClassesContext.Provider>
   );

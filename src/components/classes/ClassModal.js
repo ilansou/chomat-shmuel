@@ -14,12 +14,12 @@ const weekDays = {
 };
 
 const mapWeekDaysToHebrew = (englishDays) => {
-  return englishDays.map(day => weekDays[day] || day);
+  return englishDays.map((day) => weekDays[day] || day);
 };
 
 export const ClassModal = ({ classItem, onClose }) => {
   const { user } = useAuth();
-  const { deleteClass } = useClasses();
+  const { deleteClass, getClassList } = useClasses();
   const [isEditing, setIsEditing] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
 
@@ -27,6 +27,7 @@ export const ClassModal = ({ classItem, onClose }) => {
     if (window.confirm("האם אתה בטוח שברצונך למחוק חוג זה?")) {
       try {
         await deleteClass(classItem.id);
+        await getClassList();
         onClose();
       } catch (error) {
         console.error("Error deleting class: ", error);
@@ -41,12 +42,11 @@ export const ClassModal = ({ classItem, onClose }) => {
   const openImageModal = () => {
     setShowImageModal(true);
   };
-  
+
   const closeImageModal = () => {
     setShowImageModal(false);
   };
 
-  
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
@@ -94,14 +94,15 @@ export const ClassModal = ({ classItem, onClose }) => {
 
               <div className="space-y-4">
                 <div className="bg-gray-100 p-4 rounded-lg">
-                {classItem.frequency && (
+                  {classItem.frequency && (
                     <p>
                       <strong>תדירות:</strong> {classItem.frequency}
                     </p>
                   )}
                   {classItem.weekdays && classItem.weekdays.length > 0 && (
                     <p>
-                      <strong>ימים בשבוע:</strong> {mapWeekDaysToHebrew(classItem.weekdays).join(", ")}
+                      <strong>ימים בשבוע:</strong>{" "}
+                      {mapWeekDaysToHebrew(classItem.weekdays).join(", ")}
                     </p>
                   )}
                   {classItem.startTime && (
@@ -174,7 +175,7 @@ export const ClassModal = ({ classItem, onClose }) => {
                       onClick={handleDelete}
                       className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition-colors w-full">
                       מחק חוג
-                      </button>
+                    </button>
                   </div>
                 )}
               </div>
@@ -189,10 +190,19 @@ export const ClassModal = ({ classItem, onClose }) => {
             <div className="bg-white rounded-lg shadow-xl p-4 relative">
               <button
                 className="absolute top-2 left-2 text-gray-500 hover:text-gray-700 transition-colors"
-                onClick={closeImageModal}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                onClick={closeImageModal}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
               <div className="overflow-auto">

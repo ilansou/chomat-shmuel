@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useCallback } from "react";
+import React, { createContext, useState, useContext, useCallback, useEffect } from "react";
 import {
   getDocs,
   deleteDoc,
@@ -8,6 +8,9 @@ import {
   query,
   orderBy,
   collection,
+  where,
+  writeBatch,
+  Timestamp,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -15,6 +18,7 @@ export const NewsContext = createContext();
 
 export const NewsContextProvider = ({ children }) => {
   const [newsList, setNewsList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const newsCollectionRef = collection(db, "news and updates");
 
   const getNewsList = useCallback(async () => {
@@ -32,6 +36,34 @@ export const NewsContextProvider = ({ children }) => {
       console.error("Error getting news: ", error);
     }
   }, [newsCollectionRef]);
+
+  const cleanupExpiredNews = async () => {
+    const twoMonthsAgo = new Date();
+    twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
+
+    const q = query(newsCollectionRef, where("expireDate", "<", Timestamp.fromDate(twoMonthsAgo)));
+    const snapshot = await getDocs(q);
+
+    const batch = writeBatch(db);
+    snapshot.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    if (!snapshot.empty) {
+      await batch.commit();
+      console.log(`${snapshot.size} expired news items deleted`);
+    }
+  };
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      setLoading(true);
+      await getNewsList();
+      setLoading(false);
+    };
+    fetchNews();
+    cleanupExpiredNews();
+  }, []);
 
   const deleteNews = async (id) => {
     try {
@@ -76,7 +108,7 @@ export const NewsContextProvider = ({ children }) => {
   };
 
   return (
-    <NewsContext.Provider value={{ newsList, getNewsList, deleteNews, addNews, editNews }}>
+    <NewsContext.Provider value={{ newsList, loading, getNewsList, deleteNews, addNews, editNews }}>
       {children}
     </NewsContext.Provider>
   );

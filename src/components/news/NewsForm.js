@@ -24,7 +24,7 @@ const schema = yup.object().shape({
 export const NewsForm = ({ news, onClose, onSubmit: handleUpdate, isEditing }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileBase64, setFileBase64] = useState(null);
-  const { addNews, editNews } = useNews();
+  const { addNews, editNews, getNewsList } = useNews();
   const {
     register,
     handleSubmit,
@@ -63,6 +63,7 @@ export const NewsForm = ({ news, onClose, onSubmit: handleUpdate, isEditing }) =
         await addNews(newsData, fileBase64);
       }
       setIsSubmitting(false);
+      await getNewsList();
       onClose();
     } catch (error) {
       setIsSubmitting(false);
