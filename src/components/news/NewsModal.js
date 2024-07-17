@@ -8,6 +8,7 @@ export const NewsModal = ({ news, onClose }) => {
   const { user } = useAuth();
   const { deleteNews, editNews } = useNews();
   const [isEditing, setIsEditing] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
 
   const handleDelete = async () => {
     if (window.confirm("האם אתה בטוח שברצונך למחוק עדכון זה?")) {
@@ -18,6 +19,14 @@ export const NewsModal = ({ news, onClose }) => {
         console.error("Error deleting news item: ", error);
       }
     }
+  };
+
+  const openImageModal = () => {
+    setShowImageModal(true);
+  };
+
+  const closeImageModal = () => {
+    setShowImageModal(false);
   };
 
   const handleEdit = () => {
@@ -54,12 +63,14 @@ export const NewsModal = ({ news, onClose }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-0 gap-6">
               <div className="space-y-0">
-                {news.imageUrl && (
-                  <img
-                    src={news.imageUrl}
-                    alt={news.title}
-                    className="w-full h-[500px] object-contain rounded-lg"
-                  />
+               {news.imageUrl && (
+                  <div className="cursor-pointer" onClick={openImageModal}>
+                    <img
+                      src={news.imageUrl}
+                      alt={news.title}
+                      className="w-full h-[500px] object-contain rounded-lg"
+                    />
+                  </div>
                 )}
               </div>
 
@@ -83,6 +94,25 @@ export const NewsModal = ({ news, onClose }) => {
           </div>
         )}
       </div>
+      {showImageModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-auto">
+          <div className="max-w-3xl max-h-[90vh]">
+            <div className="bg-white rounded-lg shadow-xl p-4 relative">
+              <button
+                className="absolute top-2 left-2 text-gray-500 hover:text-gray-700 transition-colors"
+                onClick={closeImageModal}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              <div className="overflow-auto">
+                <img src={news.imageUrl} alt={news.title} className="w-full" />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
