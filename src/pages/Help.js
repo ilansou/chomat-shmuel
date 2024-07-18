@@ -4,6 +4,7 @@ import { useHelp } from "../hooks/useHelp";
 import { RiDeleteBin6Line, RiEdit2Line } from "react-icons/ri"; // Example icons
 import { MdAdd } from "react-icons/md";
 import { FaMinus } from "react-icons/fa6";
+import PageFeedback from "../components/PageFeedback";
 
 
 
@@ -151,6 +152,9 @@ export const Help = () => {
           )}
         </div>
       ))}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <PageFeedback pageId="Help" />
+      </div>
     </div>
   );
 };
