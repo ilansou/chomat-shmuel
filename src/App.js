@@ -15,6 +15,8 @@ import { Footer } from "./components/Footer";
 import { EventsContextProvider } from "./contexts/EventsContext";
 import { NewsContextProvider } from "./contexts/NewsContext";
 import { ClassesContextProvider } from "./contexts/ClassesContext";
+import AboutUs from "./pages/AboutUs";
+import { Help } from "./pages/Help";
 
 
 function App() {
@@ -33,6 +35,9 @@ function App() {
               <Route path="/newsAndUpdates" element={<News />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/aboutus" element={<AboutUs />} />
+              <Route path="/help" element={<Help />} />
+
               <Route
                 path="/dashboard"
                 element={

@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
-import { FaFacebook, FaYoutube, FaWhatsapp, FaInstagram } from "react-icons/fa"; // Import the Instagram icon
+import { FaFacebook, FaYoutube, FaBookOpen, FaWhatsapp, FaInstagram } from "react-icons/fa"; // Import the Instagram icon
+import { Link } from "react-router-dom";
+import { IoIosHelpCircleOutline } from "react-icons/io";
+
 
 const socialItems = [
   { name: "Facebook", icon: FaFacebook, link: "https://www.facebook.com/harhomat" },
+  { name: "Youtube", icon: FaYoutube, link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw" },
+  { name: "WhatsApp", icon: FaWhatsapp, link: "https://wa.me/972524337664" }, // Add the WhatsApp item
+  { name: "Instagram", icon: FaInstagram, link: "https://www.instagram.com/homat.shmuel/?igsh=NWhhdTRnNmVteDg0" }, // Add the Instagram item
+];
+
+const BottomLinks = [
   {
-    name: "Youtube",
-    icon: FaYoutube,
-    link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw",
+    name: "עזרה",
+    icon: IoIosHelpCircleOutline,
+    link: "/help",
   },
-  { name: "WhatsApp", icon: FaWhatsapp, link: "https://wa.me/972524337664" }, 
-  {
-    name: "Instagram",
-    icon: FaInstagram,
-    link: "https://www.instagram.com/homat.shmuel/?igsh=NWhhdTRnNmVteDg0",
-  }, 
 ];
 
 export const Footer = () => {
@@ -83,7 +86,8 @@ export const Footer = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full flex items-center justify-center py-3 px-5 border border-transparent text-base font-medium rounded-full text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                    className="w-full flex items-center justify-center py-3 px-5 border border-transparent text-base font-medium rounded-full text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                  >
                     {isSubmitting ? "שולח..." : "צרפו אותי"}
                   </button>
                 </div>
@@ -102,7 +106,18 @@ export const Footer = () => {
 
         {/* Bottom Section */}
         <div className="py-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-base text-gray-500">&copy; 2024</p>
+          <div className="flex items-center gap-2">
+            <p className="text-base text-gray-500">&copy; 2024</p>
+            <div>
+              {BottomLinks.map((link) => {
+                return (
+                  <Link className="font-medium underline" to={link.link} key={link.name}>
+                    {link.name}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
           <div className="flex mt-4 md:mt-0 space-x-6 rtl:space-x-reverse">
             {socialItems.map((item, index) => (
               <a
@@ -110,7 +125,8 @@ export const Footer = () => {
                 href={item.link}
                 className="text-gray-500 hover:text-gray-600 transition-colors duration-300"
                 target="_blank"
-                rel="noopener noreferrer">
+                rel="noopener noreferrer"
+              >
                 <span className="sr-only">{item.name}</span>
                 <item.icon className="h-6 w-6" aria-hidden="true" />
               </a>
