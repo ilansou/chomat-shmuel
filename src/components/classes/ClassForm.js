@@ -21,13 +21,12 @@ export const ClassForm = ({ classItem, onClose, onSubmit: handleUpdate, isEditin
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileBase64, setFileBase64] = useState(null);
   const [showOtherTextInput, setShowOtherTextInput] = useState(false);
-  const { addClass, editClass } = useClasses();
+  const { addClass, editClass, getClassList } = useClasses();
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    setValue,
     reset,
   } = useForm({
     resolver: yupResolver(schema),
@@ -62,6 +61,7 @@ export const ClassForm = ({ classItem, onClose, onSubmit: handleUpdate, isEditin
         await addClass(classData, fileBase64);
       }
       setIsSubmitting(false);
+      await getClassList();
       onClose();
     } catch (error) {
       setIsSubmitting(false);

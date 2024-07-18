@@ -21,6 +21,16 @@ const mapWeekDaysToHebrew = (englishDays) => {
   return englishDays.map((day) => weekDays[day] || day);
 };
 
+const categoryColors = {
+  "חוגי הגיל השלישי": "bg-red-200",
+  "התעמלות וספורט": "bg-blue-200",
+  "חוגי מחול": "bg-green-200",
+  "חוגי אומנות": "bg-yellow-200",
+  "חוגי העשרה": "bg-purple-200",
+  'חוגי צמי"ד': "bg-pink-200",
+  אחר: "bg-gray-200",
+};
+
 export const ClassCard = ({ classItem, onClick }) => {
   return (
     <div
@@ -33,7 +43,10 @@ export const ClassCard = ({ classItem, onClick }) => {
             alt={classItem.title}
             className="w-full h-full object-fill"
           />
-          <div className="absolute top-0 right-0 bg-indigo-500 text-white px-2 py-1 rounded-bl-lg text-center">
+          <div
+            className={`absolute top-0 right-0 text-black px-2 py-1 rounded-bl-lg text-center ${
+              categoryColors[classItem.category] || categoryColors["אחר"]
+            }`}>
             <div className="text-xl font-bold">{classItem.category}</div>
           </div>
         </div>

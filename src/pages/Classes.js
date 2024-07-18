@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ClassModal } from "../components/classes/ClassModal";
 import { ClassForm } from "../components/classes/ClassForm";
 import { useAuth } from "../contexts/AuthContext";
@@ -6,27 +6,14 @@ import { ClassCalendar } from "../components/classes/ClassCalendar";
 import { useClasses } from "../contexts/ClassesContext";
 import { ClassCard } from "../components/classes/ClassCard";
 import PageFeedback from "../components/PageFeedback";
-import { ClipLoader } from "react-spinners";
-
 
 export const Classes = () => {
   const { user } = useAuth();
   const [selectedClass, setSelectedClass] = useState(null);
   const [showClassForm, setShowClassForm] = useState(false);
-  const { getClassList, classList } = useClasses();
+  const { classList, loading } = useClasses();
   const [categoryFilter, setCategoryFilter] = useState("all");
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchClasses = async () => {
-      setLoading(true);
-      await getClassList();
-      setLoading(false);
-    };
-    fetchClasses();
-  }, []);
-
-  
   const categoryOptions = [
     { value: "all", label: "הכל" },
     { value: "חוגי הגיל השלישי", label: "חוגי הגיל השלישי" },
@@ -48,18 +35,11 @@ export const Classes = () => {
     אחר: "bg-gray-200",
   };
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center h-60">
-        <ClipLoader color={"#000"} loading={loading} size={50} />
-      </div>
-    );
-
   // Filter and sort classes by category
   const filteredAndSortedClassList = classList
     .filter((classItem) => categoryFilter === "all" || classItem.category === categoryFilter)
     .sort((a, b) => {
-      const categoryOrder = categoryOptions.map(option => option.value);
+      const categoryOrder = categoryOptions.map((option) => option.value);
       return categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category);
     });
 

@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
-import { FaFacebook, FaYoutube, FaBookOpen, FaWhatsapp, FaInstagram } from "react-icons/fa"; // Import the Instagram icon
-import { Link } from "react-router-dom";
-import { IoIosHelpCircleOutline } from "react-icons/io";
-
+import { FaFacebook, FaYoutube, FaWhatsapp, FaInstagram } from "react-icons/fa"; // Import the Instagram icon
 
 const socialItems = [
   { name: "Facebook", icon: FaFacebook, link: "https://www.facebook.com/harhomat" },
-  { name: "Youtube", icon: FaYoutube, link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw" },
-  { name: "WhatsApp", icon: FaWhatsapp, link: "https://wa.me/972524337664" }, // Add the WhatsApp item
   {
-    name: "About Us",
-    icon: FaBookOpen,
-    link: "https://online.fliphtml5.com/qfboh/fyni/?1609945510152#p=1",
+    name: "Youtube",
+    icon: FaYoutube,
+    link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw",
   },
-  { name: "Instagram", icon: FaInstagram, link: "https://www.instagram.com/homat.shmuel/?igsh=NWhhdTRnNmVteDg0" }, // Add the Instagram item
+  { name: "WhatsApp", icon: FaWhatsapp, link: "https://wa.me/972524337664" }, 
+  {
+    name: "Instagram",
+    icon: FaInstagram,
+    link: "https://www.instagram.com/homat.shmuel/?igsh=NWhhdTRnNmVteDg0",
+  }, 
 ];
 
 const BottomLinks = [
@@ -67,8 +67,8 @@ export const Footer = () => {
                 הישארו מעודכנים
               </h2>
               <p className="mt-3 max-w-3xl text-lg text-gray-500">
-                תהיו הראשונים לדעת על אירועים, חוגים וכל מה שחדש במנהל. אל
-                תדאגו, לא נחפור לכם יותר מדי :)
+                תהיו הראשונים לדעת על אירועים, חוגים וכל מה שחדש במנהל. אל תדאגו, לא נחפור לכם יותר
+                מדי :)
               </p>
             </div>
             <div className="mt-8 lg:mt-0 lg:ml-8">
@@ -80,13 +80,8 @@ export const Footer = () => {
                   id="email-address"
                   name="email"
                   type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-5 py-3 border border-gray-300 shadow-sm placeholder-gray-400 focus:ring-1 focus:ring-purple-500 focus:border-purple-500 sm:max-w-xs rounded-full"
                   placeholder="הזינו כתובת מייל שלכם"
-                />
                 <div className="mt-3 rounded-full mx-5 shadow sm:mt-0 sm:ml-3 sm:flex-shrink-0">
                   <button
                     type="submit"
@@ -100,11 +95,8 @@ export const Footer = () => {
               {submitMessage && (
                 <p
                   className={`mt-3 text-sm ${
-                    submitMessage.includes("שגיאה")
-                      ? "text-red-500"
-                      : "text-green-500"
-                  }`}
-                >
+                    submitMessage.includes("שגיאה") ? "text-red-500" : "text-green-500"
+                  }`}>
                   {submitMessage}
                 </p>
               )}

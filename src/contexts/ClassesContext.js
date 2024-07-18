@@ -1,13 +1,5 @@
-import React, { createContext, useState, useContext, useCallback } from "react";
-import {
-  getDocs,
-  deleteDoc,
-  doc,
-  addDoc,
-  updateDoc,
-  query,
-  orderBy,
-} from "firebase/firestore";
+import React, { useEffect, createContext, useState, useContext, useCallback } from "react";
+import { getDocs, deleteDoc, doc, addDoc, updateDoc, query } from "firebase/firestore";
 import { db } from "../firebase";
 import { collection } from "firebase/firestore";
 
@@ -15,18 +7,16 @@ export const ClassesContext = createContext();
 
 export const ClassesContextProvider = ({ children }) => {
   const [classList, setClassList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const classesCollectionRef = collection(db, "classes");
 
   const getClassList = useCallback(async () => {
     try {
-      const classQuery = query(
-        classesCollectionRef,
-        orderBy("title"),
-      );
+      const classQuery = query(classesCollectionRef);
       const data = await getDocs(classQuery);
       const filteredClasses = data.docs.map((doc) => ({
         id: doc.id,
-      ...doc.data(),
+        ...doc.data(),
       }));
       setClassList(filteredClasses);
     } catch (error) {
@@ -34,10 +24,21 @@ export const ClassesContextProvider = ({ children }) => {
     }
   }, [classesCollectionRef]);
 
+  useEffect(() => {
+    const fetchClasses = async () => {
+      setLoading(true);
+      await getClassList();
+      setLoading(false);
+    };
+    fetchClasses();
+  }, []);
+
+  console.log(classList);
+
   const deleteClass = async (id) => {
     try {
       await deleteDoc(doc(classesCollectionRef, id));
-      setClassList((prevClasses) => prevClasses.filter((classItem) => classItem.id!== id));
+      setClassList((prevClasses) => prevClasses.filter((classItem) => classItem.id !== id));
     } catch (err) {
       console.error("Error deleting class: ", err);
     }
@@ -46,11 +47,11 @@ export const ClassesContextProvider = ({ children }) => {
   const addClass = async (data, imageBase64) => {
     try {
       const classData = {
-      ...data,
-      imageUrl: imageBase64,
+        ...data,
+        imageUrl: imageBase64,
       };
       const docRef = await addDoc(classesCollectionRef, classData);
-      const newClass = { id: docRef.id,...classData };
+      const newClass = { id: docRef.id, ...classData };
       setClassList((prevClasses) => [...prevClasses, newClass]);
     } catch (error) {
       console.error("Error adding class: ", error);
@@ -62,12 +63,14 @@ export const ClassesContextProvider = ({ children }) => {
     try {
       const classRef = doc(classesCollectionRef, id);
       const classData = {
-      ...updatedData,
-      imageUrl: imageBase64,
+        ...updatedData,
+        imageUrl: imageBase64,
       };
       await updateDoc(classRef, classData);
       setClassList((prevClasses) =>
-        prevClasses.map((classItem) => (classItem.id === id? {...classItem,...classData } : classItem))
+        prevClasses.map((classItem) =>
+          classItem.id === id ? { ...classItem, ...classData } : classItem
+        )
       );
     } catch (error) {
       console.error("Error editing class: ", error);
@@ -77,8 +80,7 @@ export const ClassesContextProvider = ({ children }) => {
 
   return (
     <ClassesContext.Provider
-      value={{ classList, getClassList, deleteClass, addClass, editClass }}
-    >
+      value={{ classList, loading, getClassList, deleteClass, addClass, editClass }}>
       {children}
     </ClassesContext.Provider>
   );

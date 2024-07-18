@@ -43,14 +43,6 @@ export function AuthContextProvider({ children }) {
       sessionTimer = setTimeout(logOut, 8 * 60 * 60 * 1000); // 8 hours max session time
     };
 
-    // Check for multiple tabs
-    const checkMultipleTabs = () => {
-      const tabCount = parseInt(localStorage.getItem("tabCount") || "0");
-      if (tabCount > 1) {
-        logOut();
-      }
-    };
-
     // Check for network status
     const checkNetworkStatus = () => {
       if (!navigator.onLine) {
@@ -72,7 +64,6 @@ export function AuthContextProvider({ children }) {
         "tabCount",
         (parseInt(localStorage.getItem("tabCount") || "0") + 1).toString()
       );
-      window.addEventListener("storage", checkMultipleTabs);
 
       window.addEventListener("offline", checkNetworkStatus);
 
@@ -84,7 +75,6 @@ export function AuthContextProvider({ children }) {
       window.removeEventListener("keypress", resetInactivityTimer);
       window.removeEventListener("scroll", resetInactivityTimer);
       window.removeEventListener("click", resetInactivityTimer);
-      window.removeEventListener("storage", checkMultipleTabs);
       window.removeEventListener("offline", checkNetworkStatus);
 
       if (inactivityTimer) clearTimeout(inactivityTimer);

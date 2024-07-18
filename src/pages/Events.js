@@ -1,29 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { EventModal } from "../components/events/EventModal";
 import { EventForm } from "../components/events/EventForm";
 import { useAuth } from "../contexts/AuthContext";
 import { EventCalendar } from "../components/events/EventCalendar";
 import { useEvents } from "../contexts/EventsContext";
-import PageFeedback from "../components/PageFeedback"; 
-import { ClipLoader } from "react-spinners"; // Import the spinner
+import PageFeedback from "../components/PageFeedback";
 
 export const Events = () => {
   const { user } = useAuth();
+  // eslint-disable-next-line no-unused-vars
   const [date, setDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showEventForm, setShowEventForm] = useState(false);
-  const { getEventList, eventList } = useEvents();
+  const { eventList } = useEvents();
   const [audienceFilter, setAudienceFilter] = useState("all");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchClasses = async () => {
-      setLoading(true);
-      await getEventList();
-      setLoading(false);
-    };
-    fetchClasses();
-  }, []);
 
   const audienceOptions = [
     { value: "all", label: "הכל" },
@@ -57,12 +47,6 @@ export const Events = () => {
     "חרדי-תורני": "bg-amber-200",
     אחר: "bg-gray-400",
   };
-
-  if (loading) return (
-    <div className="flex justify-center items-center h-60">
-      <ClipLoader color={"#000"} loading={loading} size={50} />
-    </div>
-  );
 
   const handleAddEvent = () => {
     setShowEventForm(true);

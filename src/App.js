@@ -12,7 +12,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { AuthContextProvider } from "./contexts/AuthContext";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
-import {  EventsContextProvider } from "./contexts/EventsContext";
+import { EventsContextProvider } from "./contexts/EventsContext";
 import { NewsContextProvider } from "./contexts/NewsContext";
 import { ClassesContextProvider } from "./contexts/ClassesContext";
 import AboutUs from "./pages/AboutUs";

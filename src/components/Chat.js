@@ -4,18 +4,15 @@ import { format } from "date-fns";
 import { useAuth } from "../contexts/AuthContext";
 import whatsappBackground from "../images/WhatsApp.png";
 import { NewsForm } from "./news/NewsForm";
+import { ClipLoader } from "react-spinners";
 import { NewsModal } from "./news/NewsModal";
 
 export const Chat = () => {
   const scrollContainerRef = useRef();
-  const { newsList, getNewsList } = useNews();
+  const { newsList, loading } = useNews();
   const { user } = useAuth();
   const [selectedNews, setSelectedNews] = useState(null);
   const [showNewsForm, setShowNewsForm] = useState(false);
-
-  useEffect(() => {
-    getNewsList();
-  }, []);
 
   const handleSelectNews = (news) => {
     setSelectedNews(news);
@@ -42,6 +39,12 @@ export const Chat = () => {
 
     const fileType = getFileType(imageUrl);
 
+    if (loading)
+      return (
+        <div className="flex justify-center items-center h-60">
+          <ClipLoader color={"#000"} loading={loading} size={50} />
+        </div>
+      );
     return (
       <div className="mb-2 border rounded-lg overflow-hidden">
         <div className="p-2 bg-gray-100">
