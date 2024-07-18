@@ -81,9 +81,9 @@ export const EventModal = ({ event, onClose }) => {
                     <strong>מיקום:</strong> {event.location}
                   </p>
                 )}
-                {event.price && (
+                {event.price !== undefined  && (
                   <p>
-                    <strong>מחיר:</strong> {event.price} ₪
+                    <strong>מחיר:</strong> {event.price !== null ? event.price : " "} ₪
                   </p>
                 )}
                   {event.URL && (
