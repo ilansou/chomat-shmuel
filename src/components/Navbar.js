@@ -95,7 +95,7 @@ export const Navbar = () => {
                     to="/dashboard"
                     className="text-blue-800 hover:text-pink-400 pr-6 py-2 rounded-md text-xl font-bold transition duration-300 ease-in-out"
                   >
-                    סטטיסטיקות
+                    לוח בקרה
                   </Link>
                 )}
               </div>
