@@ -4,7 +4,6 @@ import { FaFacebook, FaYoutube, FaBookOpen, FaWhatsapp, FaInstagram } from "reac
 import { Link } from "react-router-dom";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 
-
 const socialItems = [
   { name: "Facebook", icon: FaFacebook, link: "https://www.facebook.com/harhomat" },
   { name: "Youtube", icon: FaYoutube, link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw" },
@@ -111,7 +110,11 @@ export const Footer = () => {
             <div>
               {BottomLinks.map((link) => {
                 return (
-                  <Link className="font-medium underline" to={link.link} key={link.name}>
+                  <Link
+                    className="font-medium underline"
+                    to={link.link}
+                    key={link.name}
+                  >
                     {link.name}
                   </Link>
                 );

@@ -13,14 +13,13 @@ import { db } from "../firebase";
 
 const sectionsCollectionRef = collection(db, "about");
 
-
 export function useAbout() {
   const [sectionList, setSectionList] = useState([]);
 
   const getSectionList = useCallback(async () => {
     console.log("ooooo");
     try {
-      const sectionQuery = query(sectionsCollectionRef, orderBy("header"));
+      const sectionQuery = query(sectionsCollectionRef);
       const data = await getDocs(sectionQuery);
       const filteredSections = data.docs.map((doc) => ({
         id: doc.id,
