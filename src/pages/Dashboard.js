@@ -44,6 +44,8 @@ export const Dashboard = () => {
     recentViews: 0,
     notExpired: 0,
   });
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [availableYears, setAvailableYears] = useState([]); 
   const [feedbackData, setFeedbackData] = useState([]);
 
   useEffect(() => {
@@ -51,7 +53,13 @@ export const Dashboard = () => {
       const eventsRef = collection(db, "events");
       const q = query(eventsRef);
       const querySnapshot = await getDocs(q);
-      const eventsData = querySnapshot.docs.map((doc) => doc.data());
+      const eventsData = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        date: new Date(doc.data().eventDate.seconds * 1000),
+      }));
+      const years = [...new Set(eventsData.map(event => event.date.getFullYear()))];
+      setAvailableYears(years.sort((a, b) => b - a));
+
       const upcoming = eventsData.filter(
         (event) => new Date(event.eventDate.seconds * 1000) > new Date()
       ).length;
@@ -80,6 +88,7 @@ export const Dashboard = () => {
         audienceAgeStats,
         monthlyStats,
       });
+      updateMonthlyStats(eventsData, selectedYear);
     };
 
     const fetchClassData = async () => {
@@ -124,7 +133,22 @@ export const Dashboard = () => {
     fetchClassData();
     fetchNewsData();
     fetchFeedbackData();
-  }, []);
+  }, [selectedYear]);
+
+
+  const updateMonthlyStats = (eventsData, year) => {
+    const filteredEvents = eventsData.filter((event) => event.date.getFullYear() === year);
+    const monthlyStats = filteredEvents.reduce((acc, event) => {
+      const month = moment(event.date).format("MMMM");
+      acc[month] = (acc[month] || 0) + 1;
+      return acc;
+    }, {});
+  
+    setEventStats((prevStats) => ({
+      ...prevStats,
+      monthlyStats,
+    }));
+  };
 
   const truncateText = (text, maxLength = 32767) => {
     if (typeof text === "string" && text.length > maxLength) {
@@ -216,7 +240,7 @@ export const Dashboard = () => {
     XLSX.writeFile(workbook, "dashboard_data.xlsx");
   };
 
-  const monthlyEventData = {
+ const monthlyEventData = {
     labels: Object.keys(eventStats.monthlyStats),
     datasets: [
       {
@@ -250,7 +274,7 @@ export const Dashboard = () => {
       x: {
         title: {
           display: true,
-          // text: 'Month',
+          text: `אירועים לשנת ${selectedYear}`,
         },
       },
     },
@@ -440,8 +464,21 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-center">אירועים לפי חודשים</h2>
+         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">אירועים לפי חודשים</h2>
+            <select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(Number(e.target.value))}
+              className="p-2 border rounded"
+            >
+              {availableYears.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="h-[300px]">
             <Bar data={monthlyEventData} options={monthlyEventOptions} />
           </div>
