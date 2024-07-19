@@ -35,7 +35,7 @@ function App() {
               <Route path="/newsAndUpdates" element={<News />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/aboutus" element={<AboutUs />} />
+              <Route path="/about-us" element={<AboutUs />} />
               <Route path="/help" element={<Help />} />
 
               <Route
