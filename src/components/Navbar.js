@@ -78,7 +78,8 @@ export const Navbar = () => {
     if (!weather) return faCloud;
 
     const weatherId = weather?.weather[0].id;
-    const isNight = weather.dt > weather.sys.sunset || weather.dt < weather.sys.sunrise;
+    const isNight =
+      weather.dt > weather.sys.sunset || weather.dt < weather.sys.sunrise;
 
     if (weatherId >= 200 && weatherId < 600) return faCloudRain;
     if (weatherId >= 600 && weatherId < 700) return faSnowflake;
@@ -220,7 +221,7 @@ export const Navbar = () => {
                 </button>
               ) : (
                 <Link to="/login" onClick={handleCloseMenu} className="w-full">
-                  <button className="w-full text-gray-600 hover:text-gray-800 text-lg font-medium py-1.5 pr-6 transition duration-300 ease-in-out">
+                  <button  className="w-full text-gray-600 hover:text-gray-800 text-lg font-medium py-1.5 pr-6 transition duration-300 ease-in-out">
                     <FontAwesomeIcon icon={faSignInAlt} className="mr-2" />
                     התחבר
                   </button>
