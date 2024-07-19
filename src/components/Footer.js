@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
-import { FaFacebook, FaYoutube, FaWhatsapp, FaInstagram } from "react-icons/fa"; // Import the Instagram icon
+import { FaFacebook, FaYoutube, FaWhatsapp, FaInstagram } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 
 const socialItems = [
   { name: "Facebook", icon: FaFacebook, link: "https://www.facebook.com/harhomat" },
   { name: "Youtube", icon: FaYoutube, link: "https://www.youtube.com/channel/UCY9XtfWYjuDqrqZwQBFp4Hw" },
-  { name: "WhatsApp", icon: FaWhatsapp, link: "https://wa.me/972524337664" }, // Add the WhatsApp item
-  { name: "Instagram", icon: FaInstagram, link: "https://www.instagram.com/homat.shmuel/?igsh=NWhhdTRnNmVteDg0" }, // Add the Instagram item
+  { name: "WhatsApp", icon: FaWhatsapp, link: "https://wa.me/972524337664" }, 
+  { name: "Instagram", icon: FaInstagram, link: "https://www.instagram.com/homat.shmuel/?igsh=NWhhdTRnNmVteDg0" },
 ];
 
 const BottomLinks = [

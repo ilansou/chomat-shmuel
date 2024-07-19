@@ -78,8 +78,7 @@ export const Navbar = () => {
     if (!weather) return faCloud;
 
     const weatherId = weather?.weather[0].id;
-    const isNight =
-      weather.dt > weather.sys.sunset || weather.dt < weather.sys.sunrise;
+    const isNight = weather.dt > weather.sys.sunset || weather.dt < weather.sys.sunrise;
 
     if (weatherId >= 200 && weatherId < 600) return faCloudRain;
     if (weatherId >= 600 && weatherId < 700) return faSnowflake;

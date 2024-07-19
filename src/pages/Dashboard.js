@@ -124,7 +124,6 @@ export const Dashboard = () => {
     const fetchFeedbackData = async () => {
       const feedbackRef = collection(db, "pageFeedback");
       const feedbackSnapshot = await getDocs(feedbackRef);
-      // console.log(feedbackSnapshot);
       const feedbackDocs = feedbackSnapshot.docs.map((doc) => doc.data());
       setFeedbackData(feedbackDocs); // Update the feedbackData state here
     };
