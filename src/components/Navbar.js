@@ -199,7 +199,7 @@ export const Navbar = () => {
                   className="text-blue-600 hover:text-pink-400 my-2 block px-3 py-2 rounded-md text-xl font-bold text-center"
                   onClick={handleCloseMenu}
                 >
-                  סטטיסטיקות
+                  לוח בקרה
                 </Link>
               </>
             )}
