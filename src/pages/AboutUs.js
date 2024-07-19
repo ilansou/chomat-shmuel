@@ -46,8 +46,7 @@ const AboutUs = () => {
         <div className="flex justify-end">
           <button
             onClick={handleAddSection}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-          >
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
             הוסף כרטיס אודות
           </button>
         </div>

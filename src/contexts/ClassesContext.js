@@ -33,8 +33,6 @@ export const ClassesContextProvider = ({ children }) => {
     fetchClasses();
   }, []);
 
-  console.log(classList);
-
   const deleteClass = async (id) => {
     try {
       await deleteDoc(doc(classesCollectionRef, id));

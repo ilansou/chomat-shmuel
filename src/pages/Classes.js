@@ -6,6 +6,7 @@ import { ClassCalendar } from "../components/classes/ClassCalendar";
 import { useClasses } from "../contexts/ClassesContext";
 import { ClassCard } from "../components/classes/ClassCard";
 import PageFeedback from "../components/PageFeedback";
+import { ClipLoader } from "react-spinners";
 
 export const Classes = () => {
   const { user } = useAuth();
@@ -43,6 +44,12 @@ export const Classes = () => {
       return categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category);
     });
 
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-48">
+        <ClipLoader color={"#000"} loading={loading} size={50} />
+      </div>
+    );
   return (
     <div className="bg-gray-50">
       <div className="container mx-auto px-4 pt-24 max-w-7xl">

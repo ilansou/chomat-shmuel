@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
-import { FaFacebook, FaYoutube, FaBookOpen, FaWhatsapp, FaInstagram } from "react-icons/fa"; // Import the Instagram icon
+import { FaFacebook, FaYoutube, FaWhatsapp, FaInstagram } from "react-icons/fa"; // Import the Instagram icon
 import { Link } from "react-router-dom";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 

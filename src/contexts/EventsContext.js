@@ -67,8 +67,6 @@ export const EventsContextProvider = ({ children }) => {
     cleanupOldEvents();
   }, []);
 
-  console.log(eventList);
-
   const deleteEvent = async (id) => {
     try {
       await deleteDoc(doc(eventsCollectionRef, id));

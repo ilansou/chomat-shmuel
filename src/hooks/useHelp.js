@@ -1,23 +1,13 @@
 import { useState, useCallback } from "react";
-import {
-  getDocs,
-  deleteDoc,
-  doc,
-  addDoc,
-  updateDoc,
-  collection,
-  query,
-} from "firebase/firestore";
+import { getDocs, deleteDoc, doc, addDoc, updateDoc, collection, query } from "firebase/firestore";
 import { db } from "../firebase";
 
 const helpCollectionRef = collection(db, "help");
-
 
 export function useHelp() {
   const [helpList, setHelpList] = useState([]);
 
   const getHelpList = useCallback(async () => {
-    console.log("8888");
     try {
       const helpQuery = query(helpCollectionRef);
       const data = await getDocs(helpQuery);
@@ -43,11 +33,9 @@ export function useHelp() {
   const removeHelpItem = async (id) => {
     try {
       await deleteDoc(doc(helpCollectionRef, id));
-      setHelpList((prevItems) =>
-        prevItems.filter((item) => item.id !== id)
-      );
+      setHelpList((prevItems) => prevItems.filter((item) => item.id !== id));
     } catch (error) {
-      console.log(error)
+      console.log(error);
       console.error("Error deleting help item: ", error);
     }
   };
@@ -57,9 +45,7 @@ export function useHelp() {
       const helpItemRef = doc(helpCollectionRef, id);
       await updateDoc(helpItemRef, data);
       setHelpList((prevItems) =>
-        prevItems.map((item) =>
-          item.id === id ? { ...item, ...data } : item
-        )
+        prevItems.map((item) => (item.id === id ? { ...item, ...data } : item))
       );
     } catch (error) {
       console.error("Error editing help item: ", error);
