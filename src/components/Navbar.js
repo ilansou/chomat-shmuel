@@ -156,7 +156,7 @@ export const Navbar = () => {
               ) : (
                 <Link to="/login">
                   <button className="text-blue-800 hover:text-gray-800 text-lg font-medium py-1.5 px-4 transition duration-300 ease-in-out">
-                    <FontAwesomeIcon icon={faSignInAlt} className="mr-2 ml-8" />
+                    <FontAwesomeIcon icon={faSignInAlt} className="mr-2 ml-2" />
                     התחבר
                   </button>
                 </Link>
