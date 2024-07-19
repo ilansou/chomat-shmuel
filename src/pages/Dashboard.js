@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../firebase"; // Adjust path as per your Firebase setup
+import { db } from "../firebase"; 
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -125,7 +125,7 @@ export const Dashboard = () => {
       const feedbackRef = collection(db, "pageFeedback");
       const feedbackSnapshot = await getDocs(feedbackRef);
       const feedbackDocs = feedbackSnapshot.docs.map((doc) => doc.data());
-      setFeedbackData(feedbackDocs); // Update the feedbackData state here
+      setFeedbackData(feedbackDocs); 
     };
 
     fetchEventData();
