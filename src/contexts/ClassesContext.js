@@ -33,7 +33,7 @@ export const ClassesContextProvider = ({ children }) => {
     fetchClasses();
   }, []);
 
-  console.log(classList);
+  // console.log(classList);
 
   const deleteClass = async (id) => {
     try {
