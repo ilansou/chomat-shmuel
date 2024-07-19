@@ -14,7 +14,8 @@ export const Help = () => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
-  const { getHelpList, helpList, addHelpItem, removeHelpItem, editHelpItem } = useHelp();
+  const { getHelpList, helpList, addHelpItem, removeHelpItem, editHelpItem } =
+    useHelp();
 
   const toggleExpand = (index) => {
     setExpandedItems((prev) => ({
@@ -70,7 +71,8 @@ export const Help = () => {
           <div className="flex justify-end">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleAddHelpItem}>
+              onClick={handleAddHelpItem}
+            >
               הוסף
             </button>
           </div>
@@ -79,11 +81,22 @@ export const Help = () => {
 
       {helpList.map((helpItem, index) => (
         <div key={index} className="my-4 shadow-3xl p-4">
-          <div className="cursor-pointer flex items-center" onClick={() => toggleExpand(index)}>
-            <span className="ml-2 border border-[#e9e9e9] rounded-full p-1" dir="rtl">
+          <div
+            className="cursor-pointer flex items-center"
+            onClick={() => toggleExpand(index)}
+          >
+            <span
+              className="ml-2 border border-[#e9e9e9] rounded-full p-1"
+              dir="rtl"
+            >
               {expandedItems[index] ? <FaMinus /> : <MdAdd />}
             </span>
-            <h2 className="text-xl font-bold break-all">{helpItem.questionName}</h2>
+
+            {editingIndex !== index && (
+              <h2 className="text-xl font-bold break-all">
+                {helpItem.questionName}
+              </h2>
+            )}
           </div>
           {expandedItems[index] && (
             <div className="mt-2">
@@ -103,12 +116,14 @@ export const Help = () => {
                   <div className="flex justify-end gap-1 text-sm">
                     <button
                       className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                      onClick={() => setEditingIndex(null)}>
+                      onClick={() => setEditingIndex(null)}
+                    >
                       בטל
                     </button>
                     <button
                       className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                      onClick={() => handleConfirmEdit(helpItem.id)}>
+                      onClick={() => handleConfirmEdit(helpItem.id)}
+                    >
                       ערוך
                     </button>
                   </div>
@@ -128,12 +143,14 @@ export const Help = () => {
                               return newItems;
                             });
                           });
-                        }}>
+                        }}
+                      >
                         <RiDeleteBin6Line />
                       </button>
                       <button
                         className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded ml-2"
-                        onClick={() => handleEditHelpItem(index, helpItem)}>
+                        onClick={() => handleEditHelpItem(index, helpItem)}
+                      >
                         <RiEdit2Line />
                       </button>
                     </div>
