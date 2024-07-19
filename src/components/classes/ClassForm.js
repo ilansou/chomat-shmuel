@@ -17,6 +17,16 @@ const schema = yup.object().shape({
   weekdays: yup.array().min(1, "יש לבחור לפחות יום אחד").required("יש לבחור ימים"),
 });
 
+const dayTranslations = {
+  Sunday: "ראשון",
+  Monday: "שני",
+  Tuesday: "שלישי",
+  Wednesday: "רביעי",
+  Thursday: "חמישי",
+  Friday: "שישי",
+  Saturday: "שבת",
+};
+
 export const ClassForm = ({ classItem, onClose, onSubmit: handleUpdate, isEditing }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileBase64, setFileBase64] = useState(null);
@@ -37,7 +47,8 @@ export const ClassForm = ({ classItem, onClose, onSubmit: handleUpdate, isEditin
       reset({
         ...classItem,
         weekdays: classItem.weekdays
-          ? classItem.weekdays.map((day) => ({ value: day, label: day }))
+          ? classItem.weekdays.map((day) => ({ value: dayTranslations[day] || day,
+            label: dayTranslations[day] || day, }))
           : [],
       });
       setFileBase64(classItem.imageUrl || null);
@@ -48,9 +59,12 @@ export const ClassForm = ({ classItem, onClose, onSubmit: handleUpdate, isEditin
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
+      const reverseDayTranslations = Object.fromEntries(
+        Object.entries(dayTranslations).map(([k, v]) => [v, k])
+      );
       const classData = {
         ...data,
-        weekdays: data.weekdays.map((day) => day.value),
+        weekdays: data.weekdays.map((day) => reverseDayTranslations[day.value] || day.value),
       };
 
       if (isEditing) {
@@ -85,13 +99,13 @@ export const ClassForm = ({ classItem, onClose, onSubmit: handleUpdate, isEditin
   };
 
   const weekdayOptions = [
-    { label: "ראשון", value: "Sunday" },
-    { label: "שני", value: "Monday" },
-    { label: "שלישי", value: "Tuesday" },
-    { label: "רביעי", value: "Wednesday" },
-    { label: "חמישי", value: "Thursday" },
-    { label: "שישי", value: "Friday" },
-    { label: "שבת", value: "Saturday" },
+    { label: "ראשון", value: "ראשון" },
+    { label: "שני", value: "שני" },
+    { label: "שלישי", value: "שלישי" },
+    { label: "רביעי", value: "רביעי" },
+    { label: "חמישי", value: "חמישי" },
+    { label: "שישי", value: "שישי" },
+    { label: "שבת", value: "שבת" },
   ];
 
   const fields = [
