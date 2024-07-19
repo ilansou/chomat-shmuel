@@ -4,17 +4,36 @@ import logo from "../images/logo2.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { AiOutlineMenuUnfold, AiOutlineClose } from "react-icons/ai";
-import { faSignInAlt, faSignOutAlt, faSun, faMoon, faCloud, faCloudRain, faSnowflake } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSignInAlt,
+  faSignOutAlt,
+  faSun,
+  faMoon,
+  faCloud,
+  faCloudRain,
+  faSnowflake,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Navbar = () => {
   const Links = [
     { name: "אירועים", link: "/events", hoverColor: "hover:text-purple-400" },
     { name: "חוגים", link: "/classes", hoverColor: "hover:text-purple-500" },
-    { name: "חדשות ועדכונים", link: "/newsAndUpdates", hoverColor: "hover:text-blue-400" },
-    { name: "קצת עלינו", link: "/aboutus", hoverColor: "hover:text-yellow-500" },
-    { name: "יצירת קשר", link: "/contact", hoverColor: "hover:text-orange-500" },
-
+    {
+      name: "חדשות ועדכונים",
+      link: "/newsAndUpdates",
+      hoverColor: "hover:text-blue-400",
+    },
+    {
+      name: "קצת עלינו",
+      link: "/aboutus",
+      hoverColor: "hover:text-yellow-500",
+    },
+    {
+      name: "יצירת קשר",
+      link: "/contact",
+      hoverColor: "hover:text-orange-500",
+    },
   ];
 
   const { user, logOut } = useAuth();
@@ -59,7 +78,8 @@ export const Navbar = () => {
     if (!weather) return faCloud;
 
     const weatherId = weather?.weather[0].id;
-    const isNight = weather.dt > weather.sys.sunset || weather.dt < weather.sys.sunrise;
+    const isNight =
+      weather.dt > weather.sys.sunset || weather.dt < weather.sys.sunrise;
 
     if (weatherId >= 200 && weatherId < 600) return faCloudRain;
     if (weatherId >= 600 && weatherId < 700) return faSnowflake;
@@ -74,8 +94,17 @@ export const Navbar = () => {
         <div className="container mx-auto px-1 sm:px-6 lg:px-8 relative">
           <div className="flex items-center justify-end h-20">
             <div className="absolute top-0 right-0 mt-2">
-              <Link to="/" onClick={handleCloseMenu} className="flex items-center">
-                <img className="h-16 w-auto" src={logo} alt="logo" style={{ margin: 0 }} />
+              <Link
+                to="/"
+                onClick={handleCloseMenu}
+                className="flex items-center"
+              >
+                <img
+                  className="h-16 w-auto"
+                  src={logo}
+                  alt="logo"
+                  style={{ margin: 0 }}
+                />
               </Link>
             </div>
 
@@ -106,7 +135,10 @@ export const Navbar = () => {
                 <div className="mx-4 text-xl text-blue-800">
                   {weather ? (
                     <>
-                      <FontAwesomeIcon icon={getWeatherIcon()} className="mr-2 ml-1" />
+                      <FontAwesomeIcon
+                        icon={getWeatherIcon()}
+                        className="mr-2 ml-1"
+                      />
                       {`${weather.main.temp.toFixed(1)}°C`}
                     </>
                   ) : (
@@ -117,14 +149,16 @@ export const Navbar = () => {
               {user ? (
                 <button
                   onClick={handleLogout}
-                  className="text-blue-800 hover:text-gray-800 text-lg font-medium py-1.5 pr-6 transition duration-300 ease-in-out"
+                  className="text-blue-800 hover:text-gray-800 text-lg font-medium py-1.5 px-4 transition duration-300 ease-in-out"
                 >
-                  <FontAwesomeIcon icon={faSignOutAlt} className="mr-2 text-red-500" />
+                  <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
+                  התנתק
                 </button>
               ) : (
                 <Link to="/login">
-                  <button className="text-blue-800 hover:text-gray-800 text-lg font-medium py-1.5 pr-6 transition duration-300 ease-in-out">
-                    <FontAwesomeIcon icon={faSignInAlt} className="mr-2" />
+                  <button className="text-blue-800 hover:text-gray-800 text-lg font-medium py-1.5 px-4 transition duration-300 ease-in-out">
+                    <FontAwesomeIcon icon={faSignInAlt} className="mr-2 ml-8" />
+                    התחבר
                   </button>
                 </Link>
               )}
@@ -147,9 +181,9 @@ export const Navbar = () => {
 
         {/* Mobile menu */}
         <div className={`lg:hidden ${menu ? "block" : "hidden"} bg-white`}>
-        <div className="px-2 pt-2 pb-3 sm:px-3">
+          <div className="px-2 pt-2 pb-3 sm:px-3">
             {Links.map((link, index) => (
-            <Fragment key={index}>
+              <Fragment key={index}>
                 <Link
                   to={link.link}
                   className={`text-blue-600 ${link.hoverColor} block px-3 py-2 rounded-md my-2 text-xl font-bold text-center`}

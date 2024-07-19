@@ -51,7 +51,9 @@ const StaffManagement = ({ type }) => {
   return (
     <div className="mt-8">
       <h2 className="text-2xl font-bold">
-      {type === "managers" ? "הנהלת המרכז הקהילתי" : "צוות עובדי המנהל הקהילתי"}
+        {type === "managers" && managerList.length > 0
+          ? "הנהלת המרכז הקהילתי"
+          : teamList.length > 0 && "צוות עובדי המנהל הקהילתי"}
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
         {type === "managers"

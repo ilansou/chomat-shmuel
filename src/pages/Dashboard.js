@@ -124,7 +124,7 @@ export const Dashboard = () => {
     const fetchFeedbackData = async () => {
       const feedbackRef = collection(db, "pageFeedback");
       const feedbackSnapshot = await getDocs(feedbackRef);
-      console.log(feedbackSnapshot);
+      // console.log(feedbackSnapshot);
       const feedbackDocs = feedbackSnapshot.docs.map((doc) => doc.data());
       setFeedbackData(feedbackDocs); // Update the feedbackData state here
     };
@@ -190,7 +190,7 @@ export const Dashboard = () => {
 
     const classesData = classesSnapshot.docs.map((doc) => {
       const data = doc.data();
-      console.log(data.weekdays);
+      // console.log(data.weekdays);
       return {
         title: data.title,
         description: data.description,
