@@ -1,18 +1,17 @@
-// src/components/Card.js
-
 import React, { useState } from "react";
-import { RiDeleteBin6Line, RiEdit2Line } from "react-icons/ri"; // Example icons
+import { RiDeleteBin6Line, RiEdit2Line } from "react-icons/ri";
 import { FaPhone } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { useAuth } from "../../contexts/AuthContext";
 
-const defaultImageUrl = "https://via.placeholder.com/150"; // Default image URL
+const defaultImageUrl =
+  "https://www.mgp.net.au/wp-content/uploads/2023/05/150-1503945_transparent-user-png-default-user-image-png-png.png";
 
 export const Card = ({ staff, onDelete, onEdit }) => {
-    const { user } = useAuth();
+  const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: staff.name || "",
+    name: staff.name || "ישראל ישראלי",
     imageUrl: staff.imageUrl || defaultImageUrl,
     role: staff.role || "",
     phone: staff.phone || "",
@@ -53,49 +52,60 @@ export const Card = ({ staff, onDelete, onEdit }) => {
   };
 
   return (
-    <div className="border border-gray-200 p-4 rounded-lg shadow-md flex items-center w-full max-w-xl">
-      <div className="flex-1">
+    <div className="border border-gray-200 p-4 rounded-lg shadow-md flex items-start w-full max-w-xl">
+      <div className="flex-1 w-full">
         {!isEditing ? (
           <>
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-xl font-bold">{formData.name}</h3>
-              {user && 
-              <div className="flex">
-                <button
-                  onClick={handleEditClick}
-                  className="text-gray-600 hover:text-gray-800 mr-2"
-                >
-                  <RiEdit2Line />
-                </button>
-                <button
-                  onClick={handleDeleteClick}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  <RiDeleteBin6Line />
-                </button>
-              </div>}
-              
+            <div className="flex justify-end w-full">
+              {user && (
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleEditClick}
+                    className="text-yellow-500 hover:text-yellow-700 mr-2"
+                  >
+                    <RiEdit2Line />
+                  </button>
+                  <button
+                    onClick={handleDeleteClick}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <RiDeleteBin6Line />
+                  </button>
+                </div>
+              )}
             </div>
-            <div className="flex items-center">
-              <div className="mr-4">
+            <div className="flex items-center gap-4">
+              <div className="">
                 <img
                   src={formData.imageUrl}
                   alt={formData.name}
                   className="rounded-full"
-                  style={{ width: "120px", height: "120px", objectFit: "cover" }}
+                  style={{
+                    width: "120px",
+                    height: "120px",
+                    objectFit: "cover",
+                  }}
                 />
               </div>
               <div>
-                <p className="mt-2 text-sm">
-                  {formData.role}
-                </p>
-                <p className="text-sm flex gap-4">
-                  <strong><FaPhone /></strong> {formData.phone || "N/A"}
-                </p>
-                <p className="text-sm flex gap-4">
-                  <strong><MdEmail />
-                  </strong> {formData.email || "N/A"}
-                </p>
+                <h3 className="text-xl font-bold">{formData.name}</h3>
+                <p className="mt-2 text-sm">{formData.role}</p>
+                {formData.phone && (
+                  <p className="text-sm flex gap-4 items-center mb-1">
+                    <strong>
+                      <FaPhone color="#38bdf8" />
+                    </strong>{" "}
+                    {formData.phone}
+                  </p>
+                )}
+                {formData.email && (
+                  <p className="text-sm flex gap-4 items-center">
+                    <strong>
+                      <MdEmail color="#38bdf8" size={17} />
+                    </strong>{" "}
+                    {formData.email}
+                  </p>
+                )}
               </div>
             </div>
           </>
@@ -107,7 +117,7 @@ export const Card = ({ staff, onDelete, onEdit }) => {
               value={formData.name}
               onChange={handleChange}
               className="border border-gray-300 rounded-md w-full p-2 mb-2"
-              placeholder="Name"
+              placeholder="שם מלא"
             />
             <input
               type="text"
@@ -115,7 +125,7 @@ export const Card = ({ staff, onDelete, onEdit }) => {
               value={formData.role}
               onChange={handleChange}
               className="border border-gray-300 rounded-md w-full p-2 mb-2"
-              placeholder="Role"
+              placeholder="תפקיד"
             />
             <input
               type="text"
@@ -123,7 +133,7 @@ export const Card = ({ staff, onDelete, onEdit }) => {
               value={formData.phone}
               onChange={handleChange}
               className="border border-gray-300 rounded-md w-full p-2 mb-2"
-              placeholder="Phone"
+              placeholder="מספר פלאפון"
             />
             <input
               type="text"
@@ -131,7 +141,7 @@ export const Card = ({ staff, onDelete, onEdit }) => {
               value={formData.email}
               onChange={handleChange}
               className="border border-gray-300 rounded-md w-full p-2 mb-2"
-              placeholder="Email"
+              placeholder='כתובת דוא"ל'
             />
             <input
               type="file"
@@ -147,22 +157,16 @@ export const Card = ({ staff, onDelete, onEdit }) => {
                 style={{ width: "120px", height: "120px", objectFit: "cover" }}
               />
             </div>
-            {user &&             
-            <div className="flex justify-end">
-              <button
-                onClick={handleSaveClick}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
-              >
-                ערוך
-              </button>
-              <button
-                onClick={() => setIsEditing(false)}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
-              >
-                בטל
-              </button>
-            </div>}
-
+            {user && (
+              <div className="flex justify-end">
+                <button
+                  onClick={handleSaveClick}
+                  className="mr-2 px-4 py-2 bg-green-300 text-white rounded"
+                >
+                  ערוך
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>
