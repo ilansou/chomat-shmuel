@@ -136,13 +136,19 @@ export const Help = () => {
                       <button
                         className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                         onClick={() => {
-                          removeHelpItem(helpItem.id).then((res) => {
-                            setExpandedItems((prev) => {
-                              const newItems = { ...prev };
-                              delete newItems[index];
-                              return newItems;
+                          if (
+                            window.confirm(
+                              "האם אתה בטוח שברצונך למחוק עזרה/שאלה זו?"
+                            )
+                          ) {
+                            removeHelpItem(helpItem.id).then((res) => {
+                              setExpandedItems((prev) => {
+                                const newItems = { ...prev };
+                                delete newItems[index];
+                                return newItems;
+                              });
                             });
-                          });
+                          }
                         }}
                       >
                         <RiDeleteBin6Line />
