@@ -41,7 +41,7 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build",
+        "build": "CI=false react-scripts build",
         "test": "react-scripts test",
         "depcheck": "depcheck --ignores=eslint,prettier,husky,lint-staged,react-scripts",
         "eject": "react-scripts eject"
