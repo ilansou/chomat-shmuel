@@ -32,8 +32,8 @@ export function useAbout() {
   const addSection = async () => {
     try {
       const newSection = {
-        header: "New Header",
-        content: "New content...",
+        header: "כותרת חדשה",
+        content: "תוכן חדש...",
         subheaders: [],
       };
       const docRef = await addDoc(sectionsCollectionRef, newSection);
@@ -45,13 +45,15 @@ export function useAbout() {
   };
 
   const removeSection = async (id) => {
-    try {
-      await deleteDoc(doc(sectionsCollectionRef, id));
-      setSectionList((prevSections) =>
-        prevSections.filter((section) => section.id !== id)
-      );
-    } catch (error) {
-      console.error("Error deleting section: ", error);
+    if (window.confirm("האם אתה בטוח שברצונך למחוק כרטיס אודות זה?")) {
+      try {
+        await deleteDoc(doc(sectionsCollectionRef, id));
+        setSectionList((prevSections) =>
+          prevSections.filter((section) => section.id !== id)
+        );
+      } catch (error) {
+        console.error("Error deleting section: ", error);
+      }
     }
   };
 
@@ -79,8 +81,8 @@ export function useAbout() {
       const section = sectionList.find((sec) => sec.id === sectionId);
       const newSubheader = {
         id: Date.now(),
-        subheader: "New Subheader",
-        subcontent: "New subcontent...",
+        subheader: "כותרת חדשה לתוכן המשני",
+        subcontent: "תוכן משני חדש...",
       };
       const updatedSubheaders = [...section.subheaders, newSubheader];
       await updateDoc(sectionRef, { subheaders: updatedSubheaders });
@@ -95,20 +97,26 @@ export function useAbout() {
   };
 
   const removeSubheader = async (sectionId, subheaderId) => {
-    try {
-      const sectionRef = doc(sectionsCollectionRef, sectionId);
-      const section = sectionList.find((sec) => sec.id === sectionId);
-      const updatedSubheaders = section.subheaders.filter(
-        (subheader) => subheader.id !== subheaderId
-      );
-      await updateDoc(sectionRef, { subheaders: updatedSubheaders });
-      setSectionList((prevSections) =>
-        prevSections.map((sec) =>
-          sec.id === sectionId ? { ...sec, subheaders: updatedSubheaders } : sec
-        )
-      );
-    } catch (error) {
-      console.error("Error removing subheader: ", error);
+    if (
+      window.confirm("האם אתה בטוח שברצונך למחוק תוכן משני של כרטיס אודות זה?")
+    ) {
+      try {
+        const sectionRef = doc(sectionsCollectionRef, sectionId);
+        const section = sectionList.find((sec) => sec.id === sectionId);
+        const updatedSubheaders = section.subheaders.filter(
+          (subheader) => subheader.id !== subheaderId
+        );
+        await updateDoc(sectionRef, { subheaders: updatedSubheaders });
+        setSectionList((prevSections) =>
+          prevSections.map((sec) =>
+            sec.id === sectionId
+              ? { ...sec, subheaders: updatedSubheaders }
+              : sec
+          )
+        );
+      } catch (error) {
+        console.error("Error removing subheader: ", error);
+      }
     }
   };
 

@@ -52,23 +52,29 @@ export function useStaffManagement() {
 
   // Function to delete a manager
   const deleteManager = async (id) => {
-    try {
-      await deleteDoc(doc(managersCollectionRef, id));
-      setManagerList((prevManagers) =>
-        prevManagers.filter((manager) => manager.id !== id)
-      );
-    } catch (error) {
-      console.error("Error deleting manager: ", error);
+    if (window.confirm("האם אתה בטוח שברצונך למחוק חבר.ת הנהלה זה?")) {
+      try {
+        await deleteDoc(doc(managersCollectionRef, id));
+        setManagerList((prevManagers) =>
+          prevManagers.filter((manager) => manager.id !== id)
+        );
+      } catch (error) {
+        console.error("Error deleting manager: ", error);
+      }
     }
   };
 
   // Function to delete a team member
   const deleteTeamMember = async (id) => {
-    try {
-      await deleteDoc(doc(teamCollectionRef, id));
-      setTeamList((prevTeam) => prevTeam.filter((member) => member.id !== id));
-    } catch (error) {
-      console.error("Error deleting team member: ", error);
+    if (window.confirm("האם אתה בטוח שברצונך למחוק עובד.ת זה?")) {
+      try {
+        await deleteDoc(doc(teamCollectionRef, id));
+        setTeamList((prevTeam) =>
+          prevTeam.filter((member) => member.id !== id)
+        );
+      } catch (error) {
+        console.error("Error deleting team member: ", error);
+      }
     }
   };
 

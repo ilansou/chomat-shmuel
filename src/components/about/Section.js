@@ -3,7 +3,7 @@ import { SubheadeAbout } from "./SubheadeAbout";
 import { useAuth } from "../../contexts/AuthContext";
 import { RiDeleteBin6Line, RiEdit2Line } from "react-icons/ri";
 import { MdAdd } from "react-icons/md";
- 
+
 export const Section = ({
   section,
   onRemove,
@@ -41,7 +41,7 @@ export const Section = ({
             onClick={handleEdit}
             className="mr-2 px-4 py-2 bg-green-500 text-white rounded"
           >
-            Save
+            שמור
           </button>
         </div>
       ) : (
