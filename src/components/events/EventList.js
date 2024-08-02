@@ -35,8 +35,8 @@ export const EventList = ({ limit = 8 }) => {
     );
 
   return (
-    <div className="w-full">
-      <div className="grid grid-cols-4 gap-x-2 gap-y-8 mt-4">
+    <div className="w-full p-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-2 gap-y-8 mt-4">
         {nearestEvents.map((event) => (
           <div
             key={event.id}
